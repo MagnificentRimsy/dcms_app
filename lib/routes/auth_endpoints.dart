@@ -1,6 +1,7 @@
-class AuthEndpoints {
+class Endpoints {
   static const String signup = 'administrations/CreateAccount';
-
+  static const String validateOtp = 'api/administrations/ValidateOtp';
+  static const String activateAccount = 'administrations/ActivateAccount?UserName=';
   
   static const String updatePersonalInformation = 'auth/personal-information';
   static const String updateBankingInformation = 'auth/bank-information';

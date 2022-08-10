@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, unnecessary_new
+// ignore_for_file: prefer_const_constructors, unnecessary_new, prefer_const_constructors_in_immutables
 
 import 'dart:convert';
 import 'package:dcms_app/view/screens/components/app_icons.dart';
@@ -9,7 +9,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class Dashboard extends StatefulWidget {
-  Dashboard({Key? key}) : super(key: key);
+    final int? pageIndex;
+
+  Dashboard({Key? key,  this.pageIndex}) : super(key: key);
 
   @override
   _DashboardState createState() => _DashboardState();

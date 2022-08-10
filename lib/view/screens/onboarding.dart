@@ -119,7 +119,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     child: new FlatButton(
                       shape: new RoundedRectangleBorder(
                           borderRadius: new BorderRadius.circular(5.0)),
-                      color: Colors.white,
+                      color: Colors.green,
                       onPressed: () {
                         Navigator.pushNamed(context, '/login');
                       },

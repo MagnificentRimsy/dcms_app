@@ -10,11 +10,13 @@ import '../routes/auth_endpoints.dart';
 
 class AuthRepo {
   final ApiClient apiClient;
-  final SharedPreferences sharedPreferences;
-  AuthRepo({required this.apiClient, required this.sharedPreferences});
+  final SharedPreferences? sharedPreferences;
+  AuthRepo({required this.apiClient,  this.sharedPreferences});
 
   Future<Response> registration(SignUp signUpBody) async {
-    return await apiClient.postData(AuthEndpoints.signup, signUpBody.toJson());
+    return await apiClient.postData(Endpoints.signup, signUpBody.toJson(), headers: { 'Content-type': 'application/json',
+              'Accept': 'application/json',
+              "Authorization": "Some token"});
   }
   // Future<Response> login({String phone, String password}) async {
   //   return await apiClient.postData(AppConstants.LOGIN_URI, {"phone": phone, "password": password});
