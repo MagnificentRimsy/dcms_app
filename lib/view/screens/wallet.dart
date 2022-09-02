@@ -37,7 +37,7 @@ class _WalletScreenState extends State<WalletScreen>
                 children: <Widget>[
                   InkWell(
                     child: Text(
-                      'Hi, Rimamchirika',
+                      'Hi, Kitaka',
                       style: TextStyle(fontSize: 21.0),
                     ),
                     onTap: () {},
@@ -149,7 +149,7 @@ class _WalletScreenState extends State<WalletScreen>
                 //   padding: const EdgeInsets.only(top: 20, bottom: 10),
                 //   child: Text(
                 //     'WALLET BALANCE',
-                //     style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                //     style: TextStyle(fontSize: 16.0.sp, fontWeight: FontWeight.bold),
                 //   ),
                 // ),
                 // Padding(

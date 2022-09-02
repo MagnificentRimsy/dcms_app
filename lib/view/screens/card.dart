@@ -1,4 +1,4 @@
-import 'package:dcms_app/util/customcard.dart';
+import 'package:dcms_app/utils/customcard.dart';
 import 'package:flutter/material.dart';
 
 class CardScreen extends StatefulWidget {

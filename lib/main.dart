@@ -1,4 +1,8 @@
-import 'package:dcms_app/controller/signup_controller.dart';
+// ignore_for_file: unused_import
+
+import 'package:dcms_app/controller/TwoFactorController.dart';
+import 'package:dcms_app/controller/register_controller.dart';
+import 'package:dcms_app/view/screens/add_farmer.dart';
 import 'package:dcms_app/view/screens/dashboard.dart';
 import 'package:dcms_app/view/screens/home.dart';
 import 'package:dcms_app/view/screens/landing.dart';
@@ -16,29 +20,31 @@ import 'package:get/get.dart';
 import 'package:page_route_transition/page_route_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'controller/login_controller.dart';
 import 'controller/otp_controller.dart';
 import 'data/api/api_client.dart';
 import 'respository/auth_repo.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
 
 // void dependencies () {
-//       // Get.lazyPut<SignupController>(() => SignupController(authRepo: AuthRepo(apiClient: ApiClient()),));
-
-// }
-
-
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context)  {
     // Get.lazyPut<AuthRepo>(()=> AuthRepo( apiClient: ApiClient()));
 
     // authRepo: AuthRepo(apiClient: ApiClient()),
- Get.lazyPut<SignupController>(() => SignupController());
+ Get.lazyPut<RegistrationController>(() => RegistrationController());
  Get.lazyPut<OtpController>(() => OtpController());
+ Get.lazyPut<LoginController>(() => LoginController());
+ Get.lazyPut<TwoFactorController>(()=> TwoFactorController());
 
 
     return ScreenUtilInit(
@@ -54,8 +60,10 @@ class MyApp extends StatelessWidget {
         ),
         debugShowCheckedModeBanner: false,
         initialRoute: '/splash',
+        
         routes: {
           // ignore: prefer_const_constructors
+         
           '/splash': (context) => SplashScreen(),
           '/onboarding': (context) => OnboardingScreen(),
           '/landing': (context) => LandingScreen(),
@@ -67,7 +75,7 @@ class MyApp extends StatelessWidget {
           '/settings': (context) => SettingsScreen(),
           '/wallet': (context) => WalletScreen()
         },
-        home: LoginScreen(),
+        
       );}
     );
   }

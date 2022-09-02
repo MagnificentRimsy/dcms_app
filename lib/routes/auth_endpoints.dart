@@ -1,13 +1,18 @@
 class Endpoints {
   static const String signup = 'administrations/CreateAccount';
+  static const String signin = 'administrations​/SignIn'; 
   static const String validateOtp = 'api/administrations/ValidateOtp';
   static const String activateAccount = 'administrations/ActivateAccount?UserName=';
-  
+  static const String login = 'administrations/Login?UserName=';
+  static const String Get2FaStatus = 'administrations/Get2FAStatus?UserName=';
+  static const String GenerateOtp = 'administrations/GetOtp';
+  static const String validateTwoFactorToken = 'administrations/ValidateOtp';
+  static const String createBatch = 'configurations/AddBatch';
+
   static const String updatePersonalInformation = 'auth/personal-information';
   static const String updateBankingInformation = 'auth/bank-information';
   static const String updateDocuments = 'auth/documents';
   static const String setPin = 'auth/set-pin';
-  static const String signin = 'auth/sign-in';
   static const String tokenRefresh = 'auth/refresh';
   static const String verifyOTP = 'auth/verify-otp';
   static const String sendOTP = 'auth/send-otp';

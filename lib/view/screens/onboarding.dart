@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, unnecessary_new, prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class OnboardingScreen extends StatefulWidget {
   OnboardingScreen({Key? key}) : super(key: key);
@@ -68,47 +69,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   const EdgeInsets.only(left: 30.0, right: 30.0, top: 10.0),
                child: Text("Experience the comfort of using our amazing farm services.", style: TextStyle(
                           color: Colors.white,
-                          fontSize: 16.0,
+                          fontSize: 16.0.sp,
                           fontWeight: FontWeight.normal),),
              ),
-            Container(
-                  width: MediaQuery.of(context).size.width,
-              margin:
-                  const EdgeInsets.only(left: 30.0, right: 30.0, top: 20.0),
-              alignment: Alignment.center,
-              child: OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  backgroundColor: Color.fromARGB(0, 0, 0, 0),
-                  primary: Colors.white,
-                  side: BorderSide(color: Color.fromARGB(255, 255, 255, 255), width: 2), //<-- SEE HERE
-                ),
-                onPressed: () {
-                    Navigator.pushNamed(context, '/register');
-                },
-                child:  Container(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 20.0,
-                            horizontal: 20.0,
-                          ),
-                          child: new Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              new Expanded(
-                                child: Text(
-                                  "Create an Account",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-              ),
-            ),
-            
+         
+           
             new Container(
               width: MediaQuery.of(context).size.width,
               margin: const EdgeInsets.only(left: 30.0, right: 30.0, top: 30.0),

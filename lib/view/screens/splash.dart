@@ -1,6 +1,8 @@
+import 'package:dcms_app/view/screens/landing.dart';
 import 'package:dcms_app/view/screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:get/get.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({ Key? key}) : super(key: key);
@@ -20,7 +22,7 @@ class SplashScreenState extends State<SplashScreen> {
     super.initState();
 
     Future.delayed(const Duration(seconds: 3), () async {
-          Navigator.pushNamed(context, '/landing');
+          Get.to( LandingScreen());
     });
   }
 
@@ -49,8 +51,12 @@ class SplashScreenState extends State<SplashScreen> {
                 width: 100,
                 fit: BoxFit.cover,
               ),
-              SizedBox(height: 50),
-              SpinKitDoubleBounce (color: Color(0xff00A850))
+              SizedBox(height: 70),
+              SpinKitDualRing(
+                      color: Colors.green,
+                      lineWidth: 3,
+                      size: 40,
+                    ),
               // SpinKitThreeBounce(color: Color(0xff00A850), size: 30,)
               //  SpinKitFadingCircle(color: Colors.white, size: 50)
              

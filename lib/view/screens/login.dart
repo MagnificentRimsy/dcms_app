@@ -1,13 +1,20 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, unrelated_type_equality_checks
 
-import 'dart:convert';
-
+import 'package:dcms_app/controller/login_controller.dart';
+import 'package:dcms_app/data/models/data/sign_in.dart';
+import 'package:dcms_app/view/screens/add_farmer.dart';
+import 'package:dcms_app/view/screens/batches.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 
+import '../../utils/custom_snackbar.dart';
+import 'components/preloader.dart';
+
 class LoginScreen extends StatefulWidget {
-   LoginScreen({Key? key}) : super(key: key);
+  LoginScreen({Key? key}) : super(key: key);
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -15,14 +22,15 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen>
     with TickerProviderStateMixin {
+  final _formKey = GlobalKey<FormState>();
+  bool _passwordVisible = true;
   @override
   void initState() {
     super.initState();
+    _passwordVisible = false;
   }
 
   bool _isLoading = false;
-  final email = TextEditingController();
-  final password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -30,15 +38,17 @@ class _LoginScreenState extends State<LoginScreen>
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
-        body: _isLoading == true
-            ? const SpinKitDoubleBounce(color: const Color(0xff00A850))
-            : ListView(
-                children: [
-                  Column(
+        body: ListView(
+      children: [
+        GetBuilder<LoginController>(builder: (loginController) {
+          return loginController.isLoading == true
+              ? Preloader()
+              : Form(
+                  key: _formKey,
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
-                      
                       Container(
                         alignment: Alignment.centerLeft,
                         margin: const EdgeInsets.only(top: 30.0, left: 20),
@@ -51,9 +61,7 @@ class _LoginScreenState extends State<LoginScreen>
                           'Welcome Back',
                           textAlign: TextAlign.left,
                           style: TextStyle(
-                            fontSize: 22.0,
-                            fontWeight: FontWeight.bold
-                          ),
+                              fontSize: 22.0, fontWeight: FontWeight.bold),
                         ),
                       ),
                       const SizedBox(
@@ -64,35 +72,36 @@ class _LoginScreenState extends State<LoginScreen>
                         child: const Text(
                           'Enter your DCMS username and password',
                           textAlign: TextAlign.left,
-                          style: TextStyle(
-                            fontSize: 16.0,
-                          ),
+                          style: TextStyle(fontSize: 16.0),
                         ),
                       ),
-
                       const SizedBox(
                         height: 10,
                       ),
-
-
                       Padding(
                         padding: const EdgeInsets.only(
                           top: 25.0,
                           left: 20.0,
                           right: 20.0,
                         ),
-                        child: TextField(
+                        child: TextFormField(
                           keyboardType: TextInputType.text,
                           autocorrect: true,
-                          controller: email,
+                          controller: loginController.userNameController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter username';
+                            }
+                            return null;
+                          },
                           decoration: InputDecoration(
                             enabledBorder: const OutlineInputBorder(
                               borderSide: const BorderSide(
                                   color: Colors.grey, width: 1.0),
                             ),
                             focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: theme.primaryColor, width: 1.0),
+                              borderSide:
+                                  BorderSide(color: Colors.grey, width: 1.0),
                             ),
                             prefixIcon: Icon(
                               Icons.person_outline,
@@ -107,17 +116,28 @@ class _LoginScreenState extends State<LoginScreen>
                           ),
                         ),
                       ),
+                     
+                     
                       Padding(
                         padding: const EdgeInsets.only(
                           top: 25.0,
                           left: 20.0,
                           right: 20.0,
                         ),
-                        child: TextField(
-                          keyboardType: TextInputType.text,
+                        child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
                           autocorrect: true,
-                          obscureText: true,
-                          controller: password,
+                          obscureText: !_passwordVisible,
+                          controller: loginController.passwordController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please a Enter Password';
+                            }
+                            return null;
+                          },
                           decoration: InputDecoration(
                             enabledBorder: const OutlineInputBorder(
                               borderSide: const BorderSide(
@@ -132,11 +152,29 @@ class _LoginScreenState extends State<LoginScreen>
                               size: 28.0,
                               color: theme.primaryColor,
                             ),
-                            suffixIcon: Icon(
-                              Icons.remove_red_eye,
-                              size: 28.0,
-                              color: theme.primaryColor,
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                // Based on passwordVisible state choose the icon
+                                _passwordVisible
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                color: Theme.of(context).primaryColorDark,
+                              ),
+                              onPressed: () {
+                                // Update the state i.e. toogle the state of passwordVisible variable
+                                setState(() {
+                                  _passwordVisible = !_passwordVisible;
+                                });
+                              },
                             ),
+
+                            // IconButton(
+                            //   icon: Icon(
+                            //     Icons.remove_red_eye,
+                            //     size: 28.0,
+                            //     color: theme.primaryColor,
+                            //   ),
+                            // ),
                             hintText: 'password',
                             hintStyle: TextStyle(
                               color: Colors.grey[400],
@@ -162,12 +200,11 @@ class _LoginScreenState extends State<LoginScreen>
                                 borderRadius: BorderRadius.circular(7.0)),
                             color: theme.primaryColor,
                             onPressed: () {
-                              setState(() {
-                                _isLoading = true;
-                              });
-                              // _signIn(email.text, password.text, context);
-                              Navigator.pushNamed(context, '/home');
+                    
 
+                              if (_formKey.currentState!.validate()) {
+                                login(loginController);
+                              }
                             },
                             child: const Text(
                               'Sign in',
@@ -196,12 +233,14 @@ class _LoginScreenState extends State<LoginScreen>
                             ),
                             InkWell(
                               onTap: () {
-                                Navigator.pushNamed(context, '/register');
+                                // Navigator.pushNamed(context, '/register');
+                                Get.to(()=> AddProfileDetails());
+                              //  Get.to(()=> Batches());
                               },
                               child: Text(
                                 'Sign Up',
                                 style: TextStyle(
-                                  fontSize: 16.0,
+                                  fontSize: 16.0.sp,
                                   color: theme.primaryColor,
                                 ),
                               ),
@@ -211,7 +250,20 @@ class _LoginScreenState extends State<LoginScreen>
                       ),
                     ],
                   ),
-                ],
-              ));
+                );
+        }),
+      ],
+    ));
+  }
+
+  void login(LoginController controller) async {
+    String _userName = controller.userNameController.text.trim();
+    String _password = controller.passwordController.text.trim();
+
+    SignIn signInBody = SignIn(
+      userName: _userName,
+      password: _password,
+    );
+    await controller.loginAccount(context, signInBody);
   }
 }

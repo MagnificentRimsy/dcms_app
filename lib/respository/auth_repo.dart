@@ -13,11 +13,11 @@ class AuthRepo {
   final SharedPreferences? sharedPreferences;
   AuthRepo({required this.apiClient,  this.sharedPreferences});
 
-  Future<Response> registration(SignUp signUpBody) async {
-    return await apiClient.postData(Endpoints.signup, signUpBody.toJson(), headers: { 'Content-type': 'application/json',
-              'Accept': 'application/json',
-              "Authorization": "Some token"});
-  }
+  // Future<Response> registration(SignUp signUpBody) async {
+  //   return await apiClient.postData(Endpoints.signup, signUpBody.toJson(), headers: { 'Content-type': 'application/json',
+  //             'Accept': 'application/json',
+  //             "Authorization": "Some token"});
+  // }
   // Future<Response> login({String phone, String password}) async {
   //   return await apiClient.postData(AppConstants.LOGIN_URI, {"phone": phone, "password": password});
   // }

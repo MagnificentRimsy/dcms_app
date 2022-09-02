@@ -2,7 +2,10 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:dcms_app/view/screens/components/background.dart';
+import 'package:dcms_app/view/screens/login.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class LandingScreen extends StatelessWidget {
   @override
@@ -50,7 +53,7 @@ class LandingScreen extends StatelessWidget {
                   const EdgeInsets.only(left: 30.0, right: 30.0, top: 10.0),
                child: Text("Experience the comfort of using our amazing farm services.", style: TextStyle(
                           color: Colors.black45,
-                          fontSize: 16.0,
+                          fontSize: 16.0.sp,
                           fontWeight: FontWeight.normal),),
              ), 
             SizedBox(height: 30,),
@@ -61,7 +64,7 @@ class LandingScreen extends StatelessWidget {
               child: RaisedButton(
                 onPressed: () {
                   // Login
-                   Navigator.pushNamed(context, '/register');
+                   Get.to(LoginScreen());
 
                 },
                 shape: RoundedRectangleBorder(

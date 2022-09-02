@@ -1,5 +1,12 @@
+import 'package:dcms_app/view/screens/add_farmer.dart';
+import 'package:dcms_app/view/screens/components/preloader.dart';
+import 'package:dcms_app/view/screens/landing.dart';
+import 'package:dcms_app/view/screens/login.dart';
+import 'package:dcms_app/view/screens/onboarding.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -56,11 +63,81 @@ class _SettingsScreenState extends State<SettingsScreen> {
             SizedBox(
               height: 10,
             ),
-            buildAccountOptionRow(context, "Account Profile"),
-            buildAccountOptionRow(context, "Change password"),
-            buildAccountOptionRow(context, "Content settings"),
-            buildAccountOptionRow(context, "Language"),
-            buildAccountOptionRow(context, "Privacy and security"),
+
+            InkWell(
+              onTap: () {
+                Get.to(AddProfileDetails());
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Account Profile",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                    Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.grey,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            InkWell(
+              onTap: () {},
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Change Password",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                    Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.grey,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            InkWell(
+              onTap: () {},
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Privacy and Security",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                    Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.grey,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
             SizedBox(
               height: 40,
             ),
@@ -86,25 +163,48 @@ class _SettingsScreenState extends State<SettingsScreen> {
             SizedBox(
               height: 10,
             ),
-            buildNotificationOptionRow("New for you", true),
-            buildNotificationOptionRow("Account activity", true),
-            buildNotificationOptionRow("Opportunity", false),
+            buildNotificationOptionRow("Enable 2FA", false),
+            buildNotificationOptionRow("Enable Notification", true),
             SizedBox(
               height: 20,
             ),
-            // Center(
-            //   child: OutlinedButton(
-            //     padding: EdgeInsets.symmetric(horizontal: 40),
-            //     shape: RoundedRectangleBorder(
-            //         borderRadius: BorderRadius.circular(20)),
-            //     onPressed: () {
-            //          Navigator.pushNamed(context, '/login');
-            //     },
-            //     child: Text("SIGN OUT",
-            //         style: TextStyle(
-            //             fontSize: 16, letterSpacing: 2.2, color: Colors.black)),
-            //   ),
-            // )
+
+            // OutlinedButton(
+
+            //   onPressed: () {
+            //      Get.to(LoginScreen());
+            //   },
+            //   child: Text("SIGN OUT",
+            //       style: TextStyle(
+            //           fontSize: 16, letterSpacing: 2.2, color: Colors.black)),
+            //  ),
+
+            SizedBox(
+              height: 50.h,
+            ),
+          
+            OutlinedButton(
+              child: Text(
+                'Log Out',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+              ),
+              style: OutlinedButton.styleFrom(
+                padding: EdgeInsets.only(
+                    left: 40.w, right: 40.w, top: 10.h, bottom: 10.h),
+                primary: Colors.red,
+                backgroundColor: Colors.white,
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(5))),
+              ),
+              onPressed: () {
+                print('Pressed');
+                // Get.to(LoginScreen());
+
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => LoginScreen()));
+              },
+            ),
+       
           ],
         ),
       ),
@@ -134,30 +234,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   GestureDetector buildAccountOptionRow(BuildContext context, String title) {
     return GestureDetector(
-      onTap: () {
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: Text(title),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text("Option 1"),
-                    Text("Option 2"),
-                    Text("Option 3"),
-                  ],
-                ),
-                actions: [
-                  FlatButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Text("Close")),
-                ],
-              );
-            });
-      },
+      onTap: () {},
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         child: Row(

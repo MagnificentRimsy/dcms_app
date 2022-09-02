@@ -2,6 +2,7 @@
 
 import 'package:dcms_app/data/models/data/otp.dart';
 import 'package:dcms_app/utils/custom_snackbar.dart';
+import 'package:dcms_app/view/screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -21,8 +22,7 @@ class OtpPage extends StatefulWidget {
 class _OtpPageState extends State<OtpPage> {
 
   String text = '';
-  late SharedPreferences _prefs;
-
+    var userNameData = Get.arguments;
 
   void _onKeyboardTap(String value) {
     setState(() {
@@ -69,7 +69,12 @@ class _OtpPageState extends State<OtpPage> {
                     ),
                     child: Icon(Icons.arrow_back_ios, color: Colors.green, size: 16,),
                   ),
-                  onPressed: () => Navigator.of(context).pop(),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    
+                  }
+                  
+                  // => Navigator.of(context).pop(),
                 ),
                 elevation: 0,
                 backgroundColor: Colors.white,
@@ -79,11 +84,8 @@ class _OtpPageState extends State<OtpPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-
-                    
+                  children: <Widget>[  
                     GetBuilder<OtpController>(builder: (otpController) {
-         
                         return Expanded(
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
@@ -176,14 +178,18 @@ class _OtpPageState extends State<OtpPage> {
       }
 
       void _validateOtp (OtpController controller)async {
-       dynamic prefs = await SharedPreferences.getInstance();
 
-        String _userName = prefs.getString('username');
+        String _userName = userNameData;
         String _otp = text.trim();
 
+        print('Otp Username $_userName}');
+
+        print(_userName);
         ValidateData validateDatadBody = ValidateData(userName: _userName, otp: _otp);
         controller.validateOtp(validateDatadBody).then((status) async {
           if(status.isSuccess){
+          //  await prefs.remove('username');
+
             showCustomSnackBar(status.message);
           }
             showCustomSnackBar(status.message);

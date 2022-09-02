@@ -1,19 +1,17 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
-
-class Supplies extends StatefulWidget {
-  Supplies({Key? key}) : super(key: key);
+class Transactions extends StatefulWidget {
+  Transactions({Key? key}) : super(key: key);
 
   @override
-  State<Supplies> createState() => _SuppliesState();
+  State<Transactions> createState() => _TransactionsState();
 }
 
-class _SuppliesState extends State<Supplies>
+class _TransactionsState extends State<Transactions>
     with SingleTickerProviderStateMixin {
   @override
   void initState() {
@@ -33,7 +31,7 @@ class _SuppliesState extends State<Supplies>
                 elevation: 0,
                 centerTitle: true,
                 title: Text(
-                  'Farm Supplies',
+                  'Batch Details',
                   style: TextStyle(color: Color(0xFF00A850)),
                 ),
                 leading: BackButton(color: Color(0xFF00A850)),
@@ -41,6 +39,9 @@ class _SuppliesState extends State<Supplies>
               body: SingleChildScrollView(
                 child: Column(
                   children: [
+                    SizedBox(
+                      height: 10,
+                    ),
                     SizedBox(
                       height: 30,
                     ),
@@ -51,7 +52,7 @@ class _SuppliesState extends State<Supplies>
                         child: SizedBox(
                           height: 20,
                           child: Text(
-                            'Most Recent',
+                            'Overview',
                             textAlign: TextAlign.left,
                             style: TextStyle(
                               color: Color(0xFF4A4B65),
@@ -94,7 +95,8 @@ class _SuppliesState extends State<Supplies>
                                               style: TextStyle(
                                                   color: Colors.black54,
                                                   fontSize: 14,
-                                                  fontWeight: FontWeight.normal),
+                                                  fontWeight:
+                                                      FontWeight.normal),
                                             ),
                                             Text(
                                               '21st June 2022',
@@ -120,7 +122,8 @@ class _SuppliesState extends State<Supplies>
                                               style: TextStyle(
                                                   color: Colors.black54,
                                                   fontSize: 14,
-                                                  fontWeight: FontWeight.normal),
+                                                  fontWeight:
+                                                      FontWeight.normal),
                                             ),
                                             Text(
                                               '200,000',
@@ -150,7 +153,8 @@ class _SuppliesState extends State<Supplies>
                                               style: TextStyle(
                                                   color: Colors.black54,
                                                   fontSize: 14,
-                                                  fontWeight: FontWeight.normal),
+                                                  fontWeight:
+                                                      FontWeight.normal),
                                             ),
                                             Text(
                                               '29 July 2022',
@@ -179,7 +183,8 @@ class _SuppliesState extends State<Supplies>
                                               style: TextStyle(
                                                   color: Colors.black54,
                                                   fontSize: 14,
-                                                  fontWeight: FontWeight.normal),
+                                                  fontWeight:
+                                                      FontWeight.normal),
                                             ),
                                             Text(
                                               'OK01123445',
@@ -200,47 +205,51 @@ class _SuppliesState extends State<Supplies>
                         ),
                       ),
                     ),
-                    Center(
-                      child: OutlinedButton(
-                        child: Text(
-                          'View Histories',
-                          style: TextStyle(fontSize: 14),
-                        ),
-                        style: OutlinedButton.styleFrom(
-                          padding: EdgeInsets.only(
-                              left: 20, right: 20, top: 5, bottom: 5),
-                          primary: Colors.green,
-                          backgroundColor: Colors.white,
-                          shape: const RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(30))),
-                        ),
-                        onPressed: () {
-                          print('Pressed');
-                        },
-                      ),
-                    ),
                     SizedBox(
                       height: 30,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20, bottom: 10),
-                      child: Align(
-                        alignment: Alignment.topLeft,
-                        child: SizedBox(
-                          height: 15,
-                          child: Text(
-                            'Recent Transactions',
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                              color: Color(0xFF4A4B65),
-                              fontWeight: FontWeight.w700,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 20, bottom: 10),
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: SizedBox(
+                              height: 15,
+                              child: Text(
+                                'Batch Transactions',
+                                textAlign: TextAlign.left,
+                                style: TextStyle(
+                                  color: Color(0xFF4A4B65),
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
+                        Padding(
+                          padding: const EdgeInsets.only(right:10.0),
+                          child: ElevatedButton(
+                              child: Text("Add New ".toUpperCase(),
+                                  style: TextStyle(fontSize: 14)),
+                              style: ButtonStyle(
+                                  foregroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          Colors.white),
+                                  backgroundColor:
+                                      MaterialStateProperty.all<Color>(
+                                          Colors.green),
+                                  shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.zero,
+                                          side:
+                                              BorderSide(color: Colors.green)))),
+                              onPressed: () => null),
+                        )
+                      ],
                     ),
-                   
                     Padding(
                       padding: const EdgeInsets.only(left: 10, right: 10),
                       child: Card(
@@ -260,9 +269,10 @@ class _SuppliesState extends State<Supplies>
                                 border: new Border(
                                     right: new BorderSide(
                                         width: 0.0,
-                                        color:
-                                            Color.fromARGB(255, 255, 255, 255)))),
-                            child: SvgPicture.asset('assets/images/trans_icon.svg',
+                                        color: Color.fromARGB(
+                                            255, 255, 255, 255)))),
+                            child: SvgPicture.asset(
+                                'assets/images/trans_icon.svg',
                                 semanticsLabel: 'Trans'),
                           ),
                           title: Text(
@@ -293,14 +303,10 @@ class _SuppliesState extends State<Supplies>
                               ],
                             ),
                           ),
-                          onTap: () {
-                           
-                          },
+                          onTap: () {},
                         ),
                       ),
                     ),
-                   
-                    
                     Padding(
                       padding: const EdgeInsets.only(left: 10, right: 10),
                       child: Card(
@@ -320,9 +326,10 @@ class _SuppliesState extends State<Supplies>
                                 border: new Border(
                                     right: new BorderSide(
                                         width: 0.0,
-                                        color:
-                                            Color.fromARGB(255, 255, 255, 255)))),
-                            child: SvgPicture.asset('assets/images/trans_icon.svg',
+                                        color: Color.fromARGB(
+                                            255, 255, 255, 255)))),
+                            child: SvgPicture.asset(
+                                'assets/images/trans_icon.svg',
                                 semanticsLabel: 'Trans'),
                           ),
                           title: Text(
@@ -353,13 +360,10 @@ class _SuppliesState extends State<Supplies>
                               ],
                             ),
                           ),
-                          onTap: () {
-                           
-                          },
+                          onTap: () {},
                         ),
                       ),
                     ),
-                   
                   ],
                 ),
               ),

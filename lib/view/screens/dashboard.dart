@@ -7,22 +7,28 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+
+import '../../controller/login_controller.dart';
 
 class Dashboard extends StatefulWidget {
     final int? pageIndex;
 
   Dashboard({Key? key,  this.pageIndex}) : super(key: key);
 
+
   @override
   _DashboardState createState() => _DashboardState();
 }
 
 class _DashboardState extends State<Dashboard> {
+    final loginController = Get.put(LoginController());
   @override
   void initState() {
     super.initState();
+    
+    print('UserName Dashboard: ${loginController.userNameText.value}');
   }
-
   
 final List<String> seasonItems = [
   '2022 Season',
@@ -51,8 +57,9 @@ String? selectedValue;
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   InkWell(
+                    // This is meant to come from the json response 
                     child: Text(
-                      'Hi, Rimamchirika',
+                      'Hi, ${loginController.userNameText.value.isNotEmpty? loginController.userNameText.value : ''}',
                       style: TextStyle(fontSize: 21.0),
                     ),
                     onTap: () {},
@@ -281,13 +288,7 @@ String? selectedValue;
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Text(
-                        //   'Amount',
-                        //   style: TextStyle(
-                        //       color: Colors.white,
-                        //       fontWeight: FontWeight.normal,
-                        //       fontSize: 18),
-                        // ),
+                      
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
@@ -510,10 +511,12 @@ String? selectedValue;
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: HomeTabCard(
-                              onPressed: () {},
-                              title: 'Transactions',
+                              onPressed: () {
+                                
+                              },
+                              title: 'Manage',
                               icon: Icons.send_and_archive,
-                              sub: 'History',
+                              sub: 'Batch Transactions ',
                               iconColor: Colors.black,
                               backgroundColor: Color(0xFFD0F0C0),
                             ),
