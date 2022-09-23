@@ -4,6 +4,7 @@ import 'package:dcms_app/controller/login_controller.dart';
 import 'package:dcms_app/data/models/data/sign_in.dart';
 import 'package:dcms_app/view/screens/add_farmer.dart';
 import 'package:dcms_app/view/screens/batches.dart';
+import 'package:dcms_app/view/screens/components/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -29,8 +30,6 @@ class _LoginScreenState extends State<LoginScreen>
     super.initState();
     _passwordVisible = false;
   }
-
-  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -116,8 +115,6 @@ class _LoginScreenState extends State<LoginScreen>
                           ),
                         ),
                       ),
-                     
-                     
                       Padding(
                         padding: const EdgeInsets.only(
                           top: 25.0,
@@ -193,25 +190,37 @@ class _LoginScreenState extends State<LoginScreen>
                           right: 20.0,
                         ),
                         child: ButtonTheme(
-                          minWidth: 320.0,
-                          height: 50.0,
-                          child: FlatButton(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(7.0)),
-                            color: theme.primaryColor,
-                            onPressed: () {
-                    
+                            minWidth: 320.0,
+                            height: 50.0,
+                            child: ButtonComponent(
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {
+                                  login(loginController);
+                                }
+                              },
+                              caption: "Sign In",
+                              textColor: Colors.white,
+                              backgroundColor: Colors.green,
+                            )
 
-                              if (_formKey.currentState!.validate()) {
-                                login(loginController);
-                              }
-                            },
-                            child: const Text(
-                              'Sign in',
-                              style: const TextStyle(color: Colors.white),
+                            // FlatButton(
+
+                            //   shape: RoundedRectangleBorder(
+                            //       borderRadius: BorderRadius.circular(7.0)),
+                            //   color: theme.primaryColor,
+                            //   onPressed: () {
+
+                            //     if (_formKey.currentState!.validate()) {
+                            //       login(loginController);
+                            //     }
+                            //   },
+                            //   child: const Text(
+                            //     'Sign in',
+                            //     style: const TextStyle(color: Colors.white),
+                            //   ),
+                            // ),
+
                             ),
-                          ),
-                        ),
                       ),
                       const SizedBox(
                         height: 10,
@@ -233,9 +242,9 @@ class _LoginScreenState extends State<LoginScreen>
                             ),
                             InkWell(
                               onTap: () {
-                                // Navigator.pushNamed(context, '/register');
-                                Get.to(()=> AddProfileDetails());
-                              //  Get.to(()=> Batches());
+                                Navigator.pushNamed(context, '/register');
+                                // Get.to(()=> AddProfileDetails());
+                                //  Get.to(()=> Batches());
                               },
                               child: Text(
                                 'Sign Up',
@@ -252,6 +261,8 @@ class _LoginScreenState extends State<LoginScreen>
                   ),
                 );
         }),
+      
+      
       ],
     ));
   }

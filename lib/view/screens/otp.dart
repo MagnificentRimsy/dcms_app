@@ -2,6 +2,7 @@
 
 import 'package:dcms_app/data/models/data/otp.dart';
 import 'package:dcms_app/utils/custom_snackbar.dart';
+import 'package:dcms_app/view/screens/components/button.dart';
 import 'package:dcms_app/view/screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -123,34 +124,49 @@ class _OtpPageState extends State<OtpPage> {
                                 constraints: const BoxConstraints(
                                     maxWidth: 500
                                 ),
-                                child: RaisedButton(
-                                  onPressed: () {
-                                      print('Otp ${text}');
+                                child:
+                                
+                                ButtonComponent(
+                              onPressed: () {
+                               print('Otp ${text}');
 
                                       _validateOtp(otpController);
-                                  },
-                                  color: Colors.green,
-                                  shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(14))
-                                  ),
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        Text('Confirm', style: TextStyle(color: Colors.white),),
-                                        Container(
-                                          padding: const EdgeInsets.all(8),
-                                          decoration: BoxDecoration(
-                                            borderRadius: const BorderRadius.all(Radius.circular(20)),
-                                            color: Colors.green,
-                                          ),
-                                          child: Icon(Icons.arrow_forward_ios, color: Colors.white, size: 16,),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
+                              },
+                              caption: "Confirm",
+                              textColor: Colors.white,
+                              backgroundColor: Colors.green,
+                            ),
+
+
+                                //  RaisedButton(
+                                //   onPressed: () {
+                                //       print('Otp ${text}');
+
+                                //       _validateOtp(otpController);
+                                //   },
+                                //   color: Colors.green,
+                                //   shape: const RoundedRectangleBorder(
+                                //       borderRadius: BorderRadius.all(Radius.circular(14))
+                                //   ),
+                                //   child: Container(
+                                //     padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                                //     child: Row(
+                                //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                //       children: <Widget>[
+                                //         Text('Confirm', style: TextStyle(color: Colors.white),),
+                                //         Container(
+                                //           padding: const EdgeInsets.all(8),
+                                //           decoration: BoxDecoration(
+                                //             borderRadius: const BorderRadius.all(Radius.circular(20)),
+                                //             color: Colors.green,
+                                //           ),
+                                //           child: Icon(Icons.arrow_forward_ios, color: Colors.white, size: 16,),
+                                //         )
+                                //       ],
+                                //     ),
+                                //   ),
+                                // ),
+                            
                               ),
                               NumericKeyboard(
                                 onKeyboardTap: _onKeyboardTap,

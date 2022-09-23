@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:dcms_app/controller/register_controller.dart';
+import 'package:dcms_app/view/screens/components/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -49,9 +50,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   //           ? SpinKitDoubleBounce(color: Color(0xff00A850))
   //           :
 
+  bool _passwordVisible = true;
   @override
   void initState() {
     super.initState();
+    _passwordVisible = false;
   }
 
   @override
@@ -213,7 +216,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           autocorrect: true,
                           controller: registrationController.passwordController,
                           focusNode: _passwordFocus,
-                          obscureText: true,
+                          obscureText: !_passwordVisible,
                           decoration: InputDecoration(
                             enabledBorder: OutlineInputBorder(
                               borderSide:
@@ -228,10 +231,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               size: 28.0,
                               color: theme.primaryColor,
                             ),
-                            suffixIcon: Icon(
-                              Icons.remove_red_eye,
-                              size: 28.0,
-                              color: theme.primaryColor,
+                              suffixIcon: IconButton(
+                              icon: Icon(
+                                // Based on passwordVisible state choose the icon
+                                _passwordVisible
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                color: Theme.of(context).primaryColorDark,
+                              ),
+                              onPressed: () {
+                                // Update the state i.e. toogle the state of passwordVisible variable
+                                setState(() {
+                                  _passwordVisible = !_passwordVisible;
+                                });
+                              },
                             ),
                             hintText: ' Password',
                             hintStyle: TextStyle(
@@ -405,20 +418,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         child: ButtonTheme(
                           minWidth: 320.0,
                           height: 50.0,
-                          child: FlatButton(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(7.0)),
-                            color: theme.primaryColor,
-                            onPressed: () async {
+                          child: ButtonComponent(
+                              onPressed: () {
+                               _register(registrationController);
+                              },
+                              caption: "Create an Account",
+                              textColor: Colors.white,
+                              backgroundColor: Colors.green,
+                            ),
+                          
+                          //  FlatButton(
+                          //   shape: RoundedRectangleBorder(
+                          //       borderRadius: BorderRadius.circular(7.0)),
+                          //   color: theme.primaryColor,
+                          //   onPressed: () async {
 
                             
-                                 _register(registrationController);
-                            },
-                            child: Text(
-                              'Create an Account',
-                              style: TextStyle(color: Colors.white, fontSize: 14),
-                            ),
-                          ),
+                          //        _register(registrationController);
+                          //   },
+                          //   child: Text(
+                          //     'Create an Account',
+                          //     style: TextStyle(color: Colors.white, fontSize: 14),
+                          //   ),
+                          // ),
                         ),
                       ),
                       SizedBox(
@@ -481,7 +503,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         pcIpAddress: '',
         pcName: '',
         pcUserName: '');
-    controller.registration(signUpBody).then((status) async {
+    controller.registration(signUpBody, context).then((status) async {
       if (status.isSuccess) {
         showCustomSnackBar(status.message);
 

@@ -1,4 +1,7 @@
 
+import 'dart:io';
+
+import 'package:dcms_app/utils/app_snacks.dart';
 import 'package:dcms_app/view/screens/otp.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -62,46 +65,32 @@ class RegistrationController extends GetxController implements GetxService {
     pcNameController.dispose();
   }
 
-  Future<dynamic> registration(SignUp signUpBody) async {
-   isLoading(true) ;
-    final prefs = await SharedPreferences.getInstance();
+  Future<dynamic> registration(SignUp signUpBody, context) async {
+    try {
+        isLoading(true) ;
+        final prefs = await SharedPreferences.getInstance();
+        update();
+        Response response = await dio.post(BaseEndpoint.baseUrl + Endpoints.signup,
+            data: signUpBody.toJson());
 
+        if (response.data['statusCode'] != 201) {
+          print('Registration Successful $response');      
+          await prefs.setString('username', signUpBody.userName);
+          AppSnacks.show(context, backgroundColor: Colors.green, leadingIcon: Icon(Icons.check), message: 'Success!');
+          isLoading(false);
+          Get.to(OtpPage(), transition: Transition.rightToLeft, arguments: signUpBody.userName);
+          update();
+        } 
 
-    update();
-    Response response = await dio.post(BaseEndpoint.baseUrl + Endpoints.signup,
-        data: signUpBody.toJson());
+    }on Response catch (e) {
+         
+          print('Registration Failed $e');
 
-    if (response.data['statusCode'] != 201) {
-      print('Registration Successful $response');
-      
-    await prefs.setString('username', signUpBody.userName);
+          AppSnacks.show(context, leadingIcon: Icon(Icons.error), message: ' Registration Failed');
 
-      Fluttertoast.showToast(
-          msg: "Account Created Success",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.TOP_RIGHT,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.green,
-          textColor: Colors.white,
-          fontSize: 16.0.sp);
-      isLoading(false);
-      Get.to(OtpPage(), transition: Transition.rightToLeft, arguments: signUpBody.userName);
-    } else {
-      print('Registration Failed $response');
-
-      Fluttertoast.showToast(
-          msg: "Failed: $response",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.TOP_RIGHT,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 16.0.sp);
-     isLoading(false);
-      update();
+          isLoading(false);
+          update();
     }
-
-    return response.data;
   }
 
 }

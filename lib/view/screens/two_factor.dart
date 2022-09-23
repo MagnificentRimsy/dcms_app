@@ -2,6 +2,7 @@
 
 import 'package:dcms_app/data/models/data/otp.dart';
 import 'package:dcms_app/utils/custom_snackbar.dart';
+import 'package:dcms_app/view/screens/components/button.dart';
 import 'package:dcms_app/view/screens/components/preloader.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -129,43 +130,55 @@ class _TwoFactorAuthState extends State<TwoFactorAuth> {
                       margin: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 5),
                       constraints: const BoxConstraints(maxWidth: 500),
-                      child: RaisedButton(
-                        onPressed: () {
-                          print('Otp ${text}');
+                      child: ButtonComponent(
+                              onPressed: () {
+                                print('Otp ${text}');
 
                           _validateOtp(twoFactorController);
-                        },
-                        color: Colors.green,
-                        shape: const RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(14))),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 8, horizontal: 8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text(
-                                'Verify and Proceed',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(20)),
-                                  color: Colors.green,
-                                ),
-                                child: Icon(
-                                  Icons.arrow_forward_ios,
-                                  color: Colors.white,
-                                  size: 16,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
+                              },
+                              caption: "Verify and Proceed",
+                              textColor: Colors.white,
+                              backgroundColor: Colors.green,
+                            ),
+                      
+                      // RaisedButton(
+                      //   onPressed: () {
+                      //     print('Otp ${text}');
+
+                      //     _validateOtp(twoFactorController);
+                      //   },
+                      //   color: Colors.green,
+                      //   shape: const RoundedRectangleBorder(
+                      //       borderRadius:
+                      //           BorderRadius.all(Radius.circular(14))),
+                      //   child: Container(
+                      //     padding: const EdgeInsets.symmetric(
+                      //         vertical: 8, horizontal: 8),
+                      //     child: Row(
+                      //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //       children: <Widget>[
+                      //         Text(
+                      //           'Verify and Proceed',
+                      //           style: TextStyle(color: Colors.white),
+                      //         ),
+                      //         Container(
+                      //           padding: const EdgeInsets.all(8),
+                      //           decoration: BoxDecoration(
+                      //             borderRadius: const BorderRadius.all(
+                      //                 Radius.circular(20)),
+                      //             color: Colors.green,
+                      //           ),
+                      //           child: Icon(
+                      //             Icons.arrow_forward_ios,
+                      //             color: Colors.white,
+                      //             size: 16,
+                      //           ),
+                      //         )
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ),
+                 
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10.0),

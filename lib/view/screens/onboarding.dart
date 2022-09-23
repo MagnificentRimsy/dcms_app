@@ -1,7 +1,10 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, unnecessary_new, prefer_const_constructors
 
+import 'package:dcms_app/view/screens/components/button.dart';
+import 'package:dcms_app/view/screens/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/route_manager.dart';
 
 class OnboardingScreen extends StatefulWidget {
   OnboardingScreen({Key? key}) : super(key: key);
@@ -81,35 +84,45 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: new Row(
                 children: <Widget>[
                   new Expanded(
-                    child: new FlatButton(
-                      shape: new RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(5.0)),
-                      color: Colors.green,
-                      onPressed: () {
-                        Navigator.pushNamed(context, '/login');
-                      },
-                      child: new Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 20.0,
-                          horizontal: 20.0,
-                        ),
-                        child: new Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            new Expanded(
-                              child: Text(
-                                "LOGIN",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Color(0xff00A850),
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                    child: ButtonComponent(
+                              onPressed: () {
+                                Get.to(LoginScreen());
+                              },
+                              caption: "Login",
+                              textColor: Colors.white,
+                              backgroundColor: Colors.green,
+                            )
+                    
+                    //  FlatButton(
+                    //   shape: new RoundedRectangleBorder(
+                    //       borderRadius: new BorderRadius.circular(5.0)),
+                    //   color: Colors.green,
+                    //   onPressed: () {
+                    //     Navigator.pushNamed(context, '/login');
+                    //   },
+                    //   child: new Container(
+                    //     padding: const EdgeInsets.symmetric(
+                    //       vertical: 20.0,
+                    //       horizontal: 20.0,
+                    //     ),
+                    //     child: new Row(
+                    //       mainAxisAlignment: MainAxisAlignment.center,
+                    //       children: <Widget>[
+                    //         new Expanded(
+                    //           child: Text(
+                    //             "LOGIN",
+                    //             textAlign: TextAlign.center,
+                    //             style: TextStyle(
+                    //                 color: Color(0xff00A850),
+                    //                 fontWeight: FontWeight.bold,
+                    //                 fontSize: 16),
+                    //           ),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
+                 
                   ),
                 ],
               ),

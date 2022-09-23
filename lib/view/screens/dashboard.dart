@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, unnecessary_new, prefer_const_constructors_in_immutables
 
 import 'dart:convert';
+import 'package:dcms_app/view/screens/batches.dart';
 import 'package:dcms_app/view/screens/components/app_icons.dart';
 import 'package:dcms_app/view/screens/components/cards.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -8,8 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../controller/login_controller.dart';
+import 'components/fade_animation.dart';
 
 class Dashboard extends StatefulWidget {
     final int? pageIndex;
@@ -22,12 +25,23 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+
     final loginController = Get.put(LoginController());
+    var userType = 0;
   @override
   void initState() {
     super.initState();
-    
     print('UserName Dashboard: ${loginController.userNameText.value}');
+    _loadUserData();
+
+  }
+
+    _loadUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      userType = (prefs.getInt('userType') ?? '') as int;
+      print('Logged In User $userType');
+    });
   }
   
 final List<String> seasonItems = [
@@ -187,7 +201,7 @@ String? selectedValue;
                           ),
                         ),
 
-                        ListTile(
+              ListTile(
                   contentPadding:
                       EdgeInsets.symmetric(horizontal: 20.0),
              
@@ -201,18 +215,15 @@ String? selectedValue;
                           fontSize: 22),
                     ),
                   ),
+
+                 
+ 
                   trailing: Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Text(
-                        //   'Amount',
-                        //   style: TextStyle(
-                        //       color: Colors.white,
-                        //       fontWeight: FontWeight.normal,
-                        //       fontSize: 18),
-                        // ),
+                      
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
@@ -247,13 +258,7 @@ String? selectedValue;
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Text(
-                        //   'Amount',
-                        //   style: TextStyle(
-                        //       color: Colors.white,
-                        //       fontWeight: FontWeight.normal,
-                        //       fontSize: 18),
-                        // ),
+                      
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
@@ -351,6 +356,8 @@ String? selectedValue;
               ),
             ),
 
+
+            userType == 1 ?
             Padding(
               padding: const EdgeInsets.only(left: 10, right: 10),
               child: Card(
@@ -409,7 +416,8 @@ String? selectedValue;
             
             
               ),
-            ),
+            ): Container(),
+            userType == 1 ?
             Padding(
               padding: const EdgeInsets.only(left: 10, right: 10),
               child: Card(
@@ -464,8 +472,9 @@ String? selectedValue;
                   onTap: () {},
                 ),
               ),
-            ),
-
+            )
+            
+            :Container(),
             Card(
               elevation: 0,
               child: Container(
@@ -477,24 +486,30 @@ String? selectedValue;
                     // Title was here
                     Row(
                       children: [
-                        Expanded(
+                          Expanded(
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: HomeTabCard(
-                              onPressed: () {},
+                              onPressed: () {
+                     
+                                   Navigator.of(context).push(FadeRoute(page: Batches()));
+
+                              },
                               title: 'Manage',
-                              icon: Icons.map_rounded,
-                              sub: 'Farms',
+                              icon: Icons.send_and_archive,
+                              sub: 'Batch Transactions ',
                               iconColor: Colors.black,
-                              backgroundColor: Color(0xFFFED8B1),
+                              backgroundColor: Color(0xFFD0F0C0),
                             ),
                           ),
-                        ),
+                        ),  
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: HomeTabCard(
-                              onPressed: () {},
+                              onPressed: () {
+                            
+                              },
                               title: 'FFB',
                               icon: Icons.ac_unit,
                               sub: 'Supplies',
@@ -507,18 +522,16 @@ String? selectedValue;
                     ),
                     Row(
                       children: [
-                        Expanded(
+                       Expanded(
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: HomeTabCard(
-                              onPressed: () {
-                                
-                              },
+                              onPressed: () {},
                               title: 'Manage',
-                              icon: Icons.send_and_archive,
-                              sub: 'Batch Transactions ',
+                              icon: Icons.map_rounded,
+                              sub: 'Farms',
                               iconColor: Colors.black,
-                              backgroundColor: Color(0xFFD0F0C0),
+                              backgroundColor: Color(0xFFFED8B1),
                             ),
                           ),
                         ),

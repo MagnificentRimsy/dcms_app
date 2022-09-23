@@ -8,6 +8,13 @@ class Endpoints {
   static const String GenerateOtp = 'administrations/GetOtp';
   static const String validateTwoFactorToken = 'administrations/ValidateOtp';
   static const String createBatch = 'configurations/AddBatch';
+  static const String getBatchByUserName ='configurations/GetAllBatchByUserName?UserName=';
+ 
+  static const String getFarmersByAgentOid ='FarmersManagement/GetAllFarmersByAgentId?agentOid=';
+  static const String getFarmsByFarmerOid = 'FarmersManagement/GetAllFarmsByFarmerId?farmerOid=';
+
+  static const String createTransaction = 'configurations/AddTransaction';
+
 
   static const String updatePersonalInformation = 'auth/personal-information';
   static const String updateBankingInformation = 'auth/bank-information';

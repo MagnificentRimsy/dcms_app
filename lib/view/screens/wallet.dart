@@ -3,6 +3,8 @@
 import 'package:dcms_app/view/screens/components/cards.dart';
 import 'package:flutter/material.dart';
 
+import 'components/appbar.dart';
+
 class WalletScreen extends StatefulWidget {
   WalletScreen({Key? key}) : super(key: key);
 
@@ -26,32 +28,7 @@ class _WalletScreenState extends State<WalletScreen>
       child: Scaffold(
         body: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                top: 20.0,
-                left: 20.0,
-                right: 20.0,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  InkWell(
-                    child: Text(
-                      'Hi, Kitaka',
-                      style: TextStyle(fontSize: 21.0),
-                    ),
-                    onTap: () {},
-                  ),
-                  CircleAvatar(
-                    radius: 30.0,
-                    child: ClipRRect(
-                      child: Image.asset('assets/user.jpg'),
-                      borderRadius: BorderRadius.circular(50.0),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            AppHeaderTop(caption: 'Your Wallet',),
             Column(
               children: [
           

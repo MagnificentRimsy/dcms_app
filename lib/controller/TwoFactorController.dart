@@ -26,7 +26,7 @@ class TwoFactorController extends GetxController {
 
   Future<dynamic> validateTwoFactor(ValidateData validateDataBody) async {
    _prefs = await SharedPreferences.getInstance();
-
+  
     isLoading(true);
     update();
     var response =  await _provider.sendPost(Endpoints.validateTwoFactorToken, validateDataBody.toJson());

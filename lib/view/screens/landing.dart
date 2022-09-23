@@ -58,41 +58,66 @@ class LandingScreen extends StatelessWidget {
              ), 
             SizedBox(height: 30,),
 
-            Container(
-              alignment: Alignment.center,
-              margin: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-              child: RaisedButton(
-                onPressed: () {
-                  // Login
-                   Get.to(LoginScreen());
+            TextButton(
+                      style: ButtonStyle(
+                          elevation: MaterialStateProperty.all(0),
+                          backgroundColor: MaterialStateProperty.all(
+                              Theme.of(context).primaryColor),
+                          padding: MaterialStateProperty.all(
+                              const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 20)),
+                          textStyle: MaterialStateProperty.all(TextStyle(
+                            color: Colors.black,
+                          )),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ))),
+                      onPressed: () {
+                           Get.off(LoginScreen());
+                      },
+                      child: Text("Get's get Started",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.normal)),
+                    ),
 
-                },
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.0)),
-                textColor: Colors.white,
-                padding: const EdgeInsets.all(0),
-                child: Container(
-                  alignment: Alignment.center,
-                  height: 55.0,
-                  width: size.width * 0.9,
+            // Container(
+            //   alignment: Alignment.center,
+            //   margin: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+            //   child: TextButton(
+            //     onPressed: () {
+            //       // Login
+            //        Get.to(LoginScreen());
 
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5.0),
-                      gradient:  LinearGradient(colors: [
-                        Color(0xFF00A850),
-                       Color(0xFF82CB46)
-                      ])),
-                  padding: const EdgeInsets.all(0),
-                  child: Text(
-                    "Let's Get Started",
+            //     },
+            //     shape: RoundedRectangleBorder(
+            //         borderRadius: BorderRadius.circular(5.0)),
+            //     textColor: Colors.white,
+            //     padding: const EdgeInsets.all(0),
+            //     child: Container(
+            //       alignment: Alignment.center,
+            //       height: 55.0,
+            //       width: size.width * 0.9,
+
+            //       decoration: BoxDecoration(
+            //           borderRadius: BorderRadius.circular(5.0),
+            //           gradient:  LinearGradient(colors: [
+            //             Color(0xFF00A850),
+            //            Color(0xFF82CB46)
+            //           ])),
+            //       padding: const EdgeInsets.all(0),
+            //       child: Text(
+            //         "Let's Get Started",
                     
-                    textAlign: TextAlign.center,
+            //         textAlign: TextAlign.center,
 
-                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-                  ),
-                ),
-              ),
-            ),
+            //         style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+            //       ),
+            //     ),
+            //   ),
+            // ),
 
           ],
         ),

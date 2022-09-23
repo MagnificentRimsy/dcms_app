@@ -19,38 +19,80 @@ import '../core/api_service_provider.dart';
 import '../models/auth/user.dart';
 import '../routes/auth_endpoints.dart';
 import '../routes/base.dart';
+import '../services/batch_service_provider.dart';
 import '../utils/app_snacks.dart';
 
-class BatchController extends GetxController {
-  var isLoading = false.obs;
+class BatchController extends GetxController with StateMixin<List<dynamic>> {
+  RxBool isLoading = false.obs;
   final ApiServiceProvider _provider = ApiServiceProvider();
   late SharedPreferences _prefs;
-
   RxString batchDescriptionText = ''.obs;
+  Dio dio = Dio(); 
+  late TextEditingController batchDescriptionController;
 
-  Dio dio = Dio();
 
-  late TextEditingController batchDescriptionController, passwordController;
+  // Get Batches
+    var listBatch = List<dynamic>.empty(growable: true).obs;
+    var page = 1;
+    var isDataProcessing = false.obs;
+    // For Pagination
+    ScrollController scrollController = ScrollController();
+    var isMoreDataAvailable = true.obs;
+
+
+ RxString username = ''.obs;
 
   @override
-  void onInit() {
+  void onInit() async{
     super.onInit();
-
     batchDescriptionController = TextEditingController();
-    
+    _getBatches ();
   }
+
+
+
+
+_getBatches () async {
+    _prefs = await  SharedPreferences.getInstance();
+     BatchProvider().getBatches(_prefs.getString('username') ).then((value) {
+      change(value, status: RxStatus.success());
+    },onError: (error){
+      change(null,status: RxStatus.error(error.toString()));
+    });
+}
+
+
 
   @override
   void onClose() {
     super.onClose();
     batchDescriptionController.dispose();
-    passwordController.dispose();
   }
 
-  Future<dynamic> loginAccount(BuildContext context, Batch batchDataBody) async {
+
+  //Load Batches
+
+
+  // common snack bar
+  showSnackBar(String title, String message, Color backgroundColor) {
+    Get.snackbar(title, message,
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: backgroundColor,
+        colorText: Colors.white);
+  }
+
+
+
+ 
+  // Refresh List
+  void refreshList() async {
+    page = 1;
+   
+  }
+
+  createBatch(BuildContext context, Batch batchDataBody) async {
 
     try {
-      _prefs = await SharedPreferences.getInstance();
 
       isLoading(true);
       update();
@@ -58,46 +100,22 @@ class BatchController extends GetxController {
       print(url);
       print('batch-data ${batchDataBody.description}');
       Response response = await dio.post(url, data: batchDataBody.toJson());
-      print (response.data['value']['isActive']);
-      var userType = _prefs.setInt('userType', response.data['value']['userType']);
-      print('UserType ---- $userType');
-      if ( response.statusCode == 200 && response.data['value']['isActive'] == true) {
-         GetTwoFaBody getTwofactorBody = GetTwoFaBody(reason: 3, requester: signInDataBody.batchDescription, status: 0);
-
-
-        Response generateOtp = await dio.post(BaseEndpoint.baseUrl+Endpoints.GenerateOtp, data: getTwofactorBody.toJson() );
-        if (generateOtp.data['statusCode'] == 200)
-        {
-          AppSnacks.show(context, backgroundColor: Colors.green, leadingIcon: Icon(Icons.check), message: 'Login Successful');
-          update();
-
-          isLoading(false);
-          Get.to(Home(), arguments: response.data['value']['batchDescription']);
-        }else {
-         
-          AppSnacks.show(context, message: 'Login Failed');
-          update();
-
-          isLoading(false);
-        }
-        
-
-      }else {
-    
-        AppSnacks.show(context, backgroundColor: Colors.green, leadingIcon: Icon(Icons.check), message: 'Login Successful');
-
-        update();
+      print (response.data);
+      if ( response.statusCode == 201 ) {
 
         isLoading(false);
-        Get.to(Home(), arguments: response);
+        Navigator.pop(context);
+        AppSnacks.show(context, backgroundColor: Colors.green, leadingIcon: Icon(Icons.check), message: 'Batch Created Success!');
+        _getBatches();
+        update();
+        return response.data;
       }
+      
     } catch (e) {
-      print('Login Failed $e');
+      print('Operation Failed $e');
       isLoading(false);
-      AppSnacks.show(context, leadingIcon: Icon(Icons.error), message: 'Login Failed: $e');
-      print('Login Failed, batchDescription or password $e');
       update();
-      return e;
+      return e.toString();
     }
   }
 }

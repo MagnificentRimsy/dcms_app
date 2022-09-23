@@ -8,30 +8,41 @@ import 'package:dcms_app/view/screens/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'components/exit_pop.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
+  @override
+  State<Home> createState() => _HomeState();
+}
 
+class _HomeState extends State<Home> {
   var data = Get.arguments;
-  
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
 
-    return  WillPopScope(
+    return WillPopScope(
       onWillPop: () => showExitPopup(context),
       child: DefaultTabController(
-        length: 4,
+        length: 3,
         child: Scaffold(
-          body: 
-          TabBarView(
+          body: TabBarView(
             children: <Widget>[
               Dashboard(),
               WalletScreen(),
-              Batches(),
+              
               SettingsScreen(),
-    
+
               // NearBy(),
               // Cart(),
             ],
@@ -53,10 +64,7 @@ class Home extends StatelessWidget {
                   icon: Icon(Icons.account_balance_wallet, size: 28),
                   text: 'Wallet',
                 ),
-                Tab(
-                  icon: Icon(Icons.cached_sharp, size: 28),
-                  text: 'Transactions',
-                ),
+              
                 Tab(
                   icon: Icon(Icons.apps, size: 28),
                   text: 'More',

@@ -1,4 +1,4 @@
 class BaseEndpoint {
 
-  static const String baseUrl = 'https://api.dscmportal.com/api/';
+  static const String baseUrl = 'http://api.dscmportal.com/api/';
 }

@@ -20,9 +20,11 @@ import 'package:get/get.dart';
 import 'package:page_route_transition/page_route_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'controller/batch_controller.dart';
 import 'controller/login_controller.dart';
 import 'controller/otp_controller.dart';
 import 'data/api/api_client.dart';
+import 'helper/app_routes.dart';
 import 'respository/auth_repo.dart';
 
 void main() => runApp(MyApp());
@@ -45,7 +47,7 @@ class _MyAppState extends State<MyApp> {
  Get.lazyPut<OtpController>(() => OtpController());
  Get.lazyPut<LoginController>(() => LoginController());
  Get.lazyPut<TwoFactorController>(()=> TwoFactorController());
-
+ Get.lazyPut<BatchController>((() => BatchController() ));
 
     return ScreenUtilInit(
       designSize: const Size(360, 690),
@@ -60,21 +62,21 @@ class _MyAppState extends State<MyApp> {
         ),
         debugShowCheckedModeBanner: false,
         initialRoute: '/splash',
-        
-        routes: {
-          // ignore: prefer_const_constructors
+        getPages: Routes.routes,
+        // {
+        //   // ignore: prefer_const_constructors
          
-          '/splash': (context) => SplashScreen(),
-          '/onboarding': (context) => OnboardingScreen(),
-          '/landing': (context) => LandingScreen(),
-          '/login': (context) => LoginScreen(),
-          '/register': (context) => RegisterScreen(),
-          '/otp' : (context) => OtpPage(),
-          '/dashboard': (context) => Dashboard(pageIndex: 0,),
-          '/home': (context) => Home(),
-          '/settings': (context) => SettingsScreen(),
-          '/wallet': (context) => WalletScreen()
-        },
+        //   '/splash': (context) => SplashScreen(),
+        //   '/onboarding': (context) => OnboardingScreen(),
+        //   '/landing': (context) => LandingScreen(),
+        //   '/login': (context) => LoginScreen(),
+        //   '/register': (context) => RegisterScreen(),
+        //   '/otp' : (context) => OtpPage(),
+        //   '/dashboard': (context) => Dashboard(pageIndex: 0,),
+        //   '/home': (context) => Home(),
+        //   '/settings': (context) => SettingsScreen(),
+        //   '/wallet': (context) => WalletScreen()
+        // },
         
       );}
     );

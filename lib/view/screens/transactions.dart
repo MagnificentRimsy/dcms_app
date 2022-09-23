@@ -1,8 +1,19 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, unused_import, unnecessary_new
 
+import 'package:dcms_app/controller/batch_controller.dart';
+import 'package:dcms_app/core/api_service_provider.dart';
+import 'package:dcms_app/respository/transaction_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../controller/transaction_controller.dart';
+import '../../models/transaction.dart';
+import '../../utils/svg_assets.dart';
+import 'components/button.dart';
 
 class Transactions extends StatefulWidget {
   Transactions({Key? key}) : super(key: key);
@@ -13,9 +24,15 @@ class Transactions extends StatefulWidget {
 
 class _TransactionsState extends State<Transactions>
     with SingleTickerProviderStateMixin {
+  var data = Get.arguments;
+
+  NumberFormat moneyFormat = NumberFormat.decimalPattern('en_us');
+ 
   @override
   void initState() {
     super.initState();
+
+    print('Collected Data ${data}');
   }
 
   @override
@@ -30,9 +47,17 @@ class _TransactionsState extends State<Transactions>
                 backgroundColor: Colors.transparent,
                 elevation: 0,
                 centerTitle: true,
-                title: Text(
-                  'Batch Details',
-                  style: TextStyle(color: Color(0xFF00A850)),
+                title: Column(
+                  children: [
+                    Text(
+                      'Batch Details',
+                      style: TextStyle(color: Color(0xFF00A850)),
+                    ),
+                    Text(
+                      'ID: ${data['batchId']}',
+                      style: TextStyle(color: Color(0xFF00A850)),
+                    ),
+                  ],
                 ),
                 leading: BackButton(color: Color(0xFF00A850)),
               ),
@@ -49,16 +74,26 @@ class _TransactionsState extends State<Transactions>
                       padding: const EdgeInsets.only(left: 15),
                       child: Align(
                         alignment: Alignment.topLeft,
-                        child: SizedBox(
-                          height: 20,
-                          child: Text(
-                            'Overview',
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                              color: Color(0xFF4A4B65),
-                              fontWeight: FontWeight.w700,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Description:',
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                color: Color(0xFF4A4B65),
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
-                          ),
+                            Text(
+                              '${data['description']}',
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                color: Color(0xFF4A4B65),
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -77,129 +112,105 @@ class _TransactionsState extends State<Transactions>
                         ),
                         child: Column(
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 30, left: 10),
-                                      child: Container(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Date',
-                                              style: TextStyle(
-                                                  color: Colors.black54,
-                                                  fontSize: 14,
-                                                  fontWeight:
-                                                      FontWeight.normal),
-                                            ),
-                                            Text(
-                                              '21st June 2022',
-                                              style: TextStyle(
-                                                  color: Colors.black54,
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 30.0, top: 20, bottom: 30),
-                                      child: Container(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Transaction Amount',
-                                              style: TextStyle(
-                                                  color: Colors.black54,
-                                                  fontSize: 14,
-                                                  fontWeight:
-                                                      FontWeight.normal),
-                                            ),
-                                            Text(
-                                              '200,000',
-                                              style: TextStyle(
-                                                  color: Colors.black54,
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 30, left: 30, right: 10),
-                                      child: Container(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Due Date',
-                                              style: TextStyle(
-                                                  color: Colors.black54,
-                                                  fontSize: 14,
-                                                  fontWeight:
-                                                      FontWeight.normal),
-                                            ),
-                                            Text(
-                                              '29 July 2022',
-                                              style: TextStyle(
-                                                  color: Colors.black54,
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 20.0,
-                                          top: 20,
-                                          right: 50,
-                                          bottom: 30),
-                                      child: Container(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              'Trans ID',
-                                              style: TextStyle(
-                                                  color: Colors.black54,
-                                                  fontSize: 14,
-                                                  fontWeight:
-                                                      FontWeight.normal),
-                                            ),
-                                            Text(
-                                              'OK01123445',
-                                              style: TextStyle(
-                                                  color: Colors.black54,
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                            Padding(
+                              padding: const EdgeInsets.all(13.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Transaction Amount:',
+                                    style: TextStyle(
+                                        color: Colors.black54,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.normal),
+                                  ),
+                                  Text(
+                                    '₦' +
+                                        moneyFormat.format(
+                                            data['summary']['totalAmount']),
+                                    style: TextStyle(
+                                        color: Colors.black54,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(13.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'FFB Collected:',
+                                    style: TextStyle(
+                                        color: Colors.black54,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.normal),
+                                  ),
+                                  Text(
+                                    '₦' +
+                                        moneyFormat.format(data['summary']
+                                            ['totalFFBCollected']),
+                                    style: TextStyle(
+                                        color: Colors.black54,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(13.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Amount Due:',
+                                    style: TextStyle(
+                                        color: Colors.black54,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.normal),
+                                  ),
+                                  Text(
+                                    '₦' +
+                                        moneyFormat.format(data['financials']
+                                            ['totalAmountDue']),
+                                    style: TextStyle(
+                                        color: Colors.black54,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(13.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Amount Due to Agent:',
+                                    style: TextStyle(
+                                        color: Colors.black54,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.normal),
+                                  ),
+                                  Text(
+                                    '₦' +
+                                        moneyFormat.format(data['financials']
+                                            ['totalAmountDueToAgent']),
+                                    style: TextStyle(
+                                        color: Colors.black54,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
@@ -229,9 +240,9 @@ class _TransactionsState extends State<Transactions>
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(right:10.0),
+                          padding: const EdgeInsets.only(right: 10.0),
                           child: ElevatedButton(
-                              child: Text("Add New ".toUpperCase(),
+                              child: Text("Create Transaction ".toUpperCase(),
                                   style: TextStyle(fontSize: 14)),
                               style: ButtonStyle(
                                   foregroundColor:
@@ -244,131 +255,306 @@ class _TransactionsState extends State<Transactions>
                                           RoundedRectangleBorder>(
                                       RoundedRectangleBorder(
                                           borderRadius: BorderRadius.zero,
-                                          side:
-                                              BorderSide(color: Colors.green)))),
-                              onPressed: () => null),
+                                          side: BorderSide(
+                                              color: Colors.green)))),
+                              onPressed: () {
+                                showModalBottomSheet(
+                                  
+                                  context: context,
+                                  isScrollControlled: true,
+                                  backgroundColor: Colors.transparent,
+                                  builder: (context) => Container(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.75,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: new BorderRadius.only(
+                                          topLeft: const Radius.circular(25.0),
+                                          topRight: const Radius.circular(25.0),
+                                        ),
+                                      ),
+                                      child: Column(
+                                        children: [
+                                             GetBuilder<TransactionController>(
+                                              initState:  maininit(),
+                                              builder: (controller) {
+                                              return 
+                                              
+                                              controller.isDataProcessing.isTrue
+                                                ? Padding(
+                                                    padding: const EdgeInsets
+                                                            .symmetric(
+                                                        vertical: 30),
+                                                    child: Center(
+                                                      child: SpinKitDualRing(
+                                                        color: Colors.green,
+                                                        lineWidth: 2,
+                                                      ),
+                                                    ),
+                                                  ):
+                                              Form(
+                                                  key: controller.formKey,
+                                                  child: Column(
+                                                  mainAxisAlignment:MainAxisAlignment.start,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .stretch,
+                                                          children: <Widget>[
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets.all(20),
+                                                              child: const Text('Create Transaction',
+                                                                textAlign: TextAlign.left,
+                                                                style: TextStyle(
+                                                                    fontSize: 22.0,
+                                                                    fontWeight:FontWeight.bold
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            const SizedBox(
+                                                              height: 10,
+                                                            ),
+                                                            Padding(
+                                                              padding: const EdgeInsets.only( left: 20),
+                                                              child: const Text(
+                                                                'Enter Details',
+                                                                textAlign: TextAlign.left,
+                                                                style: TextStyle(fontSize: 16.0),
+                                                              ),
+                                                            ),
+                                                            const SizedBox(
+                                                              height: 10,
+                                                            ),
+                                                            
+                                                            Padding(
+                                                              padding: const EdgeInsets.only(top: 25.0, left: 10.0, right: 10.0),
+                                                              child: TextFormField(
+                                                                keyboardType:TextInputType.number,
+                                                                autocorrect: true,
+                                                                validator: (value) {
+                                                                  if (value ==  null || value.isEmpty) {
+                                                                    return 'Amount Due';
+                                                                  }
+                                                                  return null;
+                                                                },
+                                                                decoration: InputDecoration(
+                                                                  enabledBorder: const OutlineInputBorder(
+                                                                    borderSide: const BorderSide( color: Colors.grey, width: 1.0),
+                                                                  ),
+                                                                  focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                                                                  ),
+                                                                  prefixIcon: Icon( Icons.money, size: 28.0, color: Colors.green ),
+                                                                  hintText: 'Amount Due',
+                                                                  hintStyle:TextStyle(
+                                                                   
+                                                                    fontSize: 14.0,
+                                                                    fontWeight: FontWeight.bold
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            const SizedBox(
+                                                              height:10,
+                                                            ),
+                                          
+                                                            Obx(
+                                                                () => Padding(
+                                                                  padding: const EdgeInsets.only( left: 10.0, right: 10.0),
+                                                                  child: DropdownButtonFormField(
+                                                                    isDense: true,
+                                                                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                                                                    validator: (val) {
+                                                                      return controller.validateFarmer(val.toString());
+                                                                    },
+                                                                    decoration: InputDecoration(
+                                                                      border: OutlineInputBorder(
+                                                                        borderRadius: BorderRadius.all(
+                                                                          Radius.circular(5),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    items: controller.listFarmerDropDownMenuItem.value,
+                                                                    value: controller.selectedFarmerId.value,
+                                                                    hint: Text(
+                                                                      "Select Farmer",
+                                                                      style:
+                                                                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                                                                    ),
+                                                                    onChanged: (selectedValue) {
+                                                                      controller.selectedFarmerId.value =
+                                                                          selectedValue.toString();
+                                                                      if (controller.selectedFarmerId.value != "0") {
+                                                                        controller.getFarms(controller.selectedFarmerId.value);
+                                                                      }
+                                                                    },
+                                                                    isExpanded: true,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            // SizedBox(height: 10,),
+                                                            // Obx(
+                                                            //     () => DropdownButtonFormField(
+                                                            //       isDense: true,
+                                                            //       autovalidateMode: AutovalidateMode.onUserInteraction,
+                                                            //       validator: (val) {
+                                                            //         return controller.validateFarm(val.toString());
+                                                            //       },
+                                                            //       decoration: InputDecoration(
+                                                            //         border: OutlineInputBorder(
+                                                            //           borderRadius: BorderRadius.all(
+                                                            //             Radius.circular(8),
+                                                            //           ),
+                                                            //         ),
+                                                            //       ),
+                                                            //       items: controller.listFarmDropDownMenuItem.value,
+                                                            //       value: controller.selectedFarmId.value,
+                                                            //       hint: Text(
+                                                            //         "Select State",
+                                                            //         style:
+                                                            //             TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                                                            //       ),
+                                                            //       onChanged: (selectedValue) {
+                                                            //         controller.selectedFarmId.value =
+                                                            //             selectedValue.toString();
+                                                                  
+                                                            //       },
+                                                            //       isExpanded: true,
+                                                            //     ),
+                                                            //   ),
+                                          
+                                                            ButtonTheme( minWidth: 320.0,  height: 50.0,
+                                                                child: ButtonComponent(
+                                                                  onPressed: () {
+                                                                    // if (_formKey
+                                                                    //     .currentState!
+                                                                    //     .validate()) {
+                                                                    //   addTransaction(
+                                                                    //       transactionController,
+                                                                    //       context);
+                                                                    // }
+                                                                  },
+                                                                  caption: "Submit",
+                                                                  textColor: Colors.white,
+                                                                  backgroundColor:Colors.green,
+                                                                )),
+                                                          ],
+                                                        ),
+                                                      );
+                                            }
+                                          )
+                                        ],
+                                      )),
+                                );
+                              }),
                         )
                       ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10, right: 10),
-                      child: Card(
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(
-                            color: Color(0xffD2CDDE),
-                          ),
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                        child: ListTile(
-                          contentPadding: EdgeInsets.symmetric(
-                              horizontal: 20.0, vertical: 10.0),
-                          leading: Container(
-                            padding: EdgeInsets.only(right: 12.0),
-                            decoration: new BoxDecoration(
-                                border: new Border(
-                                    right: new BorderSide(
-                                        width: 0.0,
-                                        color: Color.fromARGB(
-                                            255, 255, 255, 255)))),
-                            child: SvgPicture.asset(
-                                'assets/images/trans_icon.svg',
-                                semanticsLabel: 'Trans'),
-                          ),
-                          title: Text(
-                            'FFB Supply Payment',
-                            style: TextStyle(
-                                color: Color.fromRGBO(64, 75, 96, .9),
-                                fontWeight: FontWeight.w500,
-                                fontSize: 18),
-                          ),
-                          trailing: Padding(
-                            padding: const EdgeInsets.only(top: 10.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Amount Due',
-                                  style: TextStyle(
-                                      color: Color.fromRGBO(64, 75, 96, .9),
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 10),
+                    data['transactions'].length > 0
+                        ? ListView.builder(
+                            shrinkWrap: true,
+                            physics: ClampingScrollPhysics(),
+                            itemCount: data['transactions']!.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 10, right: 10),
+                                child: Card(
+                                  elevation: 0,
+                                  shape: RoundedRectangleBorder(
+                                    side: BorderSide(
+                                      color: Color(0xffD2CDDE),
+                                    ),
+                                    borderRadius: BorderRadius.circular(15.0),
+                                  ),
+                                  child: ListTile(
+                                    contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 20.0, vertical: 10.0),
+                                    title: Text(
+                                      'TranID: ${data["transactions"][index]["transId"]}',
+                                      style: TextStyle(
+                                          color: Color.fromRGBO(64, 75, 96, .9),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 16),
+                                    ),
+                                    subtitle: Text(
+                                      'Date: ${data["transactions"][index]["purchaseDate"]} ',
+                                      style: TextStyle(
+                                          color: Color.fromRGBO(64, 75, 96, .9),
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 14),
+                                    ),
+                                    trailing: Padding(
+                                      padding: const EdgeInsets.only(top: 10.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Amount Due',
+                                            style: TextStyle(
+                                                color: Color.fromRGBO(
+                                                    64, 75, 96, .9),
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: 12),
+                                          ),
+                                          Text(
+                                            '₦ ' +
+                                                moneyFormat.format(
+                                                    data["transactions"][index]
+                                                        ["amountDue"]),
+                                            style: TextStyle(
+                                                color: Color.fromRGBO(
+                                                    64, 75, 96, .9),
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    onTap: () {},
+                                  ),
                                 ),
-                                Text(
-                                  'N430,021',
-                                  style: TextStyle(
-                                      color: Color.fromRGBO(64, 75, 96, .9),
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                          ),
-                          onTap: () {},
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10, right: 10),
-                      child: Card(
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(
-                            color: Color(0xffD2CDDE),
-                          ),
-                          borderRadius: BorderRadius.circular(15.0),
-                        ),
-                        child: ListTile(
-                          contentPadding: EdgeInsets.symmetric(
-                              horizontal: 20.0, vertical: 10.0),
-                          leading: Container(
-                            padding: EdgeInsets.only(right: 12.0),
-                            decoration: new BoxDecoration(
-                                border: new Border(
-                                    right: new BorderSide(
-                                        width: 0.0,
-                                        color: Color.fromARGB(
-                                            255, 255, 255, 255)))),
-                            child: SvgPicture.asset(
-                                'assets/images/trans_icon.svg',
-                                semanticsLabel: 'Trans'),
-                          ),
-                          title: Text(
-                            'FFB Supply Payment',
-                            style: TextStyle(
-                                color: Color.fromRGBO(64, 75, 96, .9),
-                                fontWeight: FontWeight.w500,
-                                fontSize: 18),
-                          ),
-                          trailing: Padding(
-                            padding: const EdgeInsets.only(top: 10.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Amount Due',
-                                  style: TextStyle(
-                                      color: Color.fromRGBO(64, 75, 96, .9),
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 10),
-                                ),
-                                Text(
-                                  'N500,021',
-                                  style: TextStyle(
-                                      color: Color.fromRGBO(64, 75, 96, .9),
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                          ),
-                          onTap: () {},
-                        ),
-                      ),
-                    ),
+                              );
+                            })
+                        : Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Text('No Transactions Created'),
+                          )
                   ],
                 ),
               ),
             ),
           );
         });
+  }
+   maininit() {
+    print("here");
+   Get.put<TransactionController>(TransactionController(Repository(ApiServiceProvider())));
+    print("here");
+    Get.put<BatchController>(BatchController());
+    print("here");
+  }
+
+  Future<dynamic> addTransaction(
+      TransactionController controller, context) async {
+    int _amountDue = controller.amountDueController.text.trim() as int;
+    var _purchasedDate = controller.purchaseDateController.text.trim();
+    var _tonnage = controller.tonnageController.text.trim() as int;
+    int _batchOid = 0;
+    int _farmerOid = 0;
+    int _farmOid = 0;
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String username = (prefs.getString('username') ?? '');
+    Transaction transactionBody = Transaction(
+        amountDue: _amountDue,
+        batchOid: _batchOid,
+        farmerOid: _farmerOid,
+        farmOid: _farmOid,
+        purchaseDate: _purchasedDate,
+        tonnage: _tonnage,
+        createdBy: username,
+        createdOn: DateTime.now().toString());
+    return await controller.createTransaction(context, transactionBody);
   }
 }

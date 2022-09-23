@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:dcms_app/view/screens/landing.dart';
 import 'package:dcms_app/view/screens/login.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +24,7 @@ class SplashScreenState extends State<SplashScreen> {
     super.initState();
 
     Future.delayed(const Duration(seconds: 3), () async {
-          Get.to( LandingScreen());
+          Get.off( LandingScreen());
     });
   }
 
@@ -57,8 +59,6 @@ class SplashScreenState extends State<SplashScreen> {
                       lineWidth: 3,
                       size: 40,
                     ),
-              // SpinKitThreeBounce(color: Color(0xff00A850), size: 30,)
-              //  SpinKitFadingCircle(color: Colors.white, size: 50)
              
             ],
           ),
