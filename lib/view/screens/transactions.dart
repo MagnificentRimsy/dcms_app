@@ -2,6 +2,7 @@
 
 import 'package:dcms_app/controller/batch_controller.dart';
 import 'package:dcms_app/core/api_service_provider.dart';
+import 'package:dcms_app/models/farmer_transaction.dart';
 import 'package:dcms_app/respository/transaction_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../controller/transaction_controller.dart';
 import '../../models/transaction.dart';
 import '../../utils/svg_assets.dart';
@@ -27,7 +29,7 @@ class _TransactionsState extends State<Transactions>
   var data = Get.arguments;
 
   NumberFormat moneyFormat = NumberFormat.decimalPattern('en_us');
- 
+
   @override
   void initState() {
     super.initState();
@@ -259,7 +261,6 @@ class _TransactionsState extends State<Transactions>
                                               color: Colors.green)))),
                               onPressed: () {
                                 showModalBottomSheet(
-                                  
                                   context: context,
                                   isScrollControlled: true,
                                   backgroundColor: Colors.transparent,
@@ -276,122 +277,260 @@ class _TransactionsState extends State<Transactions>
                                       ),
                                       child: Column(
                                         children: [
-                                             GetBuilder<TransactionController>(
-                                              initState:  maininit(),
+                                          GetBuilder<TransactionController>(
+                                              initState: maininit(),
+                                              dispose: (c) {
+                                                c.dispose();
+                                              },
                                               builder: (controller) {
-                                              return 
-                                              
-                                              controller.isDataProcessing.isTrue
-                                                ? Padding(
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        vertical: 30),
-                                                    child: Center(
-                                                      child: SpinKitDualRing(
-                                                        color: Colors.green,
-                                                        lineWidth: 2,
-                                                      ),
-                                                    ),
-                                                  ):
-                                              Form(
-                                                  key: controller.formKey,
-                                                  child: Column(
-                                                  mainAxisAlignment:MainAxisAlignment.start,
+                                                return controller
+                                                        .isDataProcessing.isTrue
+                                                    ? Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .symmetric(
+                                                                vertical: 30),
+                                                        child: Center(
+                                                          child:
+                                                              SpinKitDualRing(
+                                                            color: Colors.green,
+                                                            lineWidth: 2,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : Form(
+                                                        key: controller.formKey,
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
                                                           crossAxisAlignment:
                                                               CrossAxisAlignment
                                                                   .stretch,
                                                           children: <Widget>[
                                                             Padding(
                                                               padding:
-                                                                  const EdgeInsets.all(20),
-                                                              child: const Text('Create Transaction',
-                                                                textAlign: TextAlign.left,
+                                                                  const EdgeInsets
+                                                                      .all(20),
+                                                              child: const Text(
+                                                                'Create Transaction',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .left,
                                                                 style: TextStyle(
-                                                                    fontSize: 22.0,
-                                                                    fontWeight:FontWeight.bold
-                                                                ),
+                                                                    fontSize:
+                                                                        22.0,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold),
                                                               ),
                                                             ),
                                                             const SizedBox(
                                                               height: 10,
                                                             ),
                                                             Padding(
-                                                              padding: const EdgeInsets.only( left: 20),
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .only(
+                                                                      left: 20),
                                                               child: const Text(
                                                                 'Enter Details',
-                                                                textAlign: TextAlign.left,
-                                                                style: TextStyle(fontSize: 16.0),
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .left,
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        16.0),
                                                               ),
                                                             ),
                                                             const SizedBox(
                                                               height: 10,
                                                             ),
-                                                            
+
                                                             Padding(
-                                                              padding: const EdgeInsets.only(top: 25.0, left: 10.0, right: 10.0),
-                                                              child: TextFormField(
-                                                                keyboardType:TextInputType.number,
-                                                                autocorrect: true,
-                                                                validator: (value) {
-                                                                  if (value ==  null || value.isEmpty) {
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                          .only(
+                                                                      top: 25.0,
+                                                                      left:
+                                                                          10.0,
+                                                                      right:
+                                                                          10.0),
+                                                              child:
+                                                                  TextFormField(
+                                                                keyboardType:
+                                                                    TextInputType
+                                                                        .number,
+                                                                autocorrect:
+                                                                    true,
+                                                                validator:
+                                                                    (value) {
+                                                                  if (value ==
+                                                                          null ||
+                                                                      value
+                                                                          .isEmpty) {
                                                                     return 'Amount Due';
                                                                   }
                                                                   return null;
                                                                 },
-                                                                decoration: InputDecoration(
-                                                                  enabledBorder: const OutlineInputBorder(
-                                                                    borderSide: const BorderSide( color: Colors.grey, width: 1.0),
+                                                                decoration:
+                                                                    InputDecoration(
+                                                                  enabledBorder:
+                                                                      const OutlineInputBorder(
+                                                                    borderSide: const BorderSide(
+                                                                        color: Colors
+                                                                            .grey,
+                                                                        width:
+                                                                            1.0),
                                                                   ),
-                                                                  focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                                                                  focusedBorder:
+                                                                      OutlineInputBorder(
+                                                                    borderSide: BorderSide(
+                                                                        color: Colors
+                                                                            .grey,
+                                                                        width:
+                                                                            1.0),
                                                                   ),
-                                                                  prefixIcon: Icon( Icons.money, size: 28.0, color: Colors.green ),
-                                                                  hintText: 'Amount Due',
-                                                                  hintStyle:TextStyle(
-                                                                   
-                                                                    fontSize: 14.0,
-                                                                    fontWeight: FontWeight.bold
-                                                                  ),
+                                                                  prefixIcon: Icon(
+                                                                      Icons
+                                                                          .money,
+                                                                      size:
+                                                                          28.0,
+                                                                      color: Colors
+                                                                          .green),
+                                                                  hintText:
+                                                                      'Amount Due',
+                                                                  hintStyle: TextStyle(
+                                                                      fontSize:
+                                                                          14.0,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold),
                                                                 ),
                                                               ),
                                                             ),
                                                             const SizedBox(
-                                                              height:10,
+                                                              height: 10,
                                                             ),
-                                          
+
                                                             Obx(
-                                                                () => Padding(
-                                                                  padding: const EdgeInsets.only( left: 10.0, right: 10.0),
-                                                                  child: DropdownButtonFormField(
-                                                                    isDense: true,
-                                                                    autovalidateMode: AutovalidateMode.onUserInteraction,
-                                                                    validator: (val) {
-                                                                      return controller.validateFarmer(val.toString());
-                                                                    },
-                                                                    decoration: InputDecoration(
-                                                                      border: OutlineInputBorder(
-                                                                        borderRadius: BorderRadius.all(
-                                                                          Radius.circular(5),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                    items: controller.listFarmerDropDownMenuItem.value,
-                                                                    value: controller.selectedFarmerId.value,
-                                                                    hint: Text(
-                                                                      "Select Farmer",
-                                                                      style:
-                                                                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                                                                    ),
-                                                                    onChanged: (selectedValue) {
-                                                                      controller.selectedFarmerId.value =
-                                                                          selectedValue.toString();
-                                                                      if (controller.selectedFarmerId.value != "0") {
-                                                                        controller.getFarms(controller.selectedFarmerId.value);
-                                                                      }
-                                                                    },
-                                                                    isExpanded: true,
+                                                              () => Padding(
+                                                                  padding: const EdgeInsets
+                                                                          .only(
+                                                                      left:
+                                                                          10.0,
+                                                                      right:
+                                                                          10.0),
+                                                                  child: controller
+                                                                          .listFarmerModel_
+                                                                          .value
+                                                                          .isNotEmpty
+                                                                      ? DropdownButtonFormField<
+                                                                          Values>(
+                                                                          icon:
+                                                                              Container(),
+                                                                          // isDense: true,
+                                                                          // underline: Container(),
+                                                                          value: controller
+                                                                              .selectedFarmerId
+                                                                              ?.value,
+                                                                          items: controller
+                                                                              .listFarmerModel_
+                                                                              .value
+                                                                              .map((e) => DropdownMenuItem(
+                                                                                    child: Text(
+                                                                                      e.name!,
+                                                                                      overflow: TextOverflow.ellipsis,
+                                                                                      maxLines: 1,
+                                                                                      softWrap: false,
+                                                                                      style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold),
+                                                                                    ),
+                                                                                    value: e,
+                                                                                  ))
+                                                                              .toList(),
+                                                                          onChanged:
+                                                                              (Values? val) {
+                                                                            controller.selectedFarmerId =
+                                                                                val.obs as Rx<Values>?;
+                                                                          },
+                                                                          isExpanded:
+                                                                              true,
+                                                                          decoration:
+                                                                              InputDecoration(
+                                                                            suffixIcon:
+                                                                                Padding(
+                                                                              padding: const EdgeInsets.only(top: 8.0),
+                                                                              child: const Icon(Icons.keyboard_arrow_down),
+                                                                            ),
+                                                                            border:
+                                                                                OutlineInputBorder(
+                                                                              borderRadius: BorderRadius.all(
+                                                                                Radius.circular(5),
+                                                                              ),
+                                                                            ),
+                                                                            isDense:
+                                                                                true,
+                                                                            hintText:
+                                                                                "Select Farm",
+                                                                          ),
+                                                                        )
+                                                                      : null
+                                                                  //     DropdownButtonFormField(
+                                                                  //   isDense: true,
+                                                                  //   autovalidateMode:
+                                                                  //       AutovalidateMode
+                                                                  //           .onUserInteraction,
+                                                                  //   validator:
+                                                                  //       (val) {
+                                                                  //     return controller
+                                                                  //         .validateFarmer(
+                                                                  //             val.toString());
+                                                                  //   },
+                                                                  //   decoration:
+                                                                  //       InputDecoration(
+                                                                  //     border:
+                                                                  //         OutlineInputBorder(
+                                                                  //       borderRadius:
+                                                                  //           BorderRadius
+                                                                  //               .all(
+                                                                  //         Radius.circular(
+                                                                  //             5),
+                                                                  //       ),
+                                                                  //     ),
+                                                                  //   ),
+                                                                  //   items: controller
+                                                                  //       .listFarmerDropDownMenuItem
+                                                                  //       .value,
+                                                                  //   value: controller
+                                                                  //       .selectedFarmerId,
+                                                                  //   hint: Text(
+                                                                  //     "Select Farmer",
+                                                                  //     style: TextStyle(
+                                                                  //         fontSize:
+                                                                  //             14,
+                                                                  //         fontWeight:
+                                                                  //             FontWeight.bold),
+                                                                  //   ),
+                                                                  //   onChanged:
+                                                                  //       (selectedValue) {
+                                                                  //     controller
+                                                                  //             .selectedFarmerId!
+                                                                  //             .value =
+                                                                  //         selectedValue
+                                                                  //             .toString();
+                                                                  //     if (controller
+                                                                  //             .selectedFarmerId! !=
+                                                                  //         "0") {
+                                                                  //       controller.getFarms(controller
+                                                                  //           .selectedFarmerId!
+                                                                  //           .value);
+                                                                  //     }
+                                                                  //   },
+                                                                  //   isExpanded:
+                                                                  //       true,
+                                                                  // ),
                                                                   ),
-                                                                ),
-                                                              ),
+                                                            ),
                                                             // SizedBox(height: 10,),
                                                             // Obx(
                                                             //     () => DropdownButtonFormField(
@@ -417,15 +556,19 @@ class _TransactionsState extends State<Transactions>
                                                             //       onChanged: (selectedValue) {
                                                             //         controller.selectedFarmId.value =
                                                             //             selectedValue.toString();
-                                                                  
+
                                                             //       },
                                                             //       isExpanded: true,
                                                             //     ),
                                                             //   ),
-                                          
-                                                            ButtonTheme( minWidth: 320.0,  height: 50.0,
-                                                                child: ButtonComponent(
-                                                                  onPressed: () {
+
+                                                            ButtonTheme(
+                                                                minWidth: 320.0,
+                                                                height: 50.0,
+                                                                child:
+                                                                    ButtonComponent(
+                                                                  onPressed:
+                                                                      () {
                                                                     // if (_formKey
                                                                     //     .currentState!
                                                                     //     .validate()) {
@@ -434,15 +577,19 @@ class _TransactionsState extends State<Transactions>
                                                                     //       context);
                                                                     // }
                                                                   },
-                                                                  caption: "Submit",
-                                                                  textColor: Colors.white,
-                                                                  backgroundColor:Colors.green,
+                                                                  caption:
+                                                                      "Submit",
+                                                                  textColor:
+                                                                      Colors
+                                                                          .white,
+                                                                  backgroundColor:
+                                                                      Colors
+                                                                          .green,
                                                                 )),
                                                           ],
                                                         ),
                                                       );
-                                            }
-                                          )
+                                              })
                                         ],
                                       )),
                                 );
@@ -527,9 +674,11 @@ class _TransactionsState extends State<Transactions>
           );
         });
   }
-   maininit() {
+
+  maininit() {
     print("here");
-   Get.put<TransactionController>(TransactionController(Repository(ApiServiceProvider())));
+    Get.put<TransactionController>(
+        TransactionController(Repository(ApiServiceProvider())));
     print("here");
     Get.put<BatchController>(BatchController());
     print("here");

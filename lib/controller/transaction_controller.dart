@@ -29,9 +29,8 @@
 //   late SharedPreferences _prefs;
 
 //   RxString batchDescriptionText = ''.obs;
-//   Dio dio = Dio(); 
+//   Dio dio = Dio();
 //   late TextEditingController batchDescriptionController;
-
 
 //   // Get Batches
 //     var listBatch = List<dynamic>.empty(growable: true).obs;
@@ -40,7 +39,6 @@
 //     // For Pagination
 //     ScrollController scrollController = ScrollController();
 //     var isMoreDataAvailable = true.obs;
-
 
 //  RxString username = ''.obs;
 
@@ -51,9 +49,6 @@
 //     _getTransactions ();
 //   }
 
-
-
-
 // _getTransactions () async {
 //     _prefs = await  SharedPreferences.getInstance();
 //      BatchProvider().getBatches(_prefs.getString('username') ).then((value) {
@@ -63,17 +58,13 @@
 //     });
 // }
 
-
-
 //   @override
 //   void onClose() {
 //     super.onClose();
 //     batchDescriptionController.dispose();
 //   }
 
-
 //   //Load Batches
-
 
 //   // common snack bar
 //   showSnackBar(String title, String message, Color backgroundColor) {
@@ -83,13 +74,10 @@
 //         colorText: Colors.white);
 //   }
 
-
-
- 
 //   // Refresh List
 //   void refreshList() async {
 //     page = 1;
-   
+
 //   }
 
 //   createTransaction(BuildContext context, Transaction transactionDataBody) async {
@@ -112,7 +100,7 @@
 //         update();
 //         return response.data;
 //       }
-      
+
 //     } catch (e) {
 //       print('Operation Failed $e');
 //       isLoading(false);
@@ -124,30 +112,25 @@
 //
 //}
 
-
-
-
-
-
-
 // ignore_for_file: prefer_const_constructors
 
+import 'package:dcms_app/models/farmer_transaction.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/state_manager.dart';
 
-import '../respository/transaction_repository.dart';
 import '../models/farm.dart';
 import '../models/farmer.dart';
 import '../models/transaction.dart';
+import '../respository/transaction_repository.dart';
 import '../routes/auth_endpoints.dart';
 import '../routes/base.dart';
 import '../utils/app_snacks.dart';
 
 class TransactionController extends GetxController {
   var isDataProcessing = false.obs;
-  Dio dio = Dio(); 
+  Dio dio = Dio();
   Repository repository;
 
   TransactionController(this.repository);
@@ -156,18 +139,30 @@ class TransactionController extends GetxController {
   late TextEditingController purchaseDateController;
   late TextEditingController tonnageController;
 
-//collect the batchoid, farmeroid, farmoid 
+//collect the batchoid, farmeroid, farmoid
 
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   Rx<List<Farmer>> listFarmerModel = Rx<List<Farmer>>([]);
-  var selectedFarmerId = "0".obs;
-  Rx<List<DropdownMenuItem<String>>> listFarmerDropDownMenuItem = Rx<List<DropdownMenuItem<String>>>([]);
+  Rx<List<Values>> listFarmerModel_ = Rx<List<Values>>([]);
+
+  Rx<Values>? _selectedFarmerId;
+
+  Rx<Values>? get selectedFarmerId => _selectedFarmerId;
+
+  set selectedFarmerId(Rx<Values>? value) {
+    _selectedFarmerId = value;
+    refresh();
+  }
+
+  // var selectedFarmerId = "0".obs;
+  Rx<List<DropdownMenuItem<String>>> listFarmerDropDownMenuItem =
+      Rx<List<DropdownMenuItem<String>>>([]);
 
   Rx<List<Farm>> listFarmModel = Rx<List<Farm>>([]);
   var selectedFarmId = "0".obs;
-  Rx<List<DropdownMenuItem<String>>> listFarmDropDownMenuItem = Rx<List<DropdownMenuItem<String>>>([]);
+  Rx<List<DropdownMenuItem<String>>> listFarmDropDownMenuItem =
+      Rx<List<DropdownMenuItem<String>>>([]);
 
-  
   void onInit() {
     super.onInit();
   }
@@ -180,19 +175,23 @@ class TransactionController extends GetxController {
   }
 
   @override
-  void onClose() {}
+  void onClose() {
+    super.onClose();
+  }
 
   void getFarmers(String agentOid) {
+    print("get farmers");
     try {
       Get.dialog(Center(
         child: CircularProgressIndicator(),
       ));
 
       repository.getFarmer(agentOid).then((value) {
-        if (value.farmerData!.length > 0) {
+        if (value.values!.length > 0) {
+          print("xxxxx ${value.values.toString()}");
           Get.back();
-          listFarmerModel.value.clear();
-          listFarmerModel.value.addAll(value.farmerData!);
+          listFarmerModel_.value.clear();
+          listFarmerModel_.value.addAll(value.values!);
           listFarmerDropDownMenuItem.value = [];
           listFarmerDropDownMenuItem.value.add(
             DropdownMenuItem(
@@ -203,23 +202,28 @@ class TransactionController extends GetxController {
               value: "0",
             ),
           );
-          for (Farmer farmer in listFarmerModel.value) {
+          for (Values farmer in listFarmerModel_.value) {
+            print(farmer.toJson());
             listFarmerDropDownMenuItem.value.add(
               DropdownMenuItem(
                 child: Text(
-                  farmer.farmerFirstName.toString() + ' '+farmer.farmerLastName.toString() ,
+                  farmer.firstName.toString() +
+                      ' ' +
+                      farmer.lastName.toString(),
                   style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                 ),
-                value: farmer.farmerId.toString(),
+                value: farmer.userId.toString(),
               ),
             );
           }
         }
       }).onError((error, stackTrace) {
+        print(error.toString());
         Get.back();
         //error handling code
       });
     } catch (exception) {
+      print(exception.toString());
       Get.back();
       // exception handling code
     }
@@ -282,28 +286,28 @@ class TransactionController extends GetxController {
     return null;
   }
 
-  
-  createTransaction(BuildContext context, Transaction transactionDataBody) async {
-
+  createTransaction(
+      BuildContext context, Transaction transactionDataBody) async {
     try {
-
       isDataProcessing(true);
       update();
-      String url = BaseEndpoint.baseUrl+Endpoints.createBatch;
+      String url = BaseEndpoint.baseUrl + Endpoints.createBatch;
       print(url);
       print('batch-data ${transactionDataBody}');
-      Response response = await dio.post(url, data: transactionDataBody.toJson());
-      print (response.data);
-      if ( response.statusCode == 201 ) {
-
+      Response response =
+          await dio.post(url, data: transactionDataBody.toJson());
+      print(response.data);
+      if (response.statusCode == 201) {
         isDataProcessing(false);
         Navigator.pop(context);
-        AppSnacks.show(context, backgroundColor: Colors.green, leadingIcon: Icon(Icons.check), message: 'Transaction Created Success!');
+        AppSnacks.show(context,
+            backgroundColor: Colors.green,
+            leadingIcon: Icon(Icons.check),
+            message: 'Transaction Created Success!');
         // _getTransactions();
         update();
         return response.data;
       }
-      
     } catch (e) {
       print('Operation Failed $e');
       isDataProcessing(false);
@@ -311,6 +315,4 @@ class TransactionController extends GetxController {
       return e.toString();
     }
   }
-
-
 }
