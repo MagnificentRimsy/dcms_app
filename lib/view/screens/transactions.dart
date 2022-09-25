@@ -386,14 +386,11 @@ class _TransactionsState extends State<Transactions>
                                                                   focusedBorder:
                                                                       OutlineInputBorder(
                                                                     borderSide: BorderSide(
-                                                                        color: Colors
-                                                                            .grey,
-                                                                        width:
-                                                                            1.0),
+                                                                        color: Colors.grey,
+                                                                        width: 1.0),
                                                                   ),
                                                                   prefixIcon: Icon(
-                                                                      Icons
-                                                                          .money,
+                                                                      Icons.money,
                                                                       size:
                                                                           28.0,
                                                                       color: Colors
@@ -415,20 +412,10 @@ class _TransactionsState extends State<Transactions>
 
                                                             Obx(
                                                               () => Padding(
-                                                                  padding: const EdgeInsets
-                                                                          .only(
-                                                                      left:
-                                                                          10.0,
-                                                                      right:
-                                                                          10.0),
-                                                                  child: controller
-                                                                          .listFarmerModel_
-                                                                          .value
-                                                                          .isNotEmpty
-                                                                      ? DropdownButtonFormField<
-                                                                          Values>(
-                                                                          icon:
-                                                                              Container(),
+                                                                  padding: const EdgeInsets.only(left:10.0, right:10.0),
+                                                                  child: controller.listFarmerModel_.value.isNotEmpty
+                                                                      ? DropdownButtonFormField<Values>(
+                                                                          icon:Container(),
                                                                           // isDense: true,
                                                                           // underline: Container(),
                                                                           value: controller
@@ -475,7 +462,8 @@ class _TransactionsState extends State<Transactions>
                                                                           ),
                                                                         )
                                                                       : null
-                                                                  //     DropdownButtonFormField(
+                                                                      
+                                                                   //     DropdownButtonFormField(
                                                                   //   isDense: true,
                                                                   //   autovalidateMode:
                                                                   //       AutovalidateMode

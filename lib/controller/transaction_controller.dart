@@ -117,6 +117,7 @@
 import 'package:dcms_app/models/farmer_transaction.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/state_manager.dart';
 
@@ -183,8 +184,11 @@ class TransactionController extends GetxController {
     print("get farmers");
     try {
       Get.dialog(Center(
-        child: CircularProgressIndicator(),
-      ));
+        child: SpinKitDualRing(
+                color: Colors.green,
+                lineWidth: 2,
+              ),
+            ));
 
       repository.getFarmer(agentOid).then((value) {
         if (value.values!.length > 0) {
