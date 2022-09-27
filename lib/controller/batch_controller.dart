@@ -14,7 +14,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/route_manager.dart';
 import 'package:get/state_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../core/api_service_provider.dart';
 import '../models/auth/user.dart';
 import '../routes/auth_endpoints.dart';
@@ -40,28 +39,24 @@ class BatchController extends GetxController with StateMixin<List<dynamic>> {
     var isMoreDataAvailable = true.obs;
 
 
- RxString username = ''.obs;
+    RxString username = ''.obs;
 
-  @override
-  void onInit() async{
-    super.onInit();
-    batchDescriptionController = TextEditingController();
-    _getBatches ();
+      @override
+      void onInit() async{
+        super.onInit();
+        batchDescriptionController = TextEditingController();
+        _getBatches ();
+      }
+
+
+  _getBatches () async {
+      _prefs = await  SharedPreferences.getInstance();
+      BatchProvider().getBatches(_prefs.getString('username') ).then((value) {
+        change(value, status: RxStatus.success());
+      },onError: (error){
+        change(null,status: RxStatus.error(error.toString()));
+      });
   }
-
-
-
-
-_getBatches () async {
-    _prefs = await  SharedPreferences.getInstance();
-     BatchProvider().getBatches(_prefs.getString('username') ).then((value) {
-      change(value, status: RxStatus.success());
-    },onError: (error){
-      change(null,status: RxStatus.error(error.toString()));
-    });
-}
-
-
 
   @override
   void onClose() {
@@ -69,27 +64,7 @@ _getBatches () async {
     batchDescriptionController.dispose();
   }
 
-
-  //Load Batches
-
-
-  // common snack bar
-  showSnackBar(String title, String message, Color backgroundColor) {
-    Get.snackbar(title, message,
-        snackPosition: SnackPosition.BOTTOM,
-        backgroundColor: backgroundColor,
-        colorText: Colors.white);
-  }
-
-
-
  
-  // Refresh List
-  void refreshList() async {
-    page = 1;
-   
-  }
-
   createBatch(BuildContext context, Batch batchDataBody) async {
 
     try {

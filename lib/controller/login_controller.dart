@@ -67,9 +67,12 @@ class LoginController extends GetxController {
             validateStatus: (status) => true,
             
           ),);
-      print (response.data['value']['isActive'].toString());
+      print (response.data['value']['isActive'].toString()); 
+      var userOid = _prefs.setInt('useroid', response.data['value']['entityOid']);
       var userType = _prefs.setInt('usertype', response.data['value']['userType']);
-      var userName = _prefs.setString('username', response.data['value']['userName']);
+      var userName = _prefs.setString('username', response.data['value']['userName']); 
+      var userDeacription = _prefs.setString('userdescription', response.data['value']['userTypeDescription']); 
+
       print('UserType ---- $userType');
      // if ( response.statusCode == 200 && response.data['value']['isActive'] == true) {
 

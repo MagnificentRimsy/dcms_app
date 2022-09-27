@@ -67,7 +67,7 @@ class Values {
   // String? pcName;
   // String? pcUserName;
   // List<Null>? wallets;
-  // List<Farms>? farms;
+   List<Farms>? farms;
   // List<Null>? freshFruitBunches;
   String? userId;
   String? name;
@@ -109,7 +109,7 @@ class Values {
       //  this.pcName,
       //  this.pcUserName,
       //  this.wallets,
-      //  this.farms,
+        this.farms,
       //  this.freshFruitBunches,
       this.userId,
       this.name});
@@ -165,12 +165,8 @@ class Values {
       //     wallets!.add(Null.fromJson(v));
       //   });
       // }
-      // if (json['farms'] != null) {
-      //   farms = <Farms>[];
-      //   json['farms'].forEach((v) {
-      //     farms!.add(Farms.fromJson(v));
-      //   });
-      // }
+     
+     
       // if (json['freshFruitBunches'] != null) {
       //   freshFruitBunches = <Null>[];
       //   json['freshFruitBunches'].forEach((v) {
@@ -180,6 +176,12 @@ class Values {
       userId = json['userId'];
       name = json['name'];
     }
+     if (json['farms'] != null) {
+        farms = <Farms>[];
+        json['farms'].forEach((v) {
+          farms!.add(Farms.fromJson(v));
+        });
+     }
   }
 
   Map<String, dynamic> toJson() {
@@ -234,9 +236,9 @@ class Values {
     // if (wallets != null) {
     //   data['wallets'] = wallets!.map((v) => v.toJson()).toList();
     // }
-    // if (farms != null) {
-    //   data['farms'] = farms!.map((v) => v.toJson()).toList();
-    // }
+    if (farms != null) {
+      data['farms'] = farms!.map((v) => v.toJson()).toList();
+    }
     // if (freshFruitBunches != null) {
     //   data['freshFruitBunches'] =
     //       freshFruitBunches!.map((v) => v?.toJson()).toList();
@@ -733,8 +735,8 @@ class Values {
 //   }
 // }
 //
-// class Farms {
-//   int? oid;
+ class Farms {
+   int? oid;
 //   int? aggregationMasterOid;
 //   int? averageProduction;
 //   int? distanceToTheMill;
@@ -742,7 +744,7 @@ class Values {
 //   Location? location;
 //   int? noOfCyclesCompleted;
 //   int? size;
-//   String? title;
+   String? title;
 //   String? createdBy;
 //   String? createdOn;
 //   String? modifiedBy;
@@ -752,8 +754,9 @@ class Values {
 //   String? pcName;
 //   String? pcUserName;
 //
-//   Farms(
-//       {this.oid,
+   Farms(
+       {
+        this.oid,
 //       this.aggregationMasterOid,
 //       this.averageProduction,
 //       this.distanceToTheMill,
@@ -761,7 +764,7 @@ class Values {
 //       this.location,
 //       this.noOfCyclesCompleted,
 //       this.size,
-//       this.title,
+       this.title,
 //       this.createdBy,
 //       this.createdOn,
 //       this.modifiedBy,
@@ -769,10 +772,11 @@ class Values {
 //       this.pcDomainName,
 //       this.pcIpAddress,
 //       this.pcName,
-//       this.pcUserName});
+//       this.pcUserName
+});
 //
-//   Farms.fromJson(Map<String, dynamic> json) {
-//     oid = json['oid'];
+  Farms.fromJson(Map<String, dynamic> json) {
+    oid = json['oid'];
 //     aggregationMasterOid = json['aggregationMasterOid'];
 //     averageProduction = json['averageProduction'];
 //     distanceToTheMill = json['distanceToTheMill'];
@@ -781,7 +785,7 @@ class Values {
 //         json['location'] != null ? Location.fromJson(json['location']) : null;
 //     noOfCyclesCompleted = json['noOfCyclesCompleted'];
 //     size = json['size'];
-//     title = json['title'];
+     title = json['title'];
 //     createdBy = json['createdBy'];
 //     createdOn = json['createdOn'];
 //     modifiedBy = json['modifiedBy'];
@@ -790,11 +794,11 @@ class Values {
 //     pcIpAddress = json['pcIpAddress'];
 //     pcName = json['pcName'];
 //     pcUserName = json['pcUserName'];
-//   }
+   }
 //
-//   Map<String, dynamic> toJson() {
-//     final Map<String, dynamic> data = <String, dynamic>{};
-//     data['oid'] = oid;
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['oid'] = oid;
 //     data['aggregationMasterOid'] = aggregationMasterOid;
 //     data['averageProduction'] = averageProduction;
 //     data['distanceToTheMill'] = distanceToTheMill;
@@ -804,7 +808,7 @@ class Values {
 //     }
 //     data['noOfCyclesCompleted'] = noOfCyclesCompleted;
 //     data['size'] = size;
-//     data['title'] = title;
+     data['title'] = title;
 //     data['createdBy'] = createdBy;
 //     data['createdOn'] = createdOn;
 //     data['modifiedBy'] = modifiedBy;
@@ -813,6 +817,6 @@ class Values {
 //     data['pcIpAddress'] = pcIpAddress;
 //     data['pcName'] = pcName;
 //     data['pcUserName'] = pcUserName;
-//     return data;
-//   }
-// }
+     return data;
+   }
+}

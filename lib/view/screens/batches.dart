@@ -17,7 +17,6 @@ class Batches extends GetView<BatchController> {
 
   @override
   void initState() {
-
   }
 
   @override

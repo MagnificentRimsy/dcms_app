@@ -12,6 +12,7 @@ class Endpoints {
   static const String getFarmersByAgentOid ='FarmersManagement/GetAllFarmersByAgentId?agentOid=';
   static const String getFarmsByFarmerOid = 'FarmersManagement/GetAllFarmsByFarmerId?farmerOid=';
   static const String createTransaction = 'configurations/AddTransaction';
+  static const String getCurrentPricing = 'configurations/GetCurrentPricing';
 
 
   static const String updatePersonalInformation = 'auth/personal-information';
