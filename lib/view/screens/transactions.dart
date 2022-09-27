@@ -35,6 +35,7 @@ class _TransactionsState extends State<Transactions>
 
   NumberFormat moneyFormat = NumberFormat.decimalPattern('en_us');
   String? username;
+
   @override
   void initState() {
     super.initState();
@@ -397,7 +398,7 @@ class _TransactionsState extends State<Transactions>
                                                                       InputDecoration(
                                                                     enabledBorder:
                                                                         const OutlineInputBorder(
-                                                                      borderSide: const BorderSide(
+                                                                      borderSide: BorderSide(
                                                                           color: Colors
                                                                               .grey,
                                                                           width:
@@ -460,7 +461,7 @@ class _TransactionsState extends State<Transactions>
                                                                       InputDecoration(
                                                                     enabledBorder:
                                                                         const OutlineInputBorder(
-                                                                      borderSide: const BorderSide(
+                                                                      borderSide: BorderSide(
                                                                           color: Colors
                                                                               .grey,
                                                                           width:
@@ -499,7 +500,9 @@ class _TransactionsState extends State<Transactions>
                                                               Obx(
                                                                 () => Padding(
                                                                     padding: const EdgeInsets
-                                                                            .only(left: 10.0,
+                                                                            .only(
+                                                                        left:
+                                                                            10.0,
                                                                         right:
                                                                             10.0),
                                                                     child: controller
@@ -507,7 +510,7 @@ class _TransactionsState extends State<Transactions>
                                                                             .value
                                                                             .isNotEmpty
                                                                         ? DropdownButtonFormField<
-                                                                            Values>(
+                                                                            Values?>(
                                                                             icon:
                                                                                 Container(),
                                                                             value:
@@ -526,12 +529,13 @@ class _TransactionsState extends State<Transactions>
                                                                                 .toList(),
                                                                             onChanged:
                                                                                 (Values? val) {
-                                                                              controller.selectedFarmerId = val.obs as Rx<Values>?;
+                                                                              controller.setFarmerId(val);
 
-                                                                              if (controller.selectedFarmerId != "0") {
-                                                                                print('controller value: ${controller.selectedFarmerId.toString()}');
-                                                                                controller.getFarmersFarm(controller.selectedFarmerId.toString());
-                                                                              }
+                                                                              // if (controller.selectedFarmerId?.value.oid.toString() != "0") {
+                                                                              //   print("true;");
+                                                                              //   print('controller value: ${controller.selectedFarmerId!.value.userId}');
+                                                                              //   // controller.getFarmersFarm(controller.selectedFarmerId.toString());
+                                                                              // }
                                                                             },
                                                                             isExpanded:
                                                                                 true,
@@ -572,11 +576,12 @@ class _TransactionsState extends State<Transactions>
                                                                             .value
                                                                             .isNotEmpty
                                                                         ? DropdownButtonFormField<
-                                                                            FarmValues>(
-                                                                            icon: Container(),
+                                                                            Farms>(
+                                                                            icon:
+                                                                                Container(),
                                                                             //e.name!
                                                                             value:
-                                                                                controller.selectedFarmId?.value,
+                                                                                controller.selectedFarm?.value,
                                                                             items: controller.listFarmModel_.value
                                                                                 .map((e) => DropdownMenuItem(
                                                                                       child: Text(
@@ -590,8 +595,8 @@ class _TransactionsState extends State<Transactions>
                                                                                     ))
                                                                                 .toList(),
                                                                             onChanged:
-                                                                                (FarmValues? val) {
-                                                                              controller.selectedFarmId = val.obs as Rx<FarmValues>?;
+                                                                                (Farms? val) {
+                                                                              controller.setFarm(val);
                                                                             },
                                                                             isExpanded:
                                                                                 true,
@@ -610,7 +615,8 @@ class _TransactionsState extends State<Transactions>
                                                                               hintText: "Select Farm",
                                                                             ),
                                                                           )
-                                                                        : null),
+                                                                        : SizedBox
+                                                                            .shrink()),
                                                               ),
                                                               SizedBox(
                                                                 height: 10,
@@ -644,7 +650,8 @@ class _TransactionsState extends State<Transactions>
                                                                 child:
                                                                     DatePickerWidget(
                                                                   looping:
-                                                                      false, // default is not looping
+                                                                      false,
+                                                                  // default is not looping
                                                                   firstDate:
                                                                       DateTime(
                                                                           2022,

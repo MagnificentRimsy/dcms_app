@@ -7,19 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/state_manager.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../models/farm.dart';
-import '../models/farmer.dart';
+
 import '../models/transaction.dart';
 import '../respository/transaction_repository.dart';
 import '../routes/auth_endpoints.dart';
 import '../routes/base.dart';
 import '../utils/app_snacks.dart';
 
-class TransactionController extends GetxController with StateMixin<List<dynamic>> {
-   
-
-    
+class TransactionController extends GetxController
+    with StateMixin<List<dynamic>> {
   var isDataProcessing = false.obs;
   Dio dio = Dio();
   Repository repository;
@@ -31,7 +27,6 @@ class TransactionController extends GetxController with StateMixin<List<dynamic>
   late TextEditingController tonnageController;
   late DateTime selectedDate;
 
-
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   //---------------farmer dropdown begining
@@ -42,46 +37,57 @@ class TransactionController extends GetxController with StateMixin<List<dynamic>
 
   Rx<Values>? get selectedFarmerId => _selectedFarmerId;
 
-  set selectedFarmerId(Rx<Values>? value) {
-    _selectedFarmerId = value;
-    
+  setFarmerId(Values? value) {
+    print("setFarmerId");
+
+    //clear the previous farmerlist if any was selected
+    _selectedFarm = null;
+    listFarmModel_ = Rx<List<Farms>>([]);
     refresh();
+
+    //get the new farmer object
+    _selectedFarmerId = value!.obs;
+
+    //extract the farm from the selected farmer object to the farmList
+    _selectedFarmerId?.value.farms?.forEach((e) {
+      listFarmModel_.value.add(e);
+    });
+
+    refresh();
+    print("done setFarmerId");
   }
 
   Rx<List<DropdownMenuItem<String>>> listFarmerDropDownMenuItem =
       Rx<List<DropdownMenuItem<String>>>([]);
 // --------------end of farmer dropdown
 
+  //--------------- farm dependent dropdown begining
 
+  Rx<List<Farms>> listFarmModel_ = Rx<List<Farms>>([]);
 
- //--------------- farm dependent dropdown begining
+  Rx<List<FarmData>> farmersFarm = Rx<List<FarmData>>([]);
 
-  Rx<List<FarmValues>> listFarmModel_ = Rx<List<FarmValues>>([]);
+  Rx<Farms>? _selectedFarm;
 
-  Rx<FarmValues>? _selectedFarmId;
+  Rx<Farms>? get selectedFarm => _selectedFarm;
 
-  Rx<FarmValues>? get selectedFarmId => _selectedFarmId;
+  setFarm(Farms? value) {
+    _selectedFarm = value!.obs;
+    refresh();
+  }
 
-  set selectedFarmId(Rx<FarmValues>? value) {
+  Rx<Farms>? _selectedFarmId;
+
+  Rx<Farms>? get selectedFarmId => _selectedFarmId;
+
+  set selectedFarmId(Rx<Farms>? value) {
     _selectedFarmId = value;
-    
     refresh();
   }
 
   Rx<List<DropdownMenuItem<String>>> listFarmDropDownMenuItem =
       Rx<List<DropdownMenuItem<String>>>([]);
 // --------------farm dependent farm dropdown
-
-
-
-
-
-
-
-
-
-
-
 
 // -------------- old farmer farm dropdown
 
@@ -90,20 +96,20 @@ class TransactionController extends GetxController with StateMixin<List<dynamic>
   // Rx<List<DropdownMenuItem<String>>> listFarmDropDownMenuItem =
   //     Rx<List<DropdownMenuItem<String>>>([]);
 // -----------------end of old farmer farm dropdown
- 
+
   GlobalKey<FormState> transactionFormKey = GlobalKey<FormState>();
-    
-    void onInit() {
-      super.onInit(); 
-      amountDueController  = TextEditingController();
-      purchaseDateController  = TextEditingController();
-      tonnageController  = TextEditingController();
-    }
+
+  void onInit() {
+    super.onInit();
+    amountDueController = TextEditingController();
+    purchaseDateController = TextEditingController();
+    tonnageController = TextEditingController();
+  }
 
   @override
   void onReady() {
     super.onReady();
-       var agentOid = 1; // you are to get this from the shared preference file
+    var agentOid = 1; // you are to get this from the shared preference file
     getFarmers(agentOid.toString());
   }
 
@@ -120,17 +126,18 @@ class TransactionController extends GetxController with StateMixin<List<dynamic>
     try {
       Get.dialog(Center(
         child: SpinKitDualRing(
-                color: Colors.green,
-                lineWidth: 2,
-              ),
-        ));
+          color: Colors.green,
+          lineWidth: 2,
+        ),
+      ));
 
       repository.getFarmer(agentOid).then((value) {
         if (value.values!.length > 0) {
-          print("xxxxx ${value.values.toString()}"); 
+          print("get farmers data: ${value.values.toString()}");
           Get.back();
           listFarmerModel_.value.clear();
           listFarmerModel_.value.addAll(value.values!);
+          refresh();
           listFarmerDropDownMenuItem.value = [];
           listFarmerDropDownMenuItem.value.add(
             DropdownMenuItem(
@@ -144,7 +151,6 @@ class TransactionController extends GetxController with StateMixin<List<dynamic>
           for (Values farmer in listFarmerModel_.value) {
             print(farmer.toJson());
 
-        
             listFarmerDropDownMenuItem.value.add(
               DropdownMenuItem(
                 child: Text(
@@ -170,63 +176,58 @@ class TransactionController extends GetxController with StateMixin<List<dynamic>
     }
   }
 
-
-
-
-  void getFarmersFarm(String farmerOid) {
-    print("get farmers farm");
-    try {
-      Get.dialog(Center(
-        child: SpinKitDualRing(
-                color: Colors.green,
-                lineWidth: 2,
-              ),
-        ));
-
-      repository.getFarmData(farmerOid).then((value) {
-        if (value.values!.length > 0) {
-          print("yyyyy ${value.values.toString()}"); 
-          Get.back();
-          listFarmModel_.value.clear();
-          listFarmModel_.value.addAll(value.values!);
-          listFarmDropDownMenuItem.value = [];
-          listFarmDropDownMenuItem.value.add(
-            DropdownMenuItem(
-              child: Text(
-                'Select Farm',
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-              ),
-              value: "0",
-            ),
-          );
-          for (FarmValues farm in listFarmModel_.value) {
-            print(farm.toJson());
-
-        
-            listFarmerDropDownMenuItem.value.add(
-              DropdownMenuItem(
-                child: Text(
-                  farm.title.toString(),
-                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-                ),
-                value: farm.oid.toString(),
-              ),
-            );
-          }
-        }
-      }).onError((error, stackTrace) {
-        print(error.toString());
-        Get.back();
-        //error handling code
-      });
-    } catch (exception) {
-      print(exception.toString());
-      Get.back();
-      // exception handling code
-    }
-  }
-
-
+  // void getFarmersFarm(String farmerOid) {
+  //   print("get farmers farm");
+  //   try {
+  //     Get.dialog(Center(
+  //       child: SpinKitDualRing(
+  //         color: Colors.green,
+  //         lineWidth: 2,
+  //       ),
+  //     ));
+  //
+  //     repository.getFarmData(farmerOid).then((v) {
+  //       print("results ${v.toJson()}");
+  //       if (v.values!.length > 0) {
+  //         print("get farmers farm: ${v.values.toString()}");
+  //         Get.back();
+  //         farmersFarm.value.clear();
+  //         farmersFarm.value.addAll(v.values!);
+  //         listFarmDropDownMenuItem.value = [];
+  //         // listFarmDropDownMenuItem.value.add(
+  //         //   DropdownMenuItem(
+  //         //     child: Text(
+  //         //       'Select Farm',
+  //         //       style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+  //         //     ),
+  //         //     value: "0",
+  //         //   ),
+  //         // );
+  //         // for (Farms farm in listFarmModel_.value) {
+  //         //   print(farm.toJson());
+  //         //
+  //         //   listFarmerDropDownMenuItem.value.add(
+  //         //     DropdownMenuItem(
+  //         //       child: Text(
+  //         //         farm.title.toString(),
+  //         //         style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+  //         //       ),
+  //         //       value: farm.oid.toString(),
+  //         //     ),
+  //         //   );
+  //         // }
+  //       }
+  //     }).onError((error, stackTrace) {
+  //       print(error.toString());
+  //       Get.back();
+  //       //error handling code
+  //     });
+  //   } catch (exception) {
+  //     print(exception.toString());
+  //     Get.back();
+  //     // exception handling code
+  //   }
+  // }
 
   // void getFarms(String farmerId) {
   //   try {

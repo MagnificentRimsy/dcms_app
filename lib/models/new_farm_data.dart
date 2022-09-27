@@ -2,7 +2,7 @@ class NewFarmData {
   int? statusCode;
   int? count;
   String? message;
-  List<FarmValues>? values;
+  List<FarmData>? values;
 
   NewFarmData({this.statusCode, this.count, this.message, this.values});
 
@@ -11,9 +11,9 @@ class NewFarmData {
     count = json['count'];
     message = json['message'];
     if (json['values'] != null) {
-      values = <FarmValues>[];
+      values = <FarmData>[];
       json['values'].forEach((v) {
-        values!.add(FarmValues.fromJson(v));
+        values!.add(FarmData.fromJson(v));
       });
     }
   }
@@ -30,23 +30,23 @@ class NewFarmData {
   }
 }
 
-class FarmValues {
+class FarmData {
   int? oid;
   int? farmerOid;
   String? title;
 
-  FarmValues(
-      {this.oid,
-      this.farmerOid,
-      this.title,
-   });
+  FarmData({
+    this.oid,
+    this.farmerOid,
+    this.title,
+  });
 
-  FarmValues.fromJson(Map<String, dynamic> json) {
+  FarmData.fromJson(Map<String, dynamic> json) {
     oid = json['oid'];
     farmerOid = json['farmerOid'];
     title = json['title'];
   }
-    
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['oid'] = oid;

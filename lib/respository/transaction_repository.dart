@@ -1,6 +1,4 @@
-import 'package:dcms_app/models/farm.dart';
 import 'package:dcms_app/models/agent_farmer.dart';
-import 'package:dcms_app/models/all_farmer_farm.dart';
 import 'package:dcms_app/models/new_farm_data.dart';
 
 import '../core/api_service_provider.dart';
@@ -14,8 +12,7 @@ class Repository {
   Future<FarmerTransaction> getFarmer(var agentOid) =>
       apiProvider.getFarmersByAgentOid(agentOid);
 
-    // GetFarmerFarmData
-  Future<NewFarmData> getFarmData(var farmerOid) =>
+  // GetFarmerFarmData
+  Future<NewFarmData> getFarmData(String farmerOid) =>
       apiProvider.getFarmsByFarmerOid(farmerOid);
-
 }
