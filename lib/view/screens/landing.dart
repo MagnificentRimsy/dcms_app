@@ -3,6 +3,7 @@
 
 import 'package:dcms_app/view/screens/components/background.dart';
 import 'package:dcms_app/view/screens/login.dart';
+import 'package:dcms_app/view/screens/test_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -76,6 +77,7 @@ class LandingScreen extends StatelessWidget {
                           ))),
                       onPressed: () {
                            Get.off(LoginScreen());
+                          // Get.to(TestDropDown(title: 'Create Transaction '));
                       },
                       child: Text("Get's get Started",
                           style: TextStyle(

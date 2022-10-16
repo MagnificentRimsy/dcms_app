@@ -9,11 +9,16 @@ class Endpoints {
   static const String validateTwoFactorToken = 'administrations/ValidateOtp';
   static const String createBatch = 'configurations/AddBatch';
   static const String getBatchByUserName ='configurations/GetAllBatchByUserName?UserName=';
+  static const String getTransactionsByBatchoid = 'configurations/GetAllTransactionByBatchId?batchId=';
   static const String getFarmersByAgentOid ='FarmersManagement/GetAllFarmersByAgentId?agentOid=';
   static const String getFarmsByFarmerOid = 'FarmersManagement/GetAllFarmsByFarmerId?farmerOid=';
   static const String createTransaction = 'configurations/AddTransaction';
   static const String getCurrentPricing = 'configurations/GetCurrentPricing';
-
+  static const String getAllTitles = 'configurations/GetAllTitles';
+  static const String getAllCluters = 'configurations/GetAllClusters';
+  static const String getAllCooperatives = 'configurations/GetAllCooperatives';
+  static const String getAllMaritalStatus = 'Miscellaneous/GetMaritalStatuses';
+   static const String getAccountTypes = 'configurations/GetAllAccountType';
 
   static const String updatePersonalInformation = 'auth/personal-information';
   static const String updateBankingInformation = 'auth/bank-information';

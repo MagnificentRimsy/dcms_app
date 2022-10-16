@@ -25,4 +25,21 @@ class BatchProvider extends GetConnect {
     }
   }
 
+   Future<List<dynamic>> getBatchesTransactions(var batchoid) async {
+    try {
+      final response = await get(
+          BaseEndpoint.baseUrl+Endpoints.getTransactionsByBatchoid+batchoid);
+      if (response.status.hasError) {
+        return Future.error(response.statusText.toString());
+      } else {
+        return response.body['values'];
+      }
+    }
+    catch(exception)
+    {
+
+      return Future.error(exception.toString());
+    }
+  }
+
 }

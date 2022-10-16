@@ -5,6 +5,7 @@ import 'package:dcms_app/view/screens/batches.dart';
 import 'package:get/get.dart';
 
 import '../bindings/databinding.dart';
+import '../view/screens/agent_profile.dart';
 import '../view/screens/dashboard.dart';
 import '../view/screens/home.dart';
 import '../view/screens/landing.dart';
@@ -14,7 +15,9 @@ import '../view/screens/otp.dart';
 import '../view/screens/register.dart';
 import '../view/screens/settings.dart';
 import '../view/screens/splash.dart';
+import '../view/screens/testdropdown.dart';
 import '../view/screens/transactions.dart';
+import '../view/screens/farmer_profile.dart';
 import '../view/screens/wallet.dart';
 
 class Routes{
@@ -22,7 +25,7 @@ class Routes{
   static final routes = [
     GetPage(
       name: '/splash', 
-      page: () =>  SplashScreen(),
+      page: () =>   SplashScreen(),
       binding: null
     ),
 
@@ -58,17 +61,17 @@ class Routes{
     GetPage(
       name: '/otp', 
       page: () =>  OtpPage(),
-      binding: null
+      binding: DataBinding()
     ),
     GetPage(
       name: '/dashboard', 
       page: () =>  Dashboard(pageIndex: 0,),
-      binding: null
+      binding: DataBinding()
     ),
     GetPage(
       name: '/home', 
       page: () =>  Home(),
-      binding: null
+      binding:  DataBinding()
     ),
     GetPage(
       name: '/settings', 
@@ -80,7 +83,22 @@ class Routes{
       page: () =>  WalletScreen(),
       binding: null
     ), 
-    GetPage(name: '/transaction', page: () => Transactions(), binding: DataBinding())
+    GetPage(
+      name: '/transaction', 
+      page: () => Transactions(), 
+      binding: DataBinding()
+    ),
+     GetPage(
+      name: '/agentprofile', 
+      page: () => AgentProfile(), 
+      binding: DataBinding()
+    ),
+
+      GetPage(
+      name: '/farmerprofile', 
+      page: () => FarmerProfile(), 
+      binding: DataBinding()
+    ),
 
   ];
 }

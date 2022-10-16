@@ -23,7 +23,8 @@ import '../services/batch_service_provider.dart';
 import '../services/pricing_service_provider.dart';
 import '../utils/app_snacks.dart';
 
-class PricingController extends GetxController with StateMixin<List<dynamic>> {
+class 
+PricingController extends GetxController with StateMixin<List<dynamic>> {
   RxBool isLoading = false.obs;
   late SharedPreferences _prefs;
 
@@ -41,12 +42,15 @@ class PricingController extends GetxController with StateMixin<List<dynamic>> {
   
   _getPricing () async {
       _prefs = await  SharedPreferences.getInstance();
-      PricingProvider().getPricing().then((value) {
+      PricingProvider().getRecentMarketPrice().then((value) {
         change(value, status: RxStatus.success());
       },onError: (error){
-        change(null,status: RxStatus.error(error.toString()));
+
+      change(null,status: RxStatus.error(error.toString()));
       });
   }
 
 }
+
+
 

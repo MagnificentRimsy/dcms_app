@@ -5,7 +5,7 @@ class Transaction {
   String? pcIpAddress;
   String? pcName;
   String? pcUserName;
-  int? oid;
+  
   int? amountDue;
   int? batchOid;
   int? farmerOid;
@@ -20,7 +20,7 @@ class Transaction {
       this.pcIpAddress,
       this.pcName,
       this.pcUserName,
-      this.oid,
+     
       this.amountDue,
       this.batchOid,
       this.farmerOid,
@@ -35,7 +35,7 @@ class Transaction {
     pcIpAddress = json['pcIpAddress'];
     pcName = json['pcName'];
     pcUserName = json['pcUserName'];
-    oid = json['oid'];
+   
     amountDue = json['amountDue'];
     batchOid = json['batchOid'];
     farmerOid = json['farmerOid'];
@@ -52,7 +52,6 @@ class Transaction {
     data['pcIpAddress'] = this.pcIpAddress;
     data['pcName'] = this.pcName;
     data['pcUserName'] = this.pcUserName;
-    data['oid'] = this.oid;
     data['amountDue'] = this.amountDue;
     data['batchOid'] = this.batchOid;
     data['farmerOid'] = this.farmerOid;

@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'package:dcms_app/data/models/data/sign_in.dart';
 import 'package:dcms_app/data/models/data/two_factor.dart';
+import 'package:dcms_app/helper/app_routes.dart';
 import 'package:dcms_app/view/screens/dashboard.dart';
 import 'package:dcms_app/view/screens/home.dart';
 import 'package:dcms_app/view/screens/two_factor.dart';
@@ -60,29 +61,49 @@ class LoginController extends GetxController {
       String url = BaseEndpoint.baseUrl+Endpoints.login+ signInDataBody.userName+'&Password='+signInDataBody.password;
       print(url);
       print('user-data ${signInDataBody.userName}  ${signInDataBody.password}');
-      Response response = await dio.post(url, data: '', options: Options(
-
-            followRedirects: false,
-            // will not throw errors
-            validateStatus: (status) => true,
-            
-          ),);
-      print (response.data['value']['isActive'].toString()); 
-      var userOid = _prefs.setInt('useroid', response.data['value']['entityOid']);
-      var userType = _prefs.setInt('usertype', response.data['value']['userType']);
-      var userName = _prefs.setString('username', response.data['value']['userName']); 
-      var userDeacription = _prefs.setString('userdescription', response.data['value']['userTypeDescription']); 
-
-      print('UserType ---- $userType');
-     // if ( response.statusCode == 200 && response.data['value']['isActive'] == true) {
+      Response response = await dio.post(url, data: '');
 
         
-        AppSnacks.show(context, backgroundColor: Colors.green, leadingIcon: Icon(Icons.check), message: 'Login Successful');
+           print (response.data['value']['isActive']); 
+        _prefs.setInt('useroid', response.data['value']['entityOid']);
+        _prefs.setInt('usertype', response.data['value']['userType']);
+        _prefs.setString('username', response.data['value']['userName']); 
+        _prefs.setString('userdescription', response.data['value']['userTypeDescription']); 
+        _prefs.setInt('entityoid', response.data['value']['entityOid']); 
 
-        isLoading(false);
-        Get.off(Home(), arguments: response);
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+          var storedusername = prefs.getString('username');
+          var storeduserdescription = prefs.getString('userdescription');
+          var storedentitytype = prefs.getInt('entityoid');
 
-        update();
+          print('Username ---- $storedusername');
+          print('UserDescription ---- $storeduserdescription');
+          print('UserType ---- $storedentitytype');
+
+ 
+          Future.delayed(Duration(seconds: 0), () {
+            AppSnacks.show(context, backgroundColor: Colors.green, leadingIcon: Icon(Icons.check), message: 'Login Successful');
+          });
+
+                isLoading(false);
+              
+                if (storeduserdescription =="Agent" && storedentitytype == 0) 
+                {
+                  Get.offNamed('/agentprofile',  arguments: response);
+                } else if(storeduserdescription =="Farmer" && storedentitytype == 0){
+                  Get.offNamed('/farmerprofile', arguments: response, );        
+                }else{
+                  Get.offNamed('/home', arguments: response);   
+                }
+        
+                update();
+                isLoading(false);
+                return AppSnacks.show(context, leadingIcon: Icon(Icons.error), message:'Login Failed' );
+        
+
+     // Get.offNamed('/home', arguments: response);
+
+        
 
         //  GetTwoFaBody getTwofactorBody = GetTwoFaBody(reason: 3, requester: signInDataBody.userName, status: 0);
 
@@ -113,14 +134,39 @@ class LoginController extends GetxController {
         // isLoading(false);
         // Get.to(Home(), arguments: response);
       //}
-    }on Response catch (e) {
-update(); 
-      print('Login Failed $e');
-      isLoading(false);
-      AppSnacks.show(context, leadingIcon: Icon(Icons.error), message:'Login Failed' );
-      print('Login Failed, Username or password $e');
-      update();
-      return e;
+    }on DioError catch (e) {
+      if(e.type == DioErrorType.response ){
+          isLoading(false);
+          print('Login Failed $e');
+          AppSnacks.show(context, leadingIcon: Icon(Icons.error), message:'Incorrect Username or Password!' );
+          update();
+          return e;
+      }if(e.type == DioErrorType.connectTimeout){
+          isLoading(false);
+          print('Connection Timeout $e');
+          AppSnacks.show(context, leadingIcon: Icon(Icons.error), message:'Connection Timeout!' );
+          update();
+          return e;
+      }if (e.type == DioErrorType.receiveTimeout){
+          isLoading(false);
+          print('Unable to Connect $e');
+          AppSnacks.show(context, leadingIcon: Icon(Icons.error), message:'Unable to connect to server!' );
+          update();
+          return e;
+      }if (e.type == DioErrorType.other){
+          isLoading(false);
+          print(' Something went Wrong $e');
+          AppSnacks.show(context, leadingIcon: Icon(Icons.error), message:'Something went wrong!' );
+          update();
+          return e;
+      }
+    
+    } catch (e){
+          isLoading(false);
+          print('Failed $e');
+          AppSnacks.show(context, leadingIcon: Icon(Icons.error), message:'Login Failed!' );
+          update();
+          return e; 
     }
   }
 }

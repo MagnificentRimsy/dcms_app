@@ -76,21 +76,51 @@ class RegistrationController extends GetxController implements GetxService {
         if (response.data['statusCode'] != 201) {
           print('Registration Successful $response');      
           await prefs.setString('username', signUpBody.userName);
-          AppSnacks.show(context, backgroundColor: Colors.green, leadingIcon: Icon(Icons.check), message: 'Success!');
+         
+          Future.delayed(Duration(seconds: 1), () {
+            AppSnacks.show(context, backgroundColor: Colors.green, leadingIcon: Icon(Icons.check), message: 'Success!');
+          });
+
           isLoading(false);
-          Get.to(OtpPage(), transition: Transition.rightToLeft, arguments: signUpBody.userName);
+             Get.toNamed('/otp', arguments: signUpBody.userName);
           update();
         } 
 
-    }on Response catch (e) {
-         
-          print('Registration Failed $e');
-
-          AppSnacks.show(context, leadingIcon: Icon(Icons.error), message: ' Registration Failed');
-
+    }on DioError catch (e) {
+      if(e.type == DioErrorType.response ){
           isLoading(false);
+          print('Registration Failed $e');
+          AppSnacks.show(context, leadingIcon: Icon(Icons.error), message:'Registration failed' );
           update();
+          return e;
+      }if(e.type == DioErrorType.connectTimeout){
+          isLoading(false);
+          print('Connection Timeout $e');
+          AppSnacks.show(context, leadingIcon: Icon(Icons.error), message:'Connection Timeout!' );
+          update();
+          return e;
+      }if (e.type == DioErrorType.receiveTimeout){
+          isLoading(false);
+          print('Unable to Connect $e');
+          AppSnacks.show(context, leadingIcon: Icon(Icons.error), message:'Unable to connect to server!' );
+          update();
+          return e;
+      }if (e.type == DioErrorType.other){
+          isLoading(false);
+          print(' Something went Wrong $e');
+          AppSnacks.show(context, leadingIcon: Icon(Icons.error), message:'Something went wrong!' );
+          update();
+          return e;
+      }
+    
+    } catch (e){
+          isLoading(false);
+          print('Failed $e');
+          AppSnacks.show(context, leadingIcon: Icon(Icons.error), message:'Registration Failed!' );
+          update();
+          return e; 
     }
+    
   }
 
 }

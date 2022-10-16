@@ -2,7 +2,7 @@
 
 import 'package:dcms_app/controller/login_controller.dart';
 import 'package:dcms_app/data/models/data/sign_in.dart';
-import 'package:dcms_app/view/screens/add_farmer.dart';
+import 'package:dcms_app/view/screens/agent_profile.dart';
 import 'package:dcms_app/view/screens/batches.dart';
 import 'package:dcms_app/view/screens/components/button.dart';
 import 'package:flutter/material.dart';

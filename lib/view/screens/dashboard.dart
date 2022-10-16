@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors, unnecessary_new, prefer_const_constructors_in_immutables
 
 import 'dart:convert';
+import 'dart:math';
+import 'package:dcms_app/models/pricing.dart';
 import 'package:dcms_app/view/screens/batches.dart';
 import 'package:dcms_app/view/screens/components/app_icons.dart';
 import 'package:dcms_app/view/screens/components/cards.dart';
@@ -9,9 +11,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../controller/login_controller.dart';
+import '../../controller/pricing_controller.dart';
 import 'components/fade_animation.dart';
 
 class Dashboard extends StatefulWidget {
@@ -28,10 +32,13 @@ class _DashboardState extends State<Dashboard> {
 
     final loginController = Get.put(LoginController());
     var userType = 0;
+    NumberFormat moneyFormat = NumberFormat.decimalPattern('en_us');
+
+    String? username = '';
   @override
   void initState() {
     super.initState();
-    print('UserName Dashboard: ${loginController.userNameText.value}');
+    print('UserName Dashboard: $username');
     _loadUserData();
 
   }
@@ -39,18 +46,19 @@ class _DashboardState extends State<Dashboard> {
     _loadUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      userType = (prefs.getInt('userType') ?? '') as int;
+      userType = (prefs.getInt('usertype') ?? '') as int;
+      username = prefs.getString('username');
       print('Logged In User $userType');
     });
   }
   
-final List<String> seasonItems = [
-  '2022 Season',
-  '2021 Season',
-];
-String? selectedValue;
+  final List<String> seasonItems = [
+    '2022 Season',
+    '2021 Season',
+  ];
+  String? selectedValue;
 
-  bool _isLoading = false;
+  
 
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
@@ -73,7 +81,7 @@ String? selectedValue;
                   InkWell(
                     // This is meant to come from the json response 
                     child: Text(
-                      'Hi, ${loginController.userNameText.value.isNotEmpty? loginController.userNameText.value : ''}',
+                      'Hi, ${username != null? username : ''}',
                       style: TextStyle(fontSize: 21.0),
                     ),
                     onTap: () {},
@@ -161,9 +169,6 @@ String? selectedValue;
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.0),
                   gradient: LinearGradient(
-                    
-
-
                     colors: const [Color(0xFF8FD400), Color(0xFF299617)],
                     begin: Alignment.topCenter,
                     end: Alignment.bottomRight,
@@ -184,180 +189,92 @@ String? selectedValue;
                                 fit: BoxFit.cover),
                           )),
                     ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding:
-                              const EdgeInsets.only(top: 30.0, bottom: 5),
-                          child: Container(
-                            child: Text(
-                              'FFB Pricing as at - 23 June 2022',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
+                    
+                   GetBuilder<PricingController>(
+                      init: PricingController(),
+                      builder: (controller) {
+                        return controller.obx(
+                                (data) {
+                            // final pricings = data as PricingItems;
 
-              ListTile(
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 20.0),
-             
-                  title: Padding(
-                    padding: const EdgeInsets.only(left: 10),
-                    child: Text(
-                      'Temera',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 22),
-                    ),
-                  ),
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left:20, top: 30.0, bottom: 5),
+                                            child: Container(
+                                              child: Text(
+                                                'FFB Pricing as at ${data![0]["createdOn"]} ',
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                       
+                        
+                                     SizedBox(
+                                      child:  ListView.builder(
+                                          shrinkWrap: true,
+                                          scrollDirection: Axis.vertical,
+                                          itemCount:data!.length,
+                                          itemBuilder:(context, index) {
+                                          return    ListTile(
+                                              contentPadding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 0),
+                                              title: Padding(
+                                                padding: const EdgeInsets.only(left: 10),
+                                                child: Text(
+                                                 '${data[index]["varietyDescription"]}',
+                                                  style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight: FontWeight.normal,
+                                                      fontSize: 22),
+                                                ),
+                                              ),
 
-                 
- 
-                  trailing: Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                      
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            '- 50k/Tone',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold, fontSize: 18),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  onTap: () {},
-                ),
-            
-               ListTile(
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 20.0),
-             
-                  title: Padding(
-                    padding: const EdgeInsets.only(left: 10),
-                    child: Text(
-                      'Dura',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 22),
-                    ),
-                  ),
-                  trailing: Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                      
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            '- 30k/Tone',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold, fontSize: 18),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  onTap: () {},
-                ),
-            
-               ListTile(
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 20.0),
-             
-                  title: Padding(
-                    padding: const EdgeInsets.only(left: 10),
-                    child: Text(
-                      'Pisitera',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 22),
-                    ),
-                  ),
-                  trailing: Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                      
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            '- 20k/Tone',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold, fontSize: 18),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  onTap: () {},
-                ),
-            
-            
-            
-                        // Padding(
-                        //   padding: const EdgeInsets.only(top: 5.0),
-                        //   child: Container(
-                        //     child: Text(
-                        //       '4000,000.00',
-                        //       style: TextStyle(
-                        //           color: Colors.white,
-                        //           fontSize: 30,
-                        //           fontWeight: FontWeight.bold),
-                        //     ),
-                        //   ),
-                        // ),
-                        // Padding(
-                        //   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        //   child: Container(
-                        //     child: Text(
-                        //       'Total FFB Supplied',
-                        //       style: TextStyle(
-                        //           color: Colors.white,
-                        //           fontSize: 20,
-                        //           fontWeight: FontWeight.normal),
-                        //     ),
-                        //   ),
-                        // ),
-                        // Padding(
-                        //   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        //   child: Container(
-                        //     child: Text(
-                        //       '1000 (Tones)',
-                        //       style: TextStyle(
-                        //           color: Colors.white,
-                        //           fontSize: 22,
-                        //           fontWeight: FontWeight.bold),
-                        //     ),
-                        //   ),
-                        // ),
-                     
-                     
-                      ],
+                                              trailing: Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                // ignore: prefer_const_literals_to_create_immutables
+                                                children: [
+                                                
+                                                  Padding(
+                                                    padding: const EdgeInsets.all(8.0),
+                                                    child: Text('₦' + moneyFormat.format(
+                                                  data[index]["amount"])
+                                                      +' /Tone',
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontWeight: FontWeight.bold, fontSize: 18),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              onTap: () {},
+                                            );
+                                          
+                                        }
+                                      ),
+                                    )
+                                 
+                                            
+                             
+                              ],
+                            );
+                          }
+                        );
+                      }
                     )
+                  
+                  
                   ],
                 ),
               ),
             ),
 
 
-            userType == 1 ?
+            userType != 1 ?
             Padding(
               padding: const EdgeInsets.only(left: 10, right: 10),
               child: Card(
@@ -417,7 +334,7 @@ String? selectedValue;
             
               ),
             ): Container(),
-            userType == 1 ?
+            userType != 1 ?
             Padding(
               padding: const EdgeInsets.only(left: 10, right: 10),
               child: Card(
@@ -490,11 +407,7 @@ String? selectedValue;
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: HomeTabCard(
-                              onPressed: () {
-                     
-                                   Navigator.of(context).push(FadeRoute(page: Batches()));
-
-                              },
+                              onPressed: ()  => Navigator.of(context).push(FadeRoute(page: Batches())),
                               title: 'Manage',
                               icon: Icons.send_and_archive,
                               sub: 'Batch Transactions ',
@@ -535,6 +448,7 @@ String? selectedValue;
                             ),
                           ),
                         ),
+                        // if farmer is should be manage cluster
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -542,7 +456,7 @@ String? selectedValue;
                               onPressed: () {},
                               title: 'Manage',
                               icon: Icons.ac_unit,
-                              sub: 'Clusters',
+                              sub: 'Farmers',
                               iconColor: Colors.black,
                               backgroundColor: Color(0xff90EE90),
                             ),

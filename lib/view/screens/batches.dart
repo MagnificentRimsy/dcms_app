@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, unnecessary_new
 
+import 'package:dcms_app/services/pricing_service_provider.dart';
 import 'package:dcms_app/view/screens/components/button.dart';
 import 'package:dcms_app/view/screens/transactions.dart';
 import 'package:flutter/material.dart';
@@ -55,7 +56,7 @@ class Batches extends GetView<BatchController> {
                   padding: const EdgeInsets.all(8.0),
                   child: OutlinedButton(
                     child: Text(
-                      'Add New Batch',
+                      'Create Batch',
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
                     ),
@@ -65,7 +66,7 @@ class Batches extends GetView<BatchController> {
                       primary: Colors.white,
                       backgroundColor: Colors.green,
                       shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10))),
+                          borderRadius: BorderRadius.all(Radius.circular(100))),
                     ),
                     onPressed: () {
                       showModalBottomSheet(
@@ -224,7 +225,8 @@ class Batches extends GetView<BatchController> {
                   ),
                 ),
                 controller.obx(
-                  (data) => Column(
+                  (data) {
+                    return Column(
                     children: [
                       ListView.builder(
                           shrinkWrap: true,
@@ -263,7 +265,7 @@ class Batches extends GetView<BatchController> {
                                     children: [
                                       Text(data[index]['description']),
                                       Text(data[index]['batchDate']),
-
+                  
                                     ],
                                   ),
                                   trailing: Column(
@@ -278,7 +280,7 @@ class Batches extends GetView<BatchController> {
                                   ),
                                   onTap: () {
                     //                 Get.toNamed(
-                    //   Routes.conversation,
+                    //   Routes.conversation
                     //   arguments: controller.chats[index],
                     // );
                                     Get.to(Transactions(), arguments: data[index]);
@@ -288,7 +290,8 @@ class Batches extends GetView<BatchController> {
                             );
                           }),
                     ],
-                  ),
+                  );
+                  },
                 )
               ]),
             ],

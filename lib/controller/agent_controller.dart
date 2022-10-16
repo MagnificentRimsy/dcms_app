@@ -16,7 +16,7 @@ import '../services/batch_service_provider.dart';
 import '../utils/app_snacks.dart';
 import '../view/screens/transactions.dart';
 
-class TransactionController extends GetxController
+class AgentController extends GetxController
     with StateMixin<List<dynamic>> {
   var isDataProcessing = false.obs;
   Dio dio = Dio();
@@ -24,7 +24,7 @@ class TransactionController extends GetxController
   late SharedPreferences _prefs;
 
 
-  TransactionController(this.repository);
+  AgentController(this.repository);
 
   late TextEditingController amountDueController;
   late TextEditingController purchaseDateController;
@@ -201,7 +201,7 @@ class TransactionController extends GetxController
     return null;
   }
 
-  createTransaction( BuildContext context, TransactionController controller, data) async {
+  createTransaction( BuildContext context, AgentController controller, data) async {
      try {
         var  storedFarmOid = (_prefs.getInt('farmoid') ?? '') as int;
         print('Stored Farm Oid $storedFarmOid');

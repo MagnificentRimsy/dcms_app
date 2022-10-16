@@ -2,7 +2,7 @@
 
 import 'package:dcms_app/controller/TwoFactorController.dart';
 import 'package:dcms_app/controller/register_controller.dart';
-import 'package:dcms_app/view/screens/add_farmer.dart';
+import 'package:dcms_app/view/screens/agent_profile.dart';
 import 'package:dcms_app/view/screens/dashboard.dart';
 import 'package:dcms_app/view/screens/home.dart';
 import 'package:dcms_app/view/screens/landing.dart';

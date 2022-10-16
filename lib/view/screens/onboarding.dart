@@ -2,6 +2,7 @@
 
 import 'package:dcms_app/view/screens/components/button.dart';
 import 'package:dcms_app/view/screens/login.dart';
+import 'package:dcms_app/view/screens/test_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
@@ -86,7 +87,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   new Expanded(
                     child: ButtonComponent(
                               onPressed: () {
-                                Get.to(LoginScreen());
+                                 Get.to(LoginScreen());
+
+                               
                               },
                               caption: "Login",
                               textColor: Colors.white,

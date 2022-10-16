@@ -1,4 +1,4 @@
-import 'package:dcms_app/view/screens/add_farmer.dart';
+import 'package:dcms_app/view/screens/agent_profile.dart';
 import 'package:dcms_app/view/screens/components/preloader.dart';
 import 'package:dcms_app/view/screens/landing.dart';
 import 'package:dcms_app/view/screens/login.dart';
@@ -7,6 +7,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+
+import 'batches.dart';
+import 'components/fade_animation.dart';
+import 'farmer_profile.dart';
 
 class SettingsScreen extends StatefulWidget {
   @override
@@ -66,7 +70,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
             InkWell(
               onTap: () {
-                Get.to(AddProfileDetails());
+                Get.to(FarmerProfile());
+
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -75,6 +80,33 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   children: [
                     Text(
                       "Account Profile",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                    Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.grey,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+  InkWell(
+              onTap: () {
+                Get.to(FarmerProfile());
+
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Create Farmer",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
@@ -115,7 +147,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
 
             InkWell(
-              onTap: () {},
+              onTap: () {
+
+              },
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Row(

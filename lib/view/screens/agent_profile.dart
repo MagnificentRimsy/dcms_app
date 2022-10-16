@@ -13,14 +13,16 @@ import 'package:get/state_manager.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AddProfileDetails extends StatefulWidget {
-  const AddProfileDetails({Key? key}) : super(key: key);
+import 'components/exit_pop.dart';
+
+class AgentProfile extends StatefulWidget {
+  const AgentProfile({Key? key}) : super(key: key);
 
   @override
-  _AddProfileDetailsState createState() => _AddProfileDetailsState();
+  _AgentProfileState createState() => _AgentProfileState();
 }
 
-class _AddProfileDetailsState extends State<AddProfileDetails> {
+class _AgentProfileState extends State<AgentProfile> {
  
   // Variables
 
@@ -1451,194 +1453,197 @@ class _AddProfileDetailsState extends State<AddProfileDetails> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        automaticallyImplyLeading: false,
-        title: Text(
-          'Update Your Profile',
-          style: TextStyle(color: Colors.black),
+    return WillPopScope(
+      onWillPop: () => showExitToLandingPopup(context),
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          automaticallyImplyLeading: false,
+          title: Text(
+            'Update Your Profile',
+            style: TextStyle(color: Colors.black),
+          ),
+          centerTitle: true,
+          elevation: 0,
         ),
-        centerTitle: true,
-        elevation: 0,
-      ),
-      body: Container(
-        child: Column(
-          children: [
-            Expanded(
-              child: Stepper(
-                type: stepperType,
-                physics: ScrollPhysics(),
-                currentStep: _currentStep,
-                steps: stepList(),
-                onStepContinue: () async {
-                  if (_activeStepIndex < (stepList().length - 1)) {
-                    setState(() {
-                      _activeStepIndex += 1;
-                    });
-                  } else {
-                    setState(() {
-                      _isLoading = true;
-                    });
-
-                    if (firstName.text.isEmpty ||
-                        selectedDateOfBirth == null ||
-                        lastName.text.isEmpty ||
-                        bvn.text.isEmpty ||
-                        _selectedGender == null ||
-                        primaryPhone.text.isEmpty ||
-                        // _selectedTitle == null  ||
-                        // _selectedFarmerTypeOid == null  ||
-                        // _selectedSectorOid == null  ||
-                        // _selectedSubSectorOid == null  ||
-
-                        _selectedStateLocalGovernment == null ||
-
-                        // _selectedNationalityCountry == null ||
-                        // _selectedNationalityState == null ||
-                        // _selectedNationalitylocalGovernment == null ||
-
-                        // nokFirstName.text.isEmpty ||
-                        // nokLastName.text.isEmpty ||
-                        // nokSelectedGender == null||
-                        // nokSelectedRelationshipType == null||
-                        // nokPrimaryPhone.text.isEmpty ||
-
-                        // idNumber.text.isEmpty ||
-                        // _selectedMeansOfIdentification == null ||
-                        // selectedIssuingDate == null ||
-                        // selectedExpiryDate == null ||
-                        // issuingBody.text.isEmpty ||
-
-                        // _selectedBank == null ||
-                        // accountNo.text.isEmpty ||
-                        // accountname.text.isEmpty ||
-                        // _selectedAccountType == null ||
-                        bytes == null) {
-                      showSB();
-
+        body: Container(
+          child: Column(
+            children: [
+              Expanded(
+                child: Stepper(
+                  type: stepperType,
+                  physics: ScrollPhysics(),
+                  currentStep: _currentStep,
+                  steps: stepList(),
+                  onStepContinue: () async {
+                    if (_activeStepIndex < (stepList().length - 1)) {
                       setState(() {
-                        _isLoading = false;
+                        _activeStepIndex += 1;
                       });
                     } else {
-                      _prefs = await SharedPreferences.getInstance();
-
-                      _submitFarmerKyc(
-                          firstName.text,
-                          middleName.text,
-                          lastName.text,
-                          email.text,
-                          bvn.text,
-                        
-                          contactAddress.text,
-                          applicantId.text,
-                          selectedDateOfBirth,
-                          1,
-                          1,
-                          _selectedGender,
-                          _selectedMaritalStatus,
-                          primaryPhone.text,
-                          1,
-                          secondaryPhone.text,
-                          _selectedTitle,
-                          _selectedFarmerTypeOid,
-                         
-                          countryId,
-                          //_selectedState,
-                          1,
-                          _selectedStateLocalGovernment,
-                          location_description.text,
-                          _selectedNationalityCountry,
-                          _selectedNationalityState,
-                          _selectedNationalitylocalGovernment,
-                          1,
-                          1,
-                          nationality_description.text,
-                          nokFirstName.text,
-                          nokMiddleName.text,
-                          nokLastName.text,
-                          nokEmail.text,
-                          nokBvn.text,
-                          nokSelectedGender,
-                          nokSelectedRelationshipType,
-                          nokPrimaryPhone.text,
-                          nokSecondaryPhone.text,
-                          nokContactAddress.text,
-                          spouse_firstName.text,
-                          spouse_middleName.text,
-                          spouse_lastName.text,
-                          spouse_email.text,
-                          spouse_bvn.text,
-                          spouse_selectedGender,
-                          spouse_primaryPhone.text,
-                          spouse_secondaryPhone.text,
-                          spouse_contactAddress.text,
-                          idNumber.text,
-                          _selectedMeansOfIdentification,
-                          selectedIssuingDate,
-                          selectedExpiryDate,
-                          issuingBody.text,
-                          _selectedBank,
-                          accountNo.text,
-                          accountName.text,
-                          _selectedAccountType,
-                          bytes,
-                          context);
-
-                      print('Submited');
+                      setState(() {
+                        _isLoading = true;
+                      });
+    
+                      if (firstName.text.isEmpty ||
+                          selectedDateOfBirth == null ||
+                          lastName.text.isEmpty ||
+                          bvn.text.isEmpty ||
+                          _selectedGender == null ||
+                          primaryPhone.text.isEmpty ||
+                          // _selectedTitle == null  ||
+                          // _selectedFarmerTypeOid == null  ||
+                          // _selectedSectorOid == null  ||
+                          // _selectedSubSectorOid == null  ||
+    
+                          _selectedStateLocalGovernment == null ||
+    
+                          // _selectedNationalityCountry == null ||
+                          // _selectedNationalityState == null ||
+                          // _selectedNationalitylocalGovernment == null ||
+    
+                          // nokFirstName.text.isEmpty ||
+                          // nokLastName.text.isEmpty ||
+                          // nokSelectedGender == null||
+                          // nokSelectedRelationshipType == null||
+                          // nokPrimaryPhone.text.isEmpty ||
+    
+                          // idNumber.text.isEmpty ||
+                          // _selectedMeansOfIdentification == null ||
+                          // selectedIssuingDate == null ||
+                          // selectedExpiryDate == null ||
+                          // issuingBody.text.isEmpty ||
+    
+                          // _selectedBank == null ||
+                          // accountNo.text.isEmpty ||
+                          // accountname.text.isEmpty ||
+                          // _selectedAccountType == null ||
+                          bytes == null) {
+                        showSB();
+    
+                        setState(() {
+                          _isLoading = false;
+                        });
+                      } else {
+                        _prefs = await SharedPreferences.getInstance();
+    
+                        _submitFarmerKyc(
+                            firstName.text,
+                            middleName.text,
+                            lastName.text,
+                            email.text,
+                            bvn.text,
+                          
+                            contactAddress.text,
+                            applicantId.text,
+                            selectedDateOfBirth,
+                            1,
+                            1,
+                            _selectedGender,
+                            _selectedMaritalStatus,
+                            primaryPhone.text,
+                            1,
+                            secondaryPhone.text,
+                            _selectedTitle,
+                            _selectedFarmerTypeOid,
+                           
+                            countryId,
+                            //_selectedState,
+                            1,
+                            _selectedStateLocalGovernment,
+                            location_description.text,
+                            _selectedNationalityCountry,
+                            _selectedNationalityState,
+                            _selectedNationalitylocalGovernment,
+                            1,
+                            1,
+                            nationality_description.text,
+                            nokFirstName.text,
+                            nokMiddleName.text,
+                            nokLastName.text,
+                            nokEmail.text,
+                            nokBvn.text,
+                            nokSelectedGender,
+                            nokSelectedRelationshipType,
+                            nokPrimaryPhone.text,
+                            nokSecondaryPhone.text,
+                            nokContactAddress.text,
+                            spouse_firstName.text,
+                            spouse_middleName.text,
+                            spouse_lastName.text,
+                            spouse_email.text,
+                            spouse_bvn.text,
+                            spouse_selectedGender,
+                            spouse_primaryPhone.text,
+                            spouse_secondaryPhone.text,
+                            spouse_contactAddress.text,
+                            idNumber.text,
+                            _selectedMeansOfIdentification,
+                            selectedIssuingDate,
+                            selectedExpiryDate,
+                            issuingBody.text,
+                            _selectedBank,
+                            accountNo.text,
+                            accountName.text,
+                            _selectedAccountType,
+                            bytes,
+                            context);
+    
+                        print('Submited');
+                      }
                     }
-                  }
-                },
-                onStepCancel: () {
-                  if (_activeStepIndex == 0) {
-                    return;
-                  }
-
-                  setState(() {
-                    _activeStepIndex -= 1;
-                  });
-                },
-                onStepTapped: (int index) {
-                  setState(() {
-                    _activeStepIndex = index;
-                  });
-                },
-                controlsBuilder: ((context, details) {
-                  final isLastStep = _activeStepIndex == stepList().length - 1;
-                  return Container(
-                    child: Row(
-                      children: [
-                        if (_activeStepIndex > 0)
+                  },
+                  onStepCancel: () {
+                    if (_activeStepIndex == 0) {
+                      return;
+                    }
+    
+                    setState(() {
+                      _activeStepIndex -= 1;
+                    });
+                  },
+                  onStepTapped: (int index) {
+                    setState(() {
+                      _activeStepIndex = index;
+                    });
+                  },
+                  controlsBuilder: ((context, details) {
+                    final isLastStep = _activeStepIndex == stepList().length - 1;
+                    return Container(
+                      child: Row(
+                        children: [
+                          if (_activeStepIndex > 0)
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: details.onStepCancel,
+                                child: const Text('Back'),
+                              ),
+                            ),
+                          const SizedBox(
+                            width: 10,
+                          ),
                           Expanded(
                             child: ElevatedButton(
-                              onPressed: details.onStepCancel,
-                              child: const Text('Back'),
+                              onPressed: details.onStepContinue,
+                              child: (isLastStep)
+                                  ? const Text('Submit Profile Update ')
+                                  : const Text('Next'),
                             ),
                           ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: details.onStepContinue,
-                            child: (isLastStep)
-                                ? const Text('Submit Profile Update ')
-                                : const Text('Next'),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                }),
+                        ],
+                      ),
+                    );
+                  }),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
+        // floatingActionButton: FloatingActionButton(
+        //   child: Icon(Icons.check),
+        //   onPressed: switchStepsType,
+        // ),
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   child: Icon(Icons.check),
-      //   onPressed: switchStepsType,
-      // ),
     );
   }
 
