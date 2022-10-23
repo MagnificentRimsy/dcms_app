@@ -1,14 +1,10 @@
 // ignore_for_file: prefer_const_constructors, unnecessary_new, prefer_const_constructors_in_immutables
 
-import 'dart:convert';
-import 'dart:math';
-import 'package:dcms_app/models/pricing.dart';
+
 import 'package:dcms_app/view/screens/batches.dart';
-import 'package:dcms_app/view/screens/components/app_icons.dart';
 import 'package:dcms_app/view/screens/components/cards.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -31,6 +27,7 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
 
     final loginController = Get.put(LoginController());
+
     var userType = 0;
     NumberFormat moneyFormat = NumberFormat.decimalPattern('en_us');
 
@@ -46,7 +43,7 @@ class _DashboardState extends State<Dashboard> {
     _loadUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      userType = (prefs.getInt('usertype') ?? '') as int;
+      userType = (prefs.getInt('usertype') ?? 0);
       username = prefs.getString('username');
       print('Logged In User $userType');
     });
@@ -96,7 +93,7 @@ class _DashboardState extends State<Dashboard> {
                 ],
               ),
             ),
-
+      
             Padding(
                 padding: const EdgeInsets.only(
                     top: 10.0, left: 20.0, right: 20.0, bottom: 25),
@@ -159,10 +156,10 @@ class _DashboardState extends State<Dashboard> {
                   //       fontWeight: FontWeight.bold),
                   // ),
                 )
-
+      
                 //  eForm(theme),
                 ),
-
+      
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Container(
@@ -189,14 +186,14 @@ class _DashboardState extends State<Dashboard> {
                                 fit: BoxFit.cover),
                           )),
                     ),
-                    
+      
                    GetBuilder<PricingController>(
                       init: PricingController(),
                       builder: (controller) {
                         return controller.obx(
                                 (data) {
                             // final pricings = data as PricingItems;
-
+      
                             return Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -213,8 +210,8 @@ class _DashboardState extends State<Dashboard> {
                                               ),
                                             ),
                                           ),
-                                       
-                        
+      
+      
                                      SizedBox(
                                       child:  ListView.builder(
                                           shrinkWrap: true,
@@ -233,12 +230,12 @@ class _DashboardState extends State<Dashboard> {
                                                       fontSize: 22),
                                                 ),
                                               ),
-
+      
                                               trailing: Column(
                                                 crossAxisAlignment: CrossAxisAlignment.start,
                                                 // ignore: prefer_const_literals_to_create_immutables
                                                 children: [
-                                                
+      
                                                   Padding(
                                                     padding: const EdgeInsets.all(8.0),
                                                     child: Text('₦' + moneyFormat.format(
@@ -253,27 +250,27 @@ class _DashboardState extends State<Dashboard> {
                                               ),
                                               onTap: () {},
                                             );
-                                          
+      
                                         }
                                       ),
                                     )
-                                 
-                                            
-                             
+      
+      
+      
                               ],
                             );
                           }
                         );
                       }
                     )
-                  
-                  
+      
+      
                   ],
                 ),
               ),
             ),
-
-
+      
+      
             userType != 1 ?
             Padding(
               padding: const EdgeInsets.only(left: 10, right: 10),
@@ -449,6 +446,8 @@ class _DashboardState extends State<Dashboard> {
                           ),
                         ),
                         // if farmer is should be manage cluster
+                        
+                        userType != 1 ? Container():
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -456,7 +455,7 @@ class _DashboardState extends State<Dashboard> {
                               onPressed: () {},
                               title: 'Manage',
                               icon: Icons.ac_unit,
-                              sub: 'Farmers',
+                              sub: 'Clusters',
                               iconColor: Colors.black,
                               backgroundColor: Color(0xff90EE90),
                             ),
@@ -468,7 +467,7 @@ class _DashboardState extends State<Dashboard> {
                 ),
               ),
             )
-
+      
             // Card(
             //     elevation: 2.0,
             //     child: ListView.separated(
@@ -504,7 +503,7 @@ class _DashboardState extends State<Dashboard> {
             //                     fontWeight: FontWeight.bold),
             //               ),
             //               // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
-
+      
             //               subtitle: Row(
             //                 children: <Widget>[
             //                   Expanded(

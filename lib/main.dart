@@ -63,21 +63,6 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         initialRoute: '/splash',
         getPages: Routes.routes,
-        // {
-        //   // ignore: prefer_const_constructors
-         
-        //   '/splash': (context) => SplashScreen(),
-        //   '/onboarding': (context) => OnboardingScreen(),
-        //   '/landing': (context) => LandingScreen(),
-        //   '/login': (context) => LoginScreen(),
-        //   '/register': (context) => RegisterScreen(),
-        //   '/otp' : (context) => OtpPage(),
-        //   '/dashboard': (context) => Dashboard(pageIndex: 0,),
-        //   '/home': (context) => Home(),
-        //   '/settings': (context) => SettingsScreen(),
-        //   '/wallet': (context) => WalletScreen()
-        // },
-        
       );}
     );
   }

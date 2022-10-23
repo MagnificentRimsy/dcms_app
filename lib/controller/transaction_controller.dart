@@ -83,7 +83,6 @@ class TransactionController extends GetxController
     _prefs = await SharedPreferences.getInstance();
     _prefs.setInt('farmoid', currentSelectedFarmOid!.toInt());
    
-
     refresh();
   }
 

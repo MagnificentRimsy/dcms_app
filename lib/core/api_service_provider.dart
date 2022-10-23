@@ -1,12 +1,18 @@
 import 'package:dcms_app/models/account_type.dart';
 import 'package:dcms_app/models/agent_farmer.dart';
 import 'package:dcms_app/models/cooperative.dart';
+import 'package:dcms_app/models/country.dart';
+import 'package:dcms_app/models/identity_type.dart';
+import 'package:dcms_app/models/lga.dart';
 import 'package:dcms_app/models/new_farm_data.dart';
+import 'package:dcms_app/models/relationship_type.dart';
+import 'package:dcms_app/models/state_of_origin.dart';
 import 'package:dcms_app/models/title.dart';
 import 'package:dcms_app/routes/auth_endpoints.dart';
 import 'package:dcms_app/routes/base.dart';
 import 'package:get/get.dart';
 
+import '../models/bank.dart';
 import '../models/cluster.dart';
 import '../models/marital_status.dart';
 
@@ -92,8 +98,86 @@ class ApiServiceProvider extends GetConnect {
   }
 
   
+  Future<Bank> getBankData(String url) async {
+    try {
+      final response = await get(BaseEndpoint.baseUrl + url );
+      if (response.status.hasError) {
+        return Future.error(response.statusText!);
+      } else {
+        return Bank.fromJson(response.body) ;
+      }
+    } catch (exception) {
+      return Future.error(exception.toString());
+    }
+  }
+
+  Future<Country> getCountryData(String url) async {
+    try {
+      final response = await get(BaseEndpoint.baseUrl + url );
+      if (response.status.hasError) {
+        return Future.error(response.statusText!);
+      } else {
+        return Country.fromJson(response.body) ;
+      }
+    } catch (exception) {
+      return Future.error(exception.toString());
+    }
+  }
+
+ Future<StateOfOrigin> getStateOfOriginData(String url) async {
+    try {
+      final response = await get(BaseEndpoint.baseUrl + url );
+      if (response.status.hasError) {
+        return Future.error(response.statusText!);
+      } else {
+        return StateOfOrigin.fromJson(response.body) ;
+      }
+    } catch (exception) {
+      return Future.error(exception.toString());
+    }
+  }
+
+   Future<IdentityType> getIdentityTypeData(String url) async {
+    try {
+      final response = await get(BaseEndpoint.baseUrl + url );
+      if (response.status.hasError) {
+        return Future.error(response.statusText!);
+      } else {
+        return IdentityType.fromJson(response.body) ;
+      }
+    } catch (exception) {
+      return Future.error(exception.toString());
+    }
+  }
 
 
+
+   Future<LocalGovernment> getLocalGovernmentData(String url) async {
+    try {
+      final response = await get(BaseEndpoint.baseUrl + url );
+      if (response.status.hasError) {
+        return Future.error(response.statusText!);
+      } else {
+        return LocalGovernment.fromJson(response.body) ;
+      }
+    } catch (exception) {
+      return Future.error(exception.toString());
+    }
+  }
+
+
+   Future<RelationshipType> getRelationshipTypeData(String url) async {
+    try {
+      final response = await get(BaseEndpoint.baseUrl + url );
+      if (response.status.hasError) {
+        return Future.error(response.statusText!);
+      } else {
+        return RelationshipType.fromJson(response.body) ;
+      }
+    } catch (exception) {
+      return Future.error(exception.toString());
+    }
+  }
 
   //Get farmers by agent Oid
   Future<FarmerTransaction> getFarmersByAgentOid(String agentOid) async {

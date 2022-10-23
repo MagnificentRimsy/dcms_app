@@ -10,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../controller/pricing_controller.dart';
 import 'components/exit_pop.dart';
 
 class Home extends StatefulWidget {
@@ -19,6 +20,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   var data = Get.arguments;
+    final pricingController = Get.put(PricingController());
 
   @override
   void initState() {
@@ -36,16 +38,21 @@ class _HomeState extends State<Home> {
       child: DefaultTabController(
         length: 3,
         child: Scaffold(
-          body: TabBarView(
-            children: <Widget>[
-              Dashboard(),
-              WalletScreen(),
-              
-              SettingsScreen(),
-
-              // NearBy(),
-              // Cart(),
-            ],
+          body: RefreshIndicator(
+        onRefresh: ( ) async{ 
+            return  await pricingController.getPricing();
+         },
+            child: TabBarView(
+              children: <Widget>[
+                Dashboard(),
+                WalletScreen(),
+                
+                SettingsScreen(),
+          
+                // NearBy(),
+                // Cart(),
+              ],
+            ),
           ),
           bottomNavigationBar: Material(
             color: Colors.white,

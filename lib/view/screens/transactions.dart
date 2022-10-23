@@ -33,7 +33,7 @@ class Transactions extends StatefulWidget {
   State<Transactions> createState() => _TransactionsState();
 }
 
-class _TransactionsState extends State<Transactions> 
+class _TransactionsState extends State<Transactions>
     with SingleTickerProviderStateMixin {
   var data = Get.arguments;
 
@@ -41,7 +41,8 @@ class _TransactionsState extends State<Transactions>
   String? username;
   late TransactionController _controller;
 
-TransactionController dataController = Get.put(TransactionController(Repository(ApiServiceProvider())));
+  TransactionController dataController =
+      Get.put(TransactionController(Repository(ApiServiceProvider())));
 
   @override
   void initState() {
@@ -52,18 +53,17 @@ TransactionController dataController = Get.put(TransactionController(Repository(
     getTransactionsByBatchId();
   }
 
-   
-
   _getUserName() async {
     final prefs = await SharedPreferences.getInstance();
     username = prefs.getInt('useroid').toString();
     print('username-shard ${username}');
   }
 
-  getTransactionsByBatchId () async {
+  getTransactionsByBatchId() async {
     // var transactionsRecords = await _controller.getBatchTransactions({data['oid']});
-      var transactionsRecords = await dataController.getBatchTransactions({data['oid']});
-      return transactionsRecords; 
+    var transactionsRecords =
+        await dataController.getBatchTransactions({data['oid']});
+    return transactionsRecords;
   }
 
   @override
@@ -143,7 +143,6 @@ TransactionController dataController = Get.put(TransactionController(Repository(
                         ),
                         child: Column(
                           children: [
-                          
                             Padding(
                               padding: const EdgeInsets.all(13.0),
                               child: Row(
@@ -274,7 +273,7 @@ TransactionController dataController = Get.put(TransactionController(Repository(
                         Padding(
                           padding: const EdgeInsets.only(right: 10.0),
                           child: ElevatedButton(
-                              child: Text("Create Transaction ".toUpperCase(),
+                              child: Text("Create New".toUpperCase(),
                                   style: TextStyle(fontSize: 14)),
                               style: ButtonStyle(
                                   foregroundColor:
@@ -289,385 +288,410 @@ TransactionController dataController = Get.put(TransactionController(Repository(
                                           borderRadius: BorderRadius.zero,
                                           side: BorderSide(
                                               color: Colors.green)))),
-                                  onPressed: () {
-                                    showModalBottomSheet(
-                                      context: context,
-                                      isScrollControlled: true,
-                                      backgroundColor: Colors.transparent,
-                                      builder: (context) => Container(
-                                          height:
-                                              MediaQuery.of(context).size.height *
-                                                  0.85,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: new BorderRadius.only(
-                                              topLeft: const Radius.circular(25.0),
-                                              topRight: const Radius.circular(25.0),
-                                            ),
-                                          ),
-                                          child: SingleChildScrollView(
-                                            child: Column(
-                                              children: [
-                                                GetBuilder<TransactionController>(
-                                                    initState: maininit(),
-                                                    dispose: (c) {
-                                                      c.dispose();
-                                                    },
-                                                    builder: (controller) {
-                                                      return controller
-                                                              .isDataProcessing
-                                                              .isTrue
-                                                          ? Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .symmetric(
-                                                                      vertical: 30),
-                                                              child: Center(
+                              onPressed: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  isScrollControlled: true,
+                                  backgroundColor: Colors.transparent,
+                                  builder: (context) => Container(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.85,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: new BorderRadius.only(
+                                          topLeft: const Radius.circular(25.0),
+                                          topRight: const Radius.circular(25.0),
+                                        ),
+                                      ),
+                                      child: SingleChildScrollView(
+                                        child: Column(
+                                          children: [
+                                            GetBuilder<TransactionController>(
+                                                initState: maininit(),
+                                                dispose: (c) {
+                                                  c.dispose();
+                                                },
+                                                builder: (controller) {
+                                                  return controller
+                                                          .isDataProcessing
+                                                          .isTrue
+                                                      ? Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                      .symmetric(
+                                                                  vertical: 30),
+                                                          child: Center(
+                                                            child:
+                                                                SpinKitDualRing(
+                                                              color:
+                                                                  Colors.green,
+                                                              lineWidth: 2,
+                                                            ),
+                                                          ),
+                                                        )
+                                                      : Form(
+                                                          key: controller
+                                                              .transactionFormKey,
+                                                          child: Column(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .start,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .stretch,
+                                                            children: <Widget>[
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(20),
                                                                 child:
-                                                                    SpinKitDualRing(
-                                                                  color:
-                                                                      Colors.green,
-                                                                  lineWidth: 2,
+                                                                    const Text(
+                                                                  'Create Transaction',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .left,
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          22.0,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold),
                                                                 ),
                                                               ),
-                                                            )
-                                                          : Form(
-                                                              key: controller.transactionFormKey,
-                                                              child: Column(
-                                                                mainAxisAlignment:MainAxisAlignment.start,
-                                                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                                                children: <Widget>[
-                                                                  Padding(
-                                                                    padding:const EdgeInsets.all(20),
-                                                                    child:
-                                                                        const Text(
-                                                                      'Create Transaction',
-                                                                      textAlign:
-                                                                          TextAlign.left,
-                                                                      style: TextStyle(
-                                                                          fontSize:22.0,
-                                                                          fontWeight: FontWeight.bold),
-                                                                    ),
-                                                                  ),
-                                                                  const SizedBox(
-                                                                    height: 10,
-                                                                  ),
-                                                                  Padding(
-                                                                    padding:
-                                                                        const EdgeInsets
-                                                                                .only(
-                                                                            left:
-                                                                                20),
-                                                                    child:
-                                                                        const Text(
-                                                                      'Enter Details',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .left,
-                                                                      style: TextStyle(
-                                                                          fontSize:
-                                                                              16.0),
-                                                                    ),
-                                                                  ),
-                                                                  const SizedBox(
-                                                                    height: 10,
-                                                                  ),
+                                                              const SizedBox(
+                                                                height: 10,
+                                                              ),
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .only(
+                                                                        left:
+                                                                            20),
+                                                                child:
+                                                                    const Text(
+                                                                  'Enter Details',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .left,
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          16.0),
+                                                                ),
+                                                              ),
+                                                              const SizedBox(
+                                                                height: 10,
+                                                              ),
 
-                                                                  Padding(
+                                                              Padding(
+                                                                padding: const EdgeInsets
+                                                                        .only(
+                                                                    top: 10.0,
+                                                                    left: 10.0,
+                                                                    right:
+                                                                        10.0),
+                                                                child:
+                                                                    TextFormField(
+                                                                  keyboardType:
+                                                                      TextInputType
+                                                                          .number,
+                                                                  controller:
+                                                                      controller
+                                                                          .tonnageController,
+                                                                  autocorrect:
+                                                                      true,
+                                                                  validator:
+                                                                      (value) {
+                                                                    if (value ==
+                                                                            null ||
+                                                                        value
+                                                                            .isEmpty) {
+                                                                      return 'Tonnage';
+                                                                    }
+                                                                    return null;
+                                                                  },
+                                                                  decoration:
+                                                                      InputDecoration(
+                                                                    enabledBorder:
+                                                                        const OutlineInputBorder(
+                                                                      borderSide: BorderSide(
+                                                                          color: Colors
+                                                                              .grey,
+                                                                          width:
+                                                                              1.0),
+                                                                    ),
+                                                                    focusedBorder:
+                                                                        OutlineInputBorder(
+                                                                      borderSide: BorderSide(
+                                                                          color: Colors
+                                                                              .grey,
+                                                                          width:
+                                                                              1.0),
+                                                                    ),
+                                                                    prefixIcon: Icon(
+                                                                        Icons
+                                                                            .device_thermostat_outlined,
+                                                                        size:
+                                                                            28.0,
+                                                                        color: Colors
+                                                                            .green),
+                                                                    hintText:
+                                                                        'Enter Tonnage',
+                                                                    hintStyle: TextStyle(
+                                                                        fontSize:
+                                                                            14.0,
+                                                                        fontWeight:
+                                                                            FontWeight.bold),
+                                                                  ),
+                                                                ),
+                                                              ),
+
+                                                              const SizedBox(
+                                                                height: 10,
+                                                              ),
+
+                                                              Obx(
+                                                                () => Padding(
                                                                     padding: const EdgeInsets
                                                                             .only(
-                                                                        top: 10.0,
-                                                                        left: 10.0,
+                                                                        left:
+                                                                            10.0,
                                                                         right:
                                                                             10.0),
-                                                                    child:
-                                                                        TextFormField(
-                                                                      keyboardType:
-                                                                          TextInputType
-                                                                              .number,
-                                                                      controller:
-                                                                          controller.tonnageController,
-                                                                      autocorrect:
-                                                                          true,
-                                                                      validator:
-                                                                          (value) {
-                                                                        if (value ==
-                                                                                null ||
-                                                                            value
-                                                                                .isEmpty) {
-                                                                          return 'Tonnage';
-                                                                        }
-                                                                        return null;
-                                                                      },
-                                                                      decoration:
-                                                                          InputDecoration(
-                                                                        enabledBorder:
-                                                                            const OutlineInputBorder(
-                                                                          borderSide: BorderSide(
-                                                                              color: Colors
-                                                                                  .grey,
-                                                                              width:
-                                                                                  1.0),
-                                                                        ),
-                                                                        focusedBorder:
-                                                                            OutlineInputBorder(
-                                                                          borderSide: BorderSide(
-                                                                              color: Colors
-                                                                                  .grey,
-                                                                              width:
-                                                                                  1.0),
-                                                                        ),
-                                                                        prefixIcon: Icon(
-                                                                            Icons
-                                                                                .device_thermostat_outlined,
-                                                                            size:
-                                                                                28.0,
-                                                                            color: Colors
-                                                                                .green),
-                                                                        hintText:
-                                                                            'Enter Tonnage',
-                                                                        hintStyle: TextStyle(
-                                                                            fontSize:
-                                                                                14.0,
-                                                                            fontWeight:
-                                                                                FontWeight.bold),
-                                                                      ),
-                                                                    ),
-                                                                  ),
+                                                                    child: controller
+                                                                            .listFarmerModel_
+                                                                            .value
+                                                                            .isNotEmpty
+                                                                        ? DropdownButtonFormField<
+                                                                            Values?>(
+                                                                            icon:
+                                                                                Container(),
+                                                                            value:
+                                                                                controller.selectedFarmerId?.value,
+                                                                            items: controller.listFarmerModel_.value
+                                                                                .map((e) => DropdownMenuItem(
+                                                                                      child: Text(
+                                                                                        e.name!,
+                                                                                        overflow: TextOverflow.ellipsis,
+                                                                                        maxLines: 1,
+                                                                                        softWrap: false,
+                                                                                        style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold),
+                                                                                      ),
+                                                                                      value: e,
+                                                                                    ))
+                                                                                .toList(),
+                                                                            onChanged:
+                                                                                (Values? val) {
+                                                                              controller.setFarmerId(val);
 
-                                                                  const SizedBox(
-                                                                    height: 10,
-                                                                  ),
-
-                                                                  Obx(
-                                                                    () => Padding(
-                                                                        padding: const EdgeInsets
-                                                                                .only(
-                                                                            left:
-                                                                                10.0,
-                                                                            right:
-                                                                                10.0),
-                                                                        child: controller
-                                                                                .listFarmerModel_
-                                                                                .value
-                                                                                .isNotEmpty
-                                                                            ? DropdownButtonFormField<
-                                                                                Values?>(
-                                                                                icon:
-                                                                                    Container(),
-                                                                                value:
-                                                                                    controller.selectedFarmerId?.value,
-                                                                                items: controller.listFarmerModel_.value
-                                                                                    .map((e) => DropdownMenuItem(
-                                                                                          child: Text(
-                                                                                            e.name!,
-                                                                                            overflow: TextOverflow.ellipsis,
-                                                                                            maxLines: 1,
-                                                                                            softWrap: false,
-                                                                                            style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold),
-                                                                                          ),
-                                                                                          value: e,
-                                                                                        ))
-                                                                                    .toList(),
-                                                                                onChanged:
-                                                                                    (Values? val) {
-                                                                                  controller.setFarmerId(val);
-
-                                                                                  // if (controller.selectedFarmerId?.value.oid.toString() != "0") {
-                                                                                  //   print("true;");
-                                                                                  //   print('controller value: ${controller.selectedFarmerId!.value.userId}');
-                                                                                  //   // controller.getFarmersFarm(controller.selectedFarmerId.toString());
-                                                                                  // }
-                                                                                },
-                                                                                isExpanded:
-                                                                                    true,
-                                                                                decoration:
-                                                                                    InputDecoration(
-                                                                                  suffixIcon: Padding(
-                                                                                    padding: const EdgeInsets.only(top: 8.0),
-                                                                                    child: const Icon(Icons.keyboard_arrow_down),
-                                                                                  ),
-                                                                                  border: OutlineInputBorder(
-                                                                                    borderRadius: BorderRadius.all(
-                                                                                      Radius.circular(5),
-                                                                                    ),
-                                                                                  ),
-                                                                                  isDense: true,
-                                                                                  hintText: "Select Farmer",
+                                                                              // if (controller.selectedFarmerId?.value.oid.toString() != "0") {
+                                                                              //   print("true;");
+                                                                              //   print('controller value: ${controller.selectedFarmerId!.value.userId}');
+                                                                              //   // controller.getFarmersFarm(controller.selectedFarmerId.toString());
+                                                                              // }
+                                                                            },
+                                                                            isExpanded:
+                                                                                true,
+                                                                            decoration:
+                                                                                InputDecoration(
+                                                                              suffixIcon: Padding(
+                                                                                padding: const EdgeInsets.only(top: 8.0),
+                                                                                child: const Icon(Icons.keyboard_arrow_down),
+                                                                              ),
+                                                                              border: OutlineInputBorder(
+                                                                                borderRadius: BorderRadius.all(
+                                                                                  Radius.circular(5),
                                                                                 ),
-                                                                              )
-                                                                            : null),
-                                                                  ),
-
-                                                                  SizedBox(
-                                                                    height: 10,
-                                                                  ),
-
-                                                                  // how can I please popluate this with the farms array below
-
-                                                                  Obx(
-                                                                    () => Padding(
-                                                                        padding: const EdgeInsets
-                                                                                .only(
-                                                                            left:
-                                                                                10.0,
-                                                                            right:
-                                                                                10.0),
-                                                                        child: controller
-                                                                                .listFarmModel_
-                                                                                .value
-                                                                                .isNotEmpty
-                                                                            ? DropdownButtonFormField<
-                                                                                Farms>(
-                                                                                icon:
-                                                                                    Container(),
-                                                                                //e.name!
-                                                                                value:
-                                                                                    controller.selectedFarm?.value,
-                                                                                items: controller.listFarmModel_.value
-                                                                                    .map((e) => DropdownMenuItem(
-                                                                                          child: Text(
-                                                                                            e.title.toString(),
-                                                                                            overflow: TextOverflow.ellipsis,
-                                                                                            maxLines: 1,
-                                                                                            softWrap: false,
-                                                                                            style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold),
-                                                                                          ),
-                                                                                          value: e,
-                                                                                        ))
-                                                                                    .toList(),
-                                                                                onChanged: (Farms? val) {
-                                                                                  controller.setFarm(val);                                                                            
-
-                                                                                },
-                                                                                isExpanded:
-                                                                                    true,
-                                                                                decoration:
-                                                                                    InputDecoration(
-                                                                                  suffixIcon: Padding(
-                                                                                    padding: const EdgeInsets.only(top: 8.0),
-                                                                                    child: const Icon(Icons.keyboard_arrow_down),
-                                                                                  ),
-                                                                                  border: OutlineInputBorder(
-                                                                                    borderRadius: BorderRadius.all(
-                                                                                      Radius.circular(5),
-                                                                                    ),
-                                                                                  ),
-                                                                                  isDense: true,
-                                                                                  hintText: "Select Farm",
-                                                                                ),
-                                                                              )
-                                                                            : SizedBox
-                                                                                .shrink()),
-                                                                  ),
-                                                                  SizedBox(
-                                                                    height: 10,
-                                                                  ),
-
-                                                                  Padding(
-                                                                    padding:
-                                                                        const EdgeInsets
-                                                                                .only(
-                                                                            left:
-                                                                                10),
-                                                                    child:
-                                                                        const Text(
-                                                                      'Select Purchase Date:',
-                                                                      textAlign:
-                                                                          TextAlign
-                                                                              .left,
-                                                                      style: TextStyle(
-                                                                          fontSize:
-                                                                              16.0,
-                                                                          fontWeight:
-                                                                              FontWeight
-                                                                                  .bold),
-                                                                    ),
-                                                                  ),
-                                                                  Container(
-                                                                    padding: const EdgeInsets
-                                                                            .symmetric(
-                                                                        horizontal:
-                                                                            10),
-                                                                    child:
-                                                                        DatePickerWidget(
-                                                                      looping:
-                                                                          false,
-                                                                      // default is not looping
-                                                                      firstDate:
-                                                                          DateTime(
-                                                                              2010,
-                                                                              1,
-                                                                              1),
-                                                                      lastDate:  DateTime.now(),
-                                                                        // DateTime(2030,  1, 1),
-                                                                      initialDate:
-                                                                          DateTime
-                                                                              .now(),
-                                                                      dateFormat:
-                                                                          "dd-MMM-yyyy",
-                                                                      locale: DatePicker
-                                                                          .localeFromString( 'en'),
-                                                                      onChange: (DateTime newDate,  _) =>
-                                                                          controller.selectedDate = newDate,
-                                                                      pickerTheme: DateTimePickerTheme(
-                                                                        itemTextStyle: TextStyle(
-                                                                            color: Colors.black,
-                                                                            fontSize: 19),
-                                                                        dividerColor:Colors.green,
-                                                                      ),
-                                                                    ),
-                                                                  ),
-
-                                                                  ButtonTheme(
-                                                                      minWidth:
-                                                                          320.0,
-                                                                      height: 50.0,
-                                                                      child:
-                                                                          ButtonComponent(
-                                                                        onPressed:
-                                                                            () {
-                                                                          if (controller .transactionFormKey .currentState!.validate()) {
-                                                                            addTransaction(context, controller);
-
-                                                                          
-                                                                          }
-
-                                                                        },
-                                                                        caption:
-                                                                            "Submit",
-                                                                        textColor:
-                                                                            Colors
-                                                                                .white,
-                                                                        backgroundColor:
-                                                                            Colors
-                                                                                .green,
-                                                                      )),
-                                                                ],
+                                                                              ),
+                                                                              isDense: true,
+                                                                              hintText: "Select Farmer",
+                                                                            ),
+                                                                          )
+                                                                        : null),
                                                               ),
-                                                            );
-                                                    })
-                                              ],
-                                            ),
-                                          )),
-                                    );
-                                  }),
-                            )
-                          ],
-                        ),
-                        
-                      //  GetBuilder<TransactionController>(
-                      //      builder: (controller) {
-                      //       return  controller.obx(
-                      //         (data) {
-                      //             controller.getBatchTransactions()
-                      //               return Text('data');
-                      //         });
-                      //     }
-                      //   ),
 
+                                                              SizedBox(
+                                                                height: 10,
+                                                              ),
 
-                        data['transactions'].length > 0
+                                                              // how can I please popluate this with the farms array below
+
+                                                              Obx(
+                                                                () => Padding(
+                                                                    padding: const EdgeInsets
+                                                                            .only(
+                                                                        left:
+                                                                            10.0,
+                                                                        right:
+                                                                            10.0),
+                                                                    child: controller
+                                                                            .listFarmModel_
+                                                                            .value
+                                                                            .isNotEmpty
+                                                                        ? DropdownButtonFormField<
+                                                                            Farms>(
+                                                                            icon:
+                                                                                Container(),
+                                                                            //e.name!
+                                                                            value:
+                                                                                controller.selectedFarm?.value,
+                                                                            items: controller.listFarmModel_.value
+                                                                                .map((e) => DropdownMenuItem(
+                                                                                      child: Text(
+                                                                                        e.title.toString(),
+                                                                                        overflow: TextOverflow.ellipsis,
+                                                                                        maxLines: 1,
+                                                                                        softWrap: false,
+                                                                                        style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold),
+                                                                                      ),
+                                                                                      value: e,
+                                                                                    ))
+                                                                                .toList(),
+                                                                            onChanged:
+                                                                                (Farms? val) {
+                                                                              controller.setFarm(val);
+                                                                            },
+                                                                            isExpanded:
+                                                                                true,
+                                                                            decoration:
+                                                                                InputDecoration(
+                                                                              suffixIcon: Padding(
+                                                                                padding: const EdgeInsets.only(top: 8.0),
+                                                                                child: const Icon(Icons.keyboard_arrow_down),
+                                                                              ),
+                                                                              border: OutlineInputBorder(
+                                                                                borderRadius: BorderRadius.all(
+                                                                                  Radius.circular(5),
+                                                                                ),
+                                                                              ),
+                                                                              isDense: true,
+                                                                              hintText: "Select Farm",
+                                                                            ),
+                                                                          )
+                                                                        : SizedBox
+                                                                            .shrink()),
+                                                              ),
+                                                              SizedBox(
+                                                                height: 10,
+                                                              ),
+
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .only(
+                                                                        left:
+                                                                            10),
+                                                                child:
+                                                                    const Text(
+                                                                  'Select Purchase Date:',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .left,
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          16.0,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold),
+                                                                ),
+                                                              ),
+                                                              Container(
+                                                                padding: const EdgeInsets
+                                                                        .symmetric(
+                                                                    horizontal:
+                                                                        10),
+                                                                child:
+                                                                    DatePickerWidget(
+                                                                  looping:
+                                                                      false,
+                                                                  // default is not looping
+                                                                  firstDate:
+                                                                      DateTime(
+                                                                          2010,
+                                                                          1,
+                                                                          1),
+                                                                  lastDate:
+                                                                      DateTime
+                                                                          .now(),
+                                                                  // DateTime(2030,  1, 1),
+                                                                  initialDate:
+                                                                      DateTime
+                                                                          .now(),
+                                                                  dateFormat:
+                                                                      "dd-MMM-yyyy",
+                                                                  locale: DatePicker
+                                                                      .localeFromString(
+                                                                          'en'),
+                                                                  onChange: (DateTime
+                                                                              newDate,
+                                                                          _) =>
+                                                                      controller
+                                                                              .selectedDate =
+                                                                          newDate,
+                                                                  pickerTheme:
+                                                                      DateTimePickerTheme(
+                                                                    itemTextStyle: TextStyle(
+                                                                        color: Colors
+                                                                            .black,
+                                                                        fontSize:
+                                                                            19),
+                                                                    dividerColor:
+                                                                        Colors
+                                                                            .green,
+                                                                  ),
+                                                                ),
+                                                              ),
+
+                                                              ButtonTheme(
+                                                                  minWidth:
+                                                                      320.0,
+                                                                  height: 50.0,
+                                                                  child:
+                                                                      ButtonComponent(
+                                                                    onPressed:
+                                                                        () {
+                                                                      if (controller
+                                                                          .transactionFormKey
+                                                                          .currentState!
+                                                                          .validate()) {
+                                                                        addTransaction(
+                                                                            context,
+                                                                            controller);
+                                                                      }
+                                                                    },
+                                                                    caption:
+                                                                        "Submit",
+                                                                    textColor:
+                                                                        Colors
+                                                                            .white,
+                                                                    backgroundColor:
+                                                                        Colors
+                                                                            .green,
+                                                                  )),
+                                                            ],
+                                                          ),
+                                                        );
+                                                })
+                                          ],
+                                        ),
+                                      )),
+                                );
+                              }),
+                        )
+                      ],
+                    ),
+
+                    //  GetBuilder<TransactionController>(
+                    //      builder: (controller) {
+                    //       return  controller.obx(
+                    //         (data) {
+                    //             controller.getBatchTransactions()
+                    //               return Text('data');
+                    //         });
+                    //     }
+                    //   ),
+
+                    data['transactions'].length > 0
                         ? ListView.builder(
                             shrinkWrap: true,
                             physics: ClampingScrollPhysics(),
@@ -752,10 +776,10 @@ TransactionController dataController = Get.put(TransactionController(Repository(
     print("here");
     Get.put<BatchController>(BatchController());
     print("here");
-
   }
 
-  Future<dynamic> addTransaction(context, TransactionController controller ) async {
-        return await controller.createTransaction(context, controller, data['oid']);
+  Future<dynamic> addTransaction(
+      context, TransactionController controller) async {
+    return await controller.createTransaction(context, controller, data['oid']);
   }
 }

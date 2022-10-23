@@ -50,7 +50,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     "We Simplify",
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 25.0,
+                      fontSize: 22.0,
                       
                     ),
                   ),
@@ -58,7 +58,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     " Agriculture",
                     style: TextStyle(
                         color: Colors.white,
-                        fontSize: 25.0,
+                        fontSize: 20.0,
                         fontWeight: FontWeight.bold),
                   ),
 

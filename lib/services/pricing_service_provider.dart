@@ -66,7 +66,7 @@ class PricingProvider extends GetConnect {
   Future<List<dynamic>> getRecentMarketPrice() async {
    
     try {
-      dynamic response = await get(BaseEndpoint.baseUrl+Endpoints.getCurrentPricing);
+      dynamic response = await get(BaseEndpoint.baseUrl+Endpoints.getCurrentPricing).timeout(const Duration(seconds: 30));
       if (response.status.hasError) {
         return Future.error(response.statusText.toString());
       } else {

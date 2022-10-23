@@ -18,7 +18,13 @@ class Endpoints {
   static const String getAllCluters = 'configurations/GetAllClusters';
   static const String getAllCooperatives = 'configurations/GetAllCooperatives';
   static const String getAllMaritalStatus = 'Miscellaneous/GetMaritalStatuses';
-   static const String getAccountTypes = 'configurations/GetAllAccountType';
+  static const String getAllBanks = 'configurations/GetAllBanks';
+  static const String getAccountTypes = 'configurations/GetAllAccountType';
+  static const String getAllLocalGovernments = 'Geography/GetAllLocalGovernments';
+  static const String getAllStates = 'Geography/GetAllStates';
+  static const String getRelationshipTypes = 'configurations/GetAllRelationshipTypes';
+  static const String getAllCountries = 'geography/GetAllCountries';
+  static const String getAllIdentityTypes = 'configurations/GetAllIdentityTypes';
 
   static const String updatePersonalInformation = 'auth/personal-information';
   static const String updateBankingInformation = 'auth/bank-information';

@@ -31,7 +31,7 @@ PricingController extends GetxController with StateMixin<List<dynamic>> {
   @override
   void onInit() async{
     super.onInit();
-    _getPricing ();
+    getPricing ();
   }
 
   @override
@@ -40,7 +40,7 @@ PricingController extends GetxController with StateMixin<List<dynamic>> {
   }
 
   
-  _getPricing () async {
+  getPricing () async {
       _prefs = await  SharedPreferences.getInstance();
       PricingProvider().getRecentMarketPrice().then((value) {
         change(value, status: RxStatus.success());

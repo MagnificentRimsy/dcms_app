@@ -3,6 +3,7 @@ import 'package:dcms_app/view/screens/components/preloader.dart';
 import 'package:dcms_app/view/screens/landing.dart';
 import 'package:dcms_app/view/screens/login.dart';
 import 'package:dcms_app/view/screens/onboarding.dart';
+import 'package:dcms_app/view/screens/test_stepper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -123,7 +124,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
 
             InkWell(
-              onTap: () {},
+              onTap: () {
+                Get.to(MyCoolStepper());
+              },
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Row(

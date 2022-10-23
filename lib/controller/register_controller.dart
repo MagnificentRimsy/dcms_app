@@ -78,7 +78,7 @@ class RegistrationController extends GetxController implements GetxService {
           await prefs.setString('username', signUpBody.userName);
          
           Future.delayed(Duration(seconds: 1), () {
-            AppSnacks.show(context, backgroundColor: Colors.green, leadingIcon: Icon(Icons.check), message: 'Success!');
+            AppSnacks.show(context, backgroundColor:  Colors.green, leadingIcon: Icon(Icons.check), message: 'Success!');
           });
 
           isLoading(false);
