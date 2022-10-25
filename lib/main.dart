@@ -24,7 +24,7 @@ import 'controller/batch_controller.dart';
 import 'controller/login_controller.dart';
 import 'controller/otp_controller.dart';
 import 'data/api/api_client.dart';
-import 'helper/app_routes.dart';
+import 'routes/app_routes.dart';
 import 'respository/auth_repo.dart';
 
 void main() => runApp(MyApp());

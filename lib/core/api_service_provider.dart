@@ -8,7 +8,7 @@ import 'package:dcms_app/models/new_farm_data.dart';
 import 'package:dcms_app/models/relationship_type.dart';
 import 'package:dcms_app/models/state_of_origin.dart';
 import 'package:dcms_app/models/title.dart';
-import 'package:dcms_app/routes/auth_endpoints.dart';
+import 'package:dcms_app/routes/endpoints.dart';
 import 'package:dcms_app/routes/base.dart';
 import 'package:get/get.dart';
 

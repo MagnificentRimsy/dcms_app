@@ -9,7 +9,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../controller/login_controller.dart';
 import '../../controller/pricing_controller.dart';
 import 'components/fade_animation.dart';
@@ -27,7 +26,9 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
 
     final loginController = Get.put(LoginController());
+        final pricingController = Get.put(PricingController());
 
+  //  final RefreshController _refreshController = RefreshController(initialRefresh: false);
     var userType = 0;
     NumberFormat moneyFormat = NumberFormat.decimalPattern('en_us');
 
@@ -55,6 +56,10 @@ class _DashboardState extends State<Dashboard> {
   ];
   String? selectedValue;
 
+  Future<Null> _refreshLocalGallery() async{
+    print('refreshing stocks...');
+
+  }
   
 
   Widget build(BuildContext context) {
@@ -62,7 +67,7 @@ class _DashboardState extends State<Dashboard> {
     Size size = MediaQuery.of(context).size;
 
     return SingleChildScrollView(
-      child: SafeArea(
+      child:  SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
@@ -156,7 +161,7 @@ class _DashboardState extends State<Dashboard> {
                   //       fontWeight: FontWeight.bold),
                   // ),
                 )
-      
+                
                 //  eForm(theme),
                 ),
       
@@ -186,14 +191,14 @@ class _DashboardState extends State<Dashboard> {
                                 fit: BoxFit.cover),
                           )),
                     ),
-      
+                
                    GetBuilder<PricingController>(
                       init: PricingController(),
                       builder: (controller) {
                         return controller.obx(
                                 (data) {
                             // final pricings = data as PricingItems;
-      
+                
                             return Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -210,61 +215,63 @@ class _DashboardState extends State<Dashboard> {
                                               ),
                                             ),
                                           ),
+                
+                
+                                      SizedBox(
+                                       child:  ListView.builder(
+                                           shrinkWrap: true,
+                                             physics: const AlwaysScrollableScrollPhysics(),
       
-      
-                                     SizedBox(
-                                      child:  ListView.builder(
-                                          shrinkWrap: true,
-                                          scrollDirection: Axis.vertical,
-                                          itemCount:data!.length,
-                                          itemBuilder:(context, index) {
-                                          return    ListTile(
-                                              contentPadding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 0),
-                                              title: Padding(
-                                                padding: const EdgeInsets.only(left: 10),
-                                                child: Text(
-                                                 '${data[index]["varietyDescription"]}',
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight: FontWeight.normal,
-                                                      fontSize: 22),
-                                                ),
-                                              ),
-      
-                                              trailing: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                // ignore: prefer_const_literals_to_create_immutables
-                                                children: [
-      
-                                                  Padding(
-                                                    padding: const EdgeInsets.all(8.0),
-                                                    child: Text('₦' + moneyFormat.format(
-                                                  data[index]["amount"])
-                                                      +' /Tone',
-                                                      style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontWeight: FontWeight.bold, fontSize: 18),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              onTap: () {},
-                                            );
-      
-                                        }
-                                      ),
-                                    )
-      
-      
-      
+                                           scrollDirection: Axis.vertical,
+                                           itemCount:data!.length,
+                                           itemBuilder:(context, index) {
+                                           return    ListTile(
+                                               contentPadding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 0),
+                                               title: Padding(
+                                                 padding: const EdgeInsets.only(left: 10),
+                                                 child: Text(
+                                                  '${data[index]["varietyDescription"]}',
+                                                   style: TextStyle(
+                                                       color: Colors.white,
+                                                       fontWeight: FontWeight.normal,
+                                                       fontSize: 22),
+                                                 ),
+                                               ),
+                                          
+                                               trailing: Column(
+                                                 crossAxisAlignment: CrossAxisAlignment.start,
+                                                 // ignore: prefer_const_literals_to_create_immutables
+                                                 children: [
+                                          
+                                                   Padding(
+                                                     padding: const EdgeInsets.all(8.0),
+                                                     child: Text('₦' + moneyFormat.format(
+                                                   data[index]["amount"])
+                                                       +' /Tone',
+                                                       style: TextStyle(
+                                                           color: Colors.white,
+                                                           fontWeight: FontWeight.bold, fontSize: 18),
+                                                     ),
+                                                   ),
+                                                 ],
+                                               ),
+                                               onTap: () {},
+                                             );
+                                          
+                                         }
+                                       ),
+                                                                        )
+                
+                
+                
                               ],
                             );
                           }
                         );
                       }
                     )
-      
-      
+                
+                
                   ],
                 ),
               ),

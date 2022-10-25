@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/api/api_client.dart';
 import '../data/models/data/register.dart';
-import '../routes/auth_endpoints.dart';
+import '../routes/endpoints.dart';
 
 class AuthRepo {
   final ApiClient apiClient;

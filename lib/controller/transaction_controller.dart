@@ -11,7 +11,7 @@ import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/state_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../respository/transaction_repository.dart';
-import '../routes/auth_endpoints.dart';
+import '../routes/endpoints.dart';
 import '../services/batch_service_provider.dart';
 import '../utils/app_snacks.dart';
 import '../view/screens/transactions.dart';

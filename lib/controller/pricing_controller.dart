@@ -17,7 +17,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../core/api_service_provider.dart';
 import '../models/auth/user.dart';
-import '../routes/auth_endpoints.dart';
+import '../routes/endpoints.dart';
 import '../routes/base.dart';
 import '../services/batch_service_provider.dart';
 import '../services/pricing_service_provider.dart';

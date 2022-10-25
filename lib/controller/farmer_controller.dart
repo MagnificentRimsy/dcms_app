@@ -1,14 +1,17 @@
 // ignore_for_file: prefer_const_constructors
 
+
 import 'package:dcms_app/models/bank.dart';
 import 'package:dcms_app/models/cluster.dart';
 import 'package:dcms_app/respository/farmer_repository.dart';
+import 'package:dcms_app/routes/base.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/state_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../core/api_service_provider.dart';
 import '../models/account_type.dart';
 import '../models/cooperative.dart';
 import '../models/country.dart';
@@ -18,19 +21,15 @@ import '../models/marital_status.dart';
 import '../models/relationship_type.dart';
 import '../models/state_of_origin.dart';
 import '../models/title.dart';
-import '../routes/auth_endpoints.dart';
+import '../routes/endpoints.dart';
 import '../utils/app_snacks.dart';
 
 class FarmerController extends GetxController with StateMixin<List<dynamic>> {
   var isDataProcessing = false.obs;
-  Dio dio = Dio();
   FarmerRepository repository;
   late SharedPreferences _prefs;
   FarmerController(this.repository);
 
-  // late TextEditingController amountDueController;
-  // late TextEditingController purchaseDateController;
-  // late TextEditingController tonnageController;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
  
   GlobalKey<FormState> transactionFormKey = GlobalKey<FormState>();
@@ -50,6 +49,8 @@ class FarmerController extends GetxController with StateMixin<List<dynamic>> {
   final sevenththStepFormKey = GlobalKey<FormState>();
 
   final eightStepFormKey = GlobalKey<FormState>();
+
+
   //title
   late TextEditingController firstNameController;
   late TextEditingController middleNameController;
@@ -428,7 +429,6 @@ class FarmerController extends GetxController with StateMixin<List<dynamic>> {
   Rx<List<DropdownMenuItem<String>>> listStateOfOriginDropDownMenuItem =
       Rx<List<DropdownMenuItem<String>>>([]);
   // --------------end of StateOfOrigin dropdown
-
 
 
   void getTitles(String url) {
@@ -1093,10 +1093,15 @@ class FarmerController extends GetxController with StateMixin<List<dynamic>> {
   }
 
   var isLoading = false.obs;
+  final Dio _dio = Dio();
 
-  createProfile (BuildContext context, FarmerController controller){
+  final ApiServiceProvider _provider = ApiServiceProvider();
+
+  createProfile (BuildContext context, dynamic data) async {
     try {
       isLoading(true);
+       Response response = await _dio.post(BaseEndpoint.baseUrl + Endpoints.createFarmerProfile, data: data);
+        print ('submitted farmer record ${response.data}');
         Future.delayed(Duration(seconds: 1), () {
           AppSnacks.show(context, backgroundColor: Colors.green, leadingIcon: Icon(Icons.check), message: 'Profile Updated Success!');
         });
@@ -1108,55 +1113,5 @@ class FarmerController extends GetxController with StateMixin<List<dynamic>> {
  
     }
   }
-// cooperativeOid
-
-  // createTransaction( BuildContext context, FarmerController controller, data) async {
-  //    try {
-  //       var  storedFarmOid = (_prefs.getInt('farmoid') ?? '') as int;
-  //       print('Stored Farm Oid $storedFarmOid');
-
-  //       print('selected purchased date $selectedDate');
-  //       var _batchOid =data.toString();
-  //       var _farmOid = storedFarmOid;
-
-  //       SharedPreferences prefs = await SharedPreferences.getInstance();
-  //       String username = (prefs.getString('username') ?? '');
-  //       Transaction transactionDataBody = Transaction(
-  //           amountDue: 0,
-  //           batchOid: int.tryParse(_batchOid),
-  //           farmerOid: controller.selectedFarmerId?.value.oid,
-  //           farmOid: _farmOid,
-  //           purchaseDate: selectedDate.toString().isNotEmpty? selectedDate.toString() : DateTime.now().toString(),
-  //           tonnage: int.tryParse(controller.tonnageController.text.trim()),
-  //           createdBy: username,
-  //           createdOn: DateTime.now().toString());
-
-  //     isDataProcessing(true);
-  //     update();
-  //     String url = BaseEndpoint.baseUrl + Endpoints.createTransaction;
-  //     print(url);
-  //     print('transaction-data $transactionDataBody');
-  //     Response response =
-  //         await dio.post(url, data: transactionDataBody.toJson());
-  //     print(response.data);
-  //     if (response.statusCode == 201) {
-  //       isDataProcessing(false);
-  //       Navigator.pop(context);
-  //       AppSnacks.show(context,
-  //           backgroundColor: Colors.green,
-  //           leadingIcon: Icon(Icons.check),
-  //           message: 'Transaction Created Success!');
-  //       // _getTransactions();
-
-  //       update();
-  //       return response.data;
-  //     }
-  //   } catch (e) {
-  //     print('Operation Failed $e');
-  //     isDataProcessing(false);
-  //     update();
-  //     return e.toString();
-  //   }
-  // }
 
 }

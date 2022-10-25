@@ -2,7 +2,7 @@
 
 
 
-import 'package:dcms_app/routes/auth_endpoints.dart';
+import 'package:dcms_app/routes/endpoints.dart';
 import 'package:dcms_app/routes/base.dart';
 import 'package:get/get.dart';
 

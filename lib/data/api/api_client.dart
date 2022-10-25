@@ -7,9 +7,7 @@ import 'package:flutter/foundation.dart' as Foundation;
 import 'package:get/get_connect/http/src/request/request.dart';
 import 'package:http/http.dart' as Http;
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../routes/base.dart';
-import '../models/response/error_response.dart';
 
 class ApiClient extends GetxService {
   static String? token;

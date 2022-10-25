@@ -12,7 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../core/api_service_provider.dart';
 import '../data/models/data/otp.dart';
-import '../routes/auth_endpoints.dart';
+import '../routes/endpoints.dart';
 
 class OtpController extends GetxController {
 

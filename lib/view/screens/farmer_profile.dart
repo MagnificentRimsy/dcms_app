@@ -1,5 +1,7 @@
 // ignore_for_file: avoid_print, prefer_const_constructors, prefer_typing_uninitialized_variables
 
+import 'dart:convert';
+
 import 'package:cool_stepper/cool_stepper.dart';
 import 'package:dcms_app/models/cluster.dart';
 import 'package:dcms_app/models/title.dart';
@@ -15,6 +17,7 @@ import 'package:get/state_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../controller/farmer_controller.dart';
 import '../../core/api_service_provider.dart';
+import '../../data/api/api_client.dart';
 import '../../models/cooperative.dart';
 import '../../models/marital_status.dart';
 import '../../models/relationship_type.dart';
@@ -29,14 +32,8 @@ class FarmerProfile extends StatefulWidget {
 }
 
 class _FarmerProfileState extends State<FarmerProfile> {
-  final controller = Get.put(FarmerController(FarmerRepository(ApiServiceProvider())));
-
-  String? selectedGender = 'Male';
-
-  String? spouseGender = 'Male';
-  String? nokGender = 'Male';
-
-
+  final controller =
+      Get.put(FarmerController(FarmerRepository(ApiServiceProvider())));
 
   List<String> genders = [
     'Male',
@@ -44,16 +41,10 @@ class _FarmerProfileState extends State<FarmerProfile> {
   ];
 
 
-  int bioGenderCurrentSelected = 0;
 
-  int nokGenderCurrentSelected = 0;
-  
-  int spouseGenderCurrentSelected = 0;
-
-  
   //bio data
   var bioSelectedTitle;
-  var bioSelectedGender;
+  int bioGenderCurrentSelected = 0;
   var bioSelectedDateOfBirth;
   var selectedCluster;
   var selectedMaritalStatus;
@@ -81,11 +72,11 @@ class _FarmerProfileState extends State<FarmerProfile> {
   //nextOfKin
   var selectedNokRelationshipType;
   var selectedNokStateId;
-  var selectedNokGender;
+  int nokGenderCurrentSelected = 0;
 
   //spouse
   var selectedSpouseStateId;
-  var selectedSpouseGender;   
+  int spouseGenderCurrentSelected = 0;
 
   bool isLoading = false;
 
@@ -403,7 +394,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
                                       .toList(),
                                   onChanged: (CooperativeValues? val) {
                                     controller.setCooperativeId(val);
-                                    
+
                                     setState(() {
                                       selectedCooperative = val!.oid;
                                     });
@@ -448,86 +439,71 @@ class _FarmerProfileState extends State<FarmerProfile> {
             SizedBox(
               height: 20,
             ),
+            Padding(
+              padding: EdgeInsets.only(left: 10.h, right: 10.h),
+              child: SizedBox(
+                width: double.infinity,
+                height: 50.h,
+                child: GridView.builder(
+                  itemCount: genders.length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          int collectedGender;
+                          collectedGender = index;
+                          collectedGender == 0 ? 1 : 2;
 
-              
-                      Padding(
-                        padding: EdgeInsets.only(left: 10.h, right: 10.h),
-                        child: SizedBox(
-                          width: double.infinity,
-                          height: 50.h,
-                          child: GridView.builder(
-                            itemCount: genders.length,
-                            itemBuilder: (context, index) {
-                              return GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    int collectedGender;
-                                    collectedGender = index;
-                                    collectedGender == 0? 1 : 2;
-                                    
-                                    bioGenderCurrentSelected = collectedGender;
-                                    print('gender ${bioGenderCurrentSelected == 0? 1 : 2}' );
-                                  });
-                                },
-                                child: Card(
-                                  elevation: 0,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: Colors.grey.shade200,
-                                        ),
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(8)),
-                                        color: bioGenderCurrentSelected == index
-                                            ? Colors.green
-                                            : Colors.white),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        bioGenderCurrentSelected == index
-                                            ? Padding(
-                                                padding:
-                                                    EdgeInsets.only(right: 8),
-                                                child: Icon(
-                                                  Icons.check_box,
-                                                  color: Colors.white,
-                                                  size: 16.h,
-                                                ),
-                                              )
-                                            : Container(),
-                                        Text(
-                                          genders[index],
-                                          style: TextStyle(
-                                            color:
-                                                bioGenderCurrentSelected == index
-                                                    ? Colors.white
-                                                    : Colors.green,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                          bioGenderCurrentSelected = collectedGender;
+                          print(
+                              'gender ${bioGenderCurrentSelected == 0 ? 1 : 2}');
+                        });
+                      },
+                      child: Card(
+                        elevation: 0,
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.grey.shade200,
+                              ),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(8)),
+                              color: bioGenderCurrentSelected == index
+                                  ? Colors.green
+                                  : Colors.white),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              bioGenderCurrentSelected == index
+                                  ? Padding(
+                                      padding: EdgeInsets.only(right: 8),
+                                      child: Icon(
+                                        Icons.check_box,
+                                        color: Colors.white,
+                                        size: 16.h,
+                                      ),
+                                    )
+                                  : Container(),
+                              Text(
+                                genders[index],
+                                style: TextStyle(
+                                  color: bioGenderCurrentSelected == index
+                                      ? Colors.white
+                                      : Colors.green,
                                 ),
-                              );
-                            },
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 2, childAspectRatio: 4.0),
+                              ),
+                            ],
                           ),
                         ),
                       ),
-              
-            // Container(
-            //   child: Row(
-            //     children: <Widget>[
-            //       _buildSelector(context: context, name: 'Male', value: 1),
-            //       SizedBox(width: 5.0),
-            //       _buildSelector(context: context, name: 'Female', value: 2),
-            //     ],
-            //   ),
-            // ),
+                    );
+                  },
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2, childAspectRatio: 4.0),
+                ),
+              ),
+            ),
             SizedBox(
               height: 40,
             ),
@@ -553,7 +529,6 @@ class _FarmerProfileState extends State<FarmerProfile> {
                     bioSelectedDateOfBirth = newDateOfBirth;
                   });
                   return controller.dateOfBirth = newDateOfBirth;
-                  
                 },
                 pickerTheme: DateTimePickerTheme(
                   itemTextStyle: TextStyle(color: Colors.black, fontSize: 19),
@@ -615,7 +590,6 @@ class _FarmerProfileState extends State<FarmerProfile> {
                         hintText: "Different Account Types",
                       ),
                       onChanged: (value) {
-
                         var selected = controller.listAccountTypeModel_.value
                             .firstWhere((e) => e.name == value);
                         controller.setAccountTypeId(selected);
@@ -645,7 +619,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
                             .firstWhere((e) => e.name == value);
                         controller.setBankId(selectedBank);
                         setState(() {
-                          selectedAccountType = selectedBank.oid;
+                          selectedBankId = selectedBank.oid;
                         });
                         print('dropdown valueeeeee ${selectedBank.oid}');
                       },
@@ -695,13 +669,14 @@ class _FarmerProfileState extends State<FarmerProfile> {
                           hintText: "Country",
                         ),
                         onChanged: (value) {
-                          var selectedCountry = controller.listCountryModel_.value
+                          var selectedCountry = controller
+                              .listCountryModel_.value
                               .firstWhere((e) => e.name == value);
                           controller.setCountryId(selectedCountry);
 
-                         setState(() {
-                          selectedAccountType = selectedCountry.oid;
-                        });
+                          setState(() {
+                            selectedCountryId = selectedCountry.oid;
+                          });
                           print('dropdown value ${selectedCountry.oid}');
                         },
                         selectedItem: "Select Country",
@@ -724,9 +699,9 @@ class _FarmerProfileState extends State<FarmerProfile> {
                               .listStateOfOriginModel_.value
                               .firstWhere((e) => e.name == value);
                           controller.setStateOfOriginId(selected);
-                         setState(() {
-                          selectedStateOfOriginId = selected.oid;
-                         });
+                          setState(() {
+                            selectedStateOfOriginId = selected.oid;
+                          });
                           print('dropdown valueeeeee ${selected.oid}');
                         },
                         selectedItem: "Select State",
@@ -750,7 +725,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
                               .firstWhere((e) => e.name == value);
                           controller.setLocalGovernmentId(selected);
                           setState(() {
-                           selectedLocalGovernmentId = selected.oid;
+                            selectedLocalGovernmentId = selected.oid;
                           });
                           print('dropdown value ${selected.oid}');
                         },
@@ -806,8 +781,10 @@ class _FarmerProfileState extends State<FarmerProfile> {
                         initialDate: DateTime.now(),
                         dateFormat: "dd-MMM-yyyy",
                         locale: DatePicker.localeFromString('en'),
-                        onChange: (DateTime newDate, _) =>
-                            controller.dateOfBirth = newDate,
+                        onChange: (DateTime newDate, _) {
+                          return selectedExpiryDate = newDate;
+                        },
+
                         pickerTheme: DateTimePickerTheme(
                           itemTextStyle:
                               TextStyle(color: Colors.black, fontSize: 19),
@@ -831,9 +808,9 @@ class _FarmerProfileState extends State<FarmerProfile> {
                           var selected = controller.listIdentityTypeModel_.value
                               .firstWhere((e) => e.name == value);
                           controller.setIdentityTypeId(selected);
-                         setState(() {
-                          selectedIdentityType = selected.oid;
-                        });
+                          setState(() {
+                            selectedIdentityType = selected.oid;
+                          });
                           print('dropdown value ${selected.oid}');
                         },
                         selectedItem: "Select IdentityType",
@@ -896,8 +873,8 @@ class _FarmerProfileState extends State<FarmerProfile> {
                         dateFormat: "dd-MMM-yyyy",
                         locale: DatePicker.localeFromString('en'),
                         onChange: (DateTime issuingDate, _) {
-                          selectedIssuingDate = issuingDate;
-                          return controller.dateOfBirth = issuingDate;
+                        return  selectedIssuingDate = issuingDate;
+                           
                         },
                         pickerTheme: DateTimePickerTheme(
                           itemTextStyle:
@@ -1101,17 +1078,88 @@ class _FarmerProfileState extends State<FarmerProfile> {
                     SizedBox(
                       height: 20,
                     ),
-                    Container(
-                      child: Row(
-                        children: <Widget>[
-                          _buildSelector(
-                              context: context, name: 'Male', value: 1),
-                          SizedBox(width: 5.0),
-                          _buildSelector(
-                              context: context, name: 'Female', value: 2),
-                        ],
+                    // Container(
+                    //   child: Row(
+                    //     children: <Widget>[
+                    //       _buildSelector(
+                    //           context: context, name: 'Male', value: 1),
+                    //       SizedBox(width: 5.0),
+                    //       _buildSelector(
+                    //           context: context, name: 'Female', value: 2),
+                    //     ],
+                    //   ),
+                    // ),
+
+                    Padding(
+                      padding: EdgeInsets.only(left: 10.h, right: 10.h),
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 50.h,
+                        child: GridView.builder(
+                          itemCount: genders.length,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  int collectedGender;
+                                  collectedGender = index;
+                                  collectedGender == 0 ? 1 : 2;
+
+                                  nokGenderCurrentSelected = collectedGender;
+                                  print(
+                                      'gender ${nokGenderCurrentSelected == 0 ? 1 : 2}');
+                                });
+                              },
+                              child: Card(
+                                elevation: 0,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Colors.grey.shade200,
+                                      ),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(8)),
+                                      color: nokGenderCurrentSelected == index
+                                          ? Colors.green
+                                          : Colors.white),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      nokGenderCurrentSelected == index
+                                          ? Padding(
+                                              padding:
+                                                  EdgeInsets.only(right: 8),
+                                              child: Icon(
+                                                Icons.check_box,
+                                                color: Colors.white,
+                                                size: 16.h,
+                                              ),
+                                            )
+                                          : Container(),
+                                      Text(
+                                        genders[index],
+                                        style: TextStyle(
+                                          color:
+                                              nokGenderCurrentSelected == index
+                                                  ? Colors.white
+                                                  : Colors.green,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2, childAspectRatio: 4.0),
+                        ),
                       ),
                     ),
+
                     Row(
                       children: [
                         Expanded(
@@ -1175,9 +1223,9 @@ class _FarmerProfileState extends State<FarmerProfile> {
                                           ))
                                       .toList(),
                                   onChanged: (RelationshipTypeValues? val) {
-                                      setState(() {
-                                        selectedNokRelationshipType = val!.oid;
-                                      });
+                                    setState(() {
+                                      selectedNokRelationshipType = val!.oid;
+                                    });
                                     controller.setRelationshipTypeId(val);
                                   },
                                   isExpanded: true,
@@ -1207,9 +1255,9 @@ class _FarmerProfileState extends State<FarmerProfile> {
                         var selected = controller.listStateOfOriginModel_.value
                             .firstWhere((e) => e.name == value);
                         controller.setStateOfOriginId(selected);
-                          setState(() {
-                            selectedNokStateId = selected.oid;
-                          });
+                        setState(() {
+                          selectedNokStateId = selected.oid;
+                        });
                         print('dropdown valueeeeee ${selected.oid}');
                       },
                       selectedItem: "Select State",
@@ -1239,8 +1287,9 @@ class _FarmerProfileState extends State<FarmerProfile> {
                             labelText: 'First Name',
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return null;                               return null;
-;
+                                return null;
+                                return null;
+                                ;
                               }
                             },
                             controller: controller.spouse_firstName,
@@ -1286,8 +1335,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
                             labelText: 'example@mail.com',
                             validator: (value) {
                               if (value!.isEmpty) {
-                                 return null;
-
+                                return null;
                               }
                               return null;
                             },
@@ -1318,15 +1366,74 @@ class _FarmerProfileState extends State<FarmerProfile> {
                     SizedBox(
                       height: 20,
                     ),
-                    Container(
-                      child: Row(
-                        children: <Widget>[
-                          _buildSelector(
-                              context: context, name: 'Male', value: 1),
-                          SizedBox(width: 5.0),
-                          _buildSelector(
-                              context: context, name: 'Female', value: 2),
-                        ],
+                    Padding(
+                      padding: EdgeInsets.only(left: 10.h, right: 10.h),
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: 50.h,
+                        child: GridView.builder(
+                          itemCount: genders.length,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  int collectedGender;
+                                  collectedGender = index;
+                                  collectedGender == 0 ? 1 : 2;
+
+                                  spouseGenderCurrentSelected = collectedGender;
+                                  print(
+                                      'gender ${spouseGenderCurrentSelected == 0 ? 1 : 2}');
+                                });
+                              },
+                              child: Card(
+                                elevation: 0,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Colors.grey.shade200,
+                                      ),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(8)),
+                                      color:
+                                          spouseGenderCurrentSelected == index
+                                              ? Colors.green
+                                              : Colors.white),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      spouseGenderCurrentSelected == index
+                                          ? Padding(
+                                              padding:
+                                                  EdgeInsets.only(right: 8),
+                                              child: Icon(
+                                                Icons.check_box,
+                                                color: Colors.white,
+                                                size: 16.h,
+                                              ),
+                                            )
+                                          : Container(),
+                                      Text(
+                                        genders[index],
+                                        style: TextStyle(
+                                          color: spouseGenderCurrentSelected ==
+                                                  index
+                                              ? Colors.white
+                                              : Colors.green,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2, childAspectRatio: 4.0),
+                        ),
                       ),
                     ),
                     Row(
@@ -1336,8 +1443,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
                             labelText: 'Primary PhoneNo',
                             validator: (value) {
                               if (value!.isEmpty) {
-                                  return null;
-
+                                return null;
                               }
                               return null;
                             },
@@ -1366,13 +1472,34 @@ class _FarmerProfileState extends State<FarmerProfile> {
                       labelText: 'Contact Address',
                       validator: (value) {
                         if (value!.isEmpty) {
-                           return null;
+                          return null;
                         }
                         return null;
                       },
                       controller: controller.spouse_residentialAddress,
                     ),
-                   
+
+                    DropdownSearch<dynamic>(
+                      mode: Mode.MENU,
+                      items: controller.listStateOfOriginModel_.value
+                          .map((e) => e.name)
+                          .toList(),
+                      showSearchBox: true,
+                      dropdownSearchDecoration: InputDecoration(
+                        labelText: "Spouse State",
+                        hintText: "Spouse State",
+                      ),
+                      onChanged: (value) {
+                        var selected = controller.listStateOfOriginModel_.value
+                            .firstWhere((e) => e.name == value);
+                        controller.setStateOfOriginId(selected);
+                        setState(() {
+                          selectedSpouseStateId = selected.oid;
+                        });
+                        print('dropdown valueeeeee ${selected.oid}');
+                      },
+                      selectedItem: "Select State",
+                    ),
                     SizedBox(
                       width: MediaQuery.of(context).size.width,
                       height: 60.0,
@@ -1383,7 +1510,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
                           _createProfile(context, controller);
                         },
                         child: const Text(
-                          'Create Profile',
+                          'Submit',
                           style: TextStyle(
                               fontSize: 14.0, fontWeight: FontWeight.normal),
                         ),
@@ -1465,154 +1592,6 @@ class _FarmerProfileState extends State<FarmerProfile> {
   }
 
   //bio gender
-  Widget _buildSelector({
-    BuildContext? context,
-    required String name,
-    required int value,
-  }) {
-    final isActive = name == selectedGender;
-    return Expanded(
-      child: AnimatedContainer(
-        duration: Duration(milliseconds: 200),
-        curve: Curves.easeInOut,
-        decoration: BoxDecoration(
-          color: isActive ? Theme.of(context!).primaryColor : null,
-          border: Border.all(width: 1, style: BorderStyle.solid),
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-        child: FormField(
-          builder: (FormFieldState<bool> state) {
-            return RadioListTile(
-              value: name,
-              activeColor: Colors.white,
-              groupValue:
-                  selectedGender == 'Male' ? 1.toString() : 2.toString(),
-              onChanged: (String? v) {
-                setState(() {
-                  selectedGender = v;
-                    bioSelectedGender = selectedGender == 'Male' ? 1.toString() : 2.toString();
-
-                  print(
-                      'selected-gender $bioSelectedGender');
-                });
-              },
-              title: Text(
-                name,
-                style: TextStyle(
-                  color: isActive ? Colors.white : null,
-                ),
-              ),
-            );
-          },
-          validator: (value) {
-            if (value != true) {
-              return 'Please Select gender';
-            }
-            return null;
-          },
-        ),
-      ),
-    );
-  }
-
-//next of kin gender 
-    Widget _buildNokGenderSelector({
-    BuildContext? context,
-    required String name,
-    required int value,
-  }) {
-    final isActive = name == nokGender;
-    return Expanded(
-      child: AnimatedContainer(
-        duration: Duration(milliseconds: 200),
-        curve: Curves.easeInOut,
-        decoration: BoxDecoration(
-          color: isActive ? Theme.of(context!).primaryColor : null,
-          border: Border.all(width: 1, style: BorderStyle.solid),
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-        child: FormField(
-          builder: (FormFieldState<bool> state) {
-            return RadioListTile(
-              value: name,
-              activeColor: Colors.white,
-              groupValue:
-                  nokGender == 'Male' ? 1.toString() : 2.toString(),
-              onChanged: (String? v) {
-                setState(() {
-                  nokGender = v;
-                  selectedNokGender = nokGender == 'Male' ? 1.toString() : 2.toString();
-                  print(
-                      'selected-gender $selectedNokGender');
-                });
-              },
-              title: Text(
-                name,
-                style: TextStyle(
-                  color: isActive ? Colors.white : null,
-                ),
-              ),
-            );
-          },
-          validator: (value) {
-            if (value != true) {
-              return 'Please Select gender';
-            }
-            return null;
-          },
-        ),
-      ),
-    );
-  }
-
-//spouse gender
-    Widget _buildSpouseGenderSelector({
-    BuildContext? context,
-    required String name,
-    required int value,
-  }) {
-    final isActive = name == selectedGender;
-    return Expanded(
-      child: AnimatedContainer(
-        duration: Duration(milliseconds: 200),
-        curve: Curves.easeInOut,
-        decoration: BoxDecoration(
-          color: isActive ? Theme.of(context!).primaryColor : null,
-          border: Border.all(width: 1, style: BorderStyle.solid),
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-        child: FormField(
-          builder: (FormFieldState<bool> state) {
-            return RadioListTile(
-              value: name,
-              activeColor: Colors.white,
-              groupValue:
-                  selectedGender == 'Male' ? 1.toString() : 2.toString(),
-              onChanged: (String? v) {
-                setState(() {
-                  selectedGender = v;
-                  print(
-                      'selected-gender ${selectedGender == 'Male' ? 1.toString() : 2.toString()}');
-                });
-              },
-              title: Text(
-                name,
-                style: TextStyle(
-                  color: isActive ? Colors.white : null,
-                ),
-              ),
-            );
-          },
-          validator: (value) {
-            if (value != true) {
-              return 'Please Select gender';
-            }
-            return null;
-          },
-        ),
-      ),
-    );
-  }
 
   maininit() {
     print("here");
@@ -1637,25 +1616,25 @@ class _FarmerProfileState extends State<FarmerProfile> {
   void _createProfile(BuildContext context, FarmerController controller) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String username = (prefs.getString('username') ?? '');
-   
+
     String _bioFirstName = controller.firstNameController.text.trim();
     String _bioMiddleName = controller.middleNameController.text.trim();
     String _bioLastName = controller.lastNameController.text.trim();
-    var _bioGender = 1 ; //todo
+    var _bioGender = bioGenderCurrentSelected; //todo
     String _bioEmail = controller.emailController.text.trim();
-     var _bioDob = bioSelectedDateOfBirth;
-     //var _applicantId = 0000001; //todo
+    var _bioDob = bioSelectedDateOfBirth;
+    //var _applicantId = 0000001; //todo
     String _bioBvn = controller.bvnController.text.trim();
     String _bioPrimaryPhone = controller.primaryPhoneController.text.trim();
     String _bioSecondaryPhone = controller.secondaryPhoneController.text.trim();
     var _seasonOid = 1; //todo
     var _clusterOid = selectedCluster;
     var _cooperativeOid = selectedCooperative;
-     String _bioContactAddress = controller.contactAddressController.text.trim();
+    String _bioContactAddress = controller.contactAddressController.text.trim();
     // var photo = 0;
-     var _cooperativeMembershipStatus = 0;
-     var _maritalStatus = selectedMaritalStatus;
-     var _onBoardingType = 2;
+    var _cooperativeMembershipStatus = 0;
+    var _maritalStatus = selectedMaritalStatus;
+    var _onBoardingType = 2;
 
     //Account Details
     String _accountName = controller.accountNameController.text.trim();
@@ -1693,6 +1672,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
     String _nokPrimaryPhone = controller.nokPrimaryPhone.text.trim();
     String _nokSecondaryPhone = controller.nokSecondaryPhone.text.trim();
     var _nokStateOid = selectedNokStateId;
+    var _nokGender = nokGenderCurrentSelected;
     var _nokRelationshipType = selectedNokRelationshipType;
 
     // //Spouse details
@@ -1703,18 +1683,20 @@ class _FarmerProfileState extends State<FarmerProfile> {
     String _spouseMiddleName = controller.spouse_middleName.text.trim();
     String _spouseLastName = controller.spouse_lastName.text.trim();
     String _spousePrimaryPhone = controller.spouse_primaryPhone.text.trim();
-    String _spouseContactAddress =  controller.spouse_residentialAddress.text.trim();
+    String _spouseContactAddress =
+        controller.spouse_residentialAddress.text.trim();
     String _spouseSecondaryPhone = controller.spouse_secondaryPhone.text.trim();
     var _spouseStateOid = selectedSpouseStateId;
+    var _spouseGender = spouseGenderCurrentSelected;
 
     var addFarmerData = {
       'titleOid': 1,
       'firstName': _bioFirstName,
       'middleName': _bioMiddleName,
       'lastName': _bioLastName,
-      'gender': 1,
+      'gender': _bioGender,
       'email': _bioEmail,
-      'dateOfBirth': _bioDob,
+      'dateOfBirth': _bioDob.toString(),
       'applicantId': 0,
       'bvn': _bioBvn,
       'primaryPhone': _bioPrimaryPhone,
@@ -1735,7 +1717,9 @@ class _FarmerProfileState extends State<FarmerProfile> {
         'bankOid': _bankOid,
         'bvn': _accountBvn,
         'createdBy': username,
-        'createdOn': DateTime.now(),
+        'createdOn': DateTime.now().toString(),
+
+
         'pcDomainName': '',
         'pcIpAddress': '',
         'pcName': '',
@@ -1747,21 +1731,25 @@ class _FarmerProfileState extends State<FarmerProfile> {
         'localGovernmentOid': _localGovernmentLocationOid,
         'others': _locationOthers,
         'createdBy': username,
-        'createdOn': DateTime.now(),
+        'createdOn': DateTime.now().toString(),
+
+
         'pcDomainName': '',
         'pcIpAddress': '',
         'pcName': '',
         'pcUserName': ''
       },
       'meansOfIdentification': {
-        'expiryDate': _moiExpiryDate,
+        'expiryDate': _moiExpiryDate.toString(),
         'identityTypeOid': _moiIdentityTypeOid,
         'idNo': _moiIdNo,
         'issuingBody': _moiIssuingBody,
-        'issuingDate': _moiIssuingDate,
+        'issuingDate': _moiIssuingDate.toString(),
         'placeOfIssue': _moiPlaceOfIssuing,
         'createdBy': username,
-        'createdOn': DateTime.now(),
+        'createdOn': DateTime.now().toString(),
+
+
         'pcDomainName': '',
         'pcIpAddress': '',
         'pcName': '',
@@ -1774,7 +1762,9 @@ class _FarmerProfileState extends State<FarmerProfile> {
         'districtOid': 0,
         'wardOid': 0,
         'createdBy': username,
-        'createdOn': DateTime.now(),
+        'createdOn': DateTime.now().toString(),
+
+
         'pcDomainName': '',
         'pcIpAddress': '',
         'pcName': '',
@@ -1785,7 +1775,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
         'contactAddress': _nokContactAddress,
         'email': _nokEmail,
         'firstName': _nokFirstName,
-        'gender': 1,
+        'gender': _nokGender,
         'lastName': _nokLastName,
         'middleName': _nokMiddleName,
         'name': '',
@@ -1794,7 +1784,9 @@ class _FarmerProfileState extends State<FarmerProfile> {
         'secondaryPhone': _nokSecondaryPhone,
         'stateOid': _nokStateOid,
         'createdBy': username,
-        'createdOn': DateTime.now(),
+        'createdOn': DateTime.now().toString(),
+
+
         'pcDomainName': '',
         'pcIpAddress': '',
         'pcName': '',
@@ -1804,51 +1796,34 @@ class _FarmerProfileState extends State<FarmerProfile> {
         'bvn': _spouseBvn,
         'email': _spouseEmail,
         'firstName': _spouseFirstName,
-        'gender': 1,
+        'gender': _spouseGender,
         'lastName': _spouseLastName,
         'middleName': _spouseMiddleName,
         'primaryPhone': _spousePrimaryPhone,
         'residentialAddress': _spouseContactAddress,
         'secondaryPhone': _spouseSecondaryPhone,
         'stateOid': _spouseStateOid,
-      'createdBy': username,
-        'createdOn': DateTime.now(),
+        'createdBy': username,
+        'createdOn': DateTime.now().toString(),
+
+
         'pcDomainName': '',
         'pcIpAddress': '',
         'pcName': '',
         'pcUserName': ''
       },
       'createdBy': username,
-      'createdOn': DateTime.now(),
+      'createdOn': DateTime.now().toString(),
+
       'pcDomainName': '',
       'pcIpAddress': '',
       'pcName': '',
       'pcUserName': '',
-      'userName': ''
+      'userName': username
     };
 
     print('farmer data $addFarmerData');
     // ignore: void_checks
-    return await controller.createProfile(context, controller);
-
-    // CreateProfile signUpBody = CreateProfile(
-    //     userName: _userName,
-    //     email: _email,
-    //     password: _password,
-    //     phoneNo: _phoneNo,
-    //     userType: userTypesCurrentSelected,
-    //     pcDomainName: '',
-    //     pcIpAddress: '',
-    //     pcName: '',
-    //     pcUserName: '');
-    // controller.registration(signUpBody, context).then((status) async {
-    //   if (status.isSuccess) {
-    //     showCustomSnackBar(status.message);
-    //   } else {
-    //     showCustomSnackBar(status.message);
-    //   }
-    //  }
-    // );
-    //await controller.createProfile(context);
+    return await controller.createProfile(context, addFarmerData);
   }
 }

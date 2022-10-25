@@ -25,7 +25,7 @@ class Endpoints {
   static const String getRelationshipTypes = 'configurations/GetAllRelationshipTypes';
   static const String getAllCountries = 'geography/GetAllCountries';
   static const String getAllIdentityTypes = 'configurations/GetAllIdentityTypes';
-
+  static const String createFarmerProfile = 'FarmersManagement/AddFarmer';
   static const String updatePersonalInformation = 'auth/personal-information';
   static const String updateBankingInformation = 'auth/bank-information';
   static const String updateDocuments = 'auth/documents';

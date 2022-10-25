@@ -6,7 +6,7 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:dcms_app/models/pricing.dart';
-import 'package:dcms_app/routes/auth_endpoints.dart';
+import 'package:dcms_app/routes/endpoints.dart';
 import 'package:dcms_app/routes/base.dart';
 
 class PricingProvider extends GetConnect {

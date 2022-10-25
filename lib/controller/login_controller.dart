@@ -3,7 +3,7 @@
 import 'dart:convert';
 import 'package:dcms_app/data/models/data/sign_in.dart';
 import 'package:dcms_app/data/models/data/two_factor.dart';
-import 'package:dcms_app/helper/app_routes.dart';
+import 'package:dcms_app/routes/app_routes.dart';
 import 'package:dcms_app/view/screens/dashboard.dart';
 import 'package:dcms_app/view/screens/home.dart';
 import 'package:dcms_app/view/screens/two_factor.dart';
@@ -17,7 +17,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../core/api_service_provider.dart';
 import '../models/auth/user.dart';
-import '../routes/auth_endpoints.dart';
+import '../routes/endpoints.dart';
 import '../routes/base.dart';
 import '../utils/app_snacks.dart';
 
