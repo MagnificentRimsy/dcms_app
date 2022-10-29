@@ -101,11 +101,6 @@ class TransactionController extends GetxController
 
 // -------------- old farmer farm dropdown
 
-  // Rx<List<Farm>> listFarmModel = Rx<List<Farm>>([]);
-  // var selectedFarmId = "0".obs;
-  // Rx<List<DropdownMenuItem<String>>> listFarmDropDownMenuItem =
-  //     Rx<List<DropdownMenuItem<String>>>([]);
-// -----------------end of old farmer farm dropdown
 
   GlobalKey<FormState> transactionFormKey = GlobalKey<FormState>();
 

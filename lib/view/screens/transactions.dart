@@ -577,10 +577,7 @@ class _TransactionsState extends State<Transactions>
 
                                                               Padding(
                                                                 padding:
-                                                                    const EdgeInsets
-                                                                            .only(
-                                                                        left:
-                                                                            10),
+                                                                    const EdgeInsets.only(left: 10),
                                                                 child:
                                                                     const Text(
                                                                   'Select Purchase Date:',
@@ -681,86 +678,83 @@ class _TransactionsState extends State<Transactions>
                       ],
                     ),
 
-                    //  GetBuilder<TransactionController>(
-                    //      builder: (controller) {
-                    //       return  controller.obx(
-                    //         (data) {
-                    //             controller.getBatchTransactions()
-                    //               return Text('data');
-                    //         });
-                    //     }
-                    //   ),
+                 
 
-                    data['transactions'].length > 0
-                        ? ListView.builder(
-                            shrinkWrap: true,
-                            physics: ClampingScrollPhysics(),
-                            itemCount: data['transactions']!.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 10, right: 10),
-                                child: Card(
-                                  elevation: 0,
-                                  shape: RoundedRectangleBorder(
-                                    side: BorderSide(
-                                      color: Color(0xffD2CDDE),
-                                    ),
-                                    borderRadius: BorderRadius.circular(15.0),
-                                  ),
-                                  child: ListTile(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        horizontal: 20.0, vertical: 10.0),
-                                    title: Text(
-                                      'TranID: ${data["transactions"][index]["transId"]}',
-                                      style: TextStyle(
-                                          color: Color.fromRGBO(64, 75, 96, .9),
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16),
-                                    ),
-                                    subtitle: Text(
-                                      'Date: ${data["transactions"][index]["purchaseDate"]} ',
-                                      style: TextStyle(
-                                          color: Color.fromRGBO(64, 75, 96, .9),
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 14),
-                                    ),
-                                    trailing: Padding(
-                                      padding: const EdgeInsets.only(top: 10.0),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            'Amount Due',
-                                            style: TextStyle(
-                                                color: Color.fromRGBO(
-                                                    64, 75, 96, .9),
-                                                fontWeight: FontWeight.normal,
-                                                fontSize: 12),
+                    StreamBuilder<TransactionController>(
+                     
+                      builder: (context, controller) {
+
+
+                        return data['transactions'].length > 0
+                            ? ListView.builder(
+                                shrinkWrap: true,
+                                physics: ClampingScrollPhysics(),
+                                itemCount: data['transactions']!.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  return Padding(
+                                    padding:
+                                        const EdgeInsets.only(left: 10, right: 10),
+                                    child: Card(
+                                      elevation: 0,
+                                      shape: RoundedRectangleBorder(
+                                        side: BorderSide(
+                                          color: Color(0xffD2CDDE),
+                                        ),
+                                        borderRadius: BorderRadius.circular(15.0),
+                                      ),
+                                      child: ListTile(
+                                        contentPadding: EdgeInsets.symmetric(
+                                            horizontal: 20.0, vertical: 10.0),
+                                        title: Text(
+                                          'TranID: ${data["transactions"][index]["transId"]}',
+                                          style: TextStyle(
+                                              color: Color.fromRGBO(64, 75, 96, .9),
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16),
+                                        ),
+                                        subtitle: Text(
+                                          'Date: ${data["transactions"][index]["purchaseDate"]} ',
+                                          style: TextStyle(
+                                              color: Color.fromRGBO(64, 75, 96, .9),
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 14),
+                                        ),
+                                        trailing: Padding(
+                                          padding: const EdgeInsets.only(top: 10.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'Amount Due',
+                                                style: TextStyle(
+                                                    color: Color.fromRGBO(
+                                                        64, 75, 96, .9),
+                                                    fontWeight: FontWeight.normal,
+                                                    fontSize: 12),
+                                              ),
+                                              Text(
+                                                '₦ ' +
+                                                    moneyFormat.format(data["transactions"][index]["amountDue"]),
+                                                style: TextStyle(
+                                                    color: Color.fromRGBO(
+                                                        64, 75, 96, .9),
+                                                    fontWeight: FontWeight.bold),
+                                              ),
+                                            ],
                                           ),
-                                          Text(
-                                            '₦ ' +
-                                                moneyFormat.format(
-                                                    data["transactions"][index]
-                                                        ["amountDue"]),
-                                            style: TextStyle(
-                                                color: Color.fromRGBO(
-                                                    64, 75, 96, .9),
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ],
+                                        ),
+                                        onTap: () {},
                                       ),
                                     ),
-                                    onTap: () {},
-                                  ),
-                                ),
+                                  );
+                                })
+                            : Padding(
+                                padding: const EdgeInsets.all(20.0),
+                                child: Text('No Transactions Created'),
                               );
-                            })
-                        : Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Text('No Transactions Created'),
-                          )
+                      }
+                    )
                   ],
                 ),
               ),
@@ -771,8 +765,7 @@ class _TransactionsState extends State<Transactions>
 
   maininit() {
     print("here");
-    Get.put<TransactionController>(
-        TransactionController(Repository(ApiServiceProvider())));
+    Get.put<TransactionController>(TransactionController(Repository(ApiServiceProvider())));
     print("here");
     Get.put<BatchController>(BatchController());
     print("here");

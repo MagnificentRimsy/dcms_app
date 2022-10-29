@@ -46,7 +46,6 @@ class _HomeState extends State<Home> {
               children: <Widget>[
                 Dashboard(),
                 WalletScreen(),
-                
                 SettingsScreen(),
           
                 // NearBy(),

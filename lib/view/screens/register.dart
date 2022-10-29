@@ -31,7 +31,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   List<String> userTypes = [
     'Farmer',
-    'Aggregator',
+    'Agent',
   ];
   int userTypesCurrentSelected = 0;
 
@@ -45,10 +45,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final FocusNode _emailFocus = FocusNode();
   final FocusNode _passwordFocus = FocusNode();
   final FocusNode _phoneNoFocus = FocusNode();
-
-  //  _isLoading == true
-  //           ? SpinKitDoubleBounce(color: Color(0xff00A850))
-  //           :
 
   bool _passwordVisible = true;
   @override
@@ -358,89 +354,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                       ),
               
-                      // Row(
-                      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //     crossAxisAlignment: CrossAxisAlignment.start,
-                      //     children: [
-                      //       Expanded(
-                      //           child: ChoiceChip(
-                      //               avatar: Icon(
-                      //                 Icons.person,
-                      //                 color: Colors.white,
-                      //               ),
-                      //               label: Text('Farmer',
-                      //                   textAlign: TextAlign.center,
-                      //                   style: TextStyle(
-                      //                       color: Colors.white, fontSize: 20)),
-                      //               labelPadding: EdgeInsets.symmetric(
-                      //                   horizontal: 30, vertical: 5),
-                      //               selected: choice == 'Farmer',
-                      //               onSelected: (bool selected) {
-                      //                 setState(() {
-                      //                   choice = (selected ? 'Farmer' : null)!;
-                      //                 });
-                      //               },
-                      //               selectedColor: Color(0xFF00A850),
-                      //               shape: ContinuousRectangleBorder(
-                      //                   borderRadius:
-                      //                       BorderRadius.circular(5.0)))),
-                      //       Expanded(
-                      //           child: ChoiceChip(
-                      //               avatar: Icon(
-                      //                 Icons.person,
-                      //                 color: Colors.white,
-                      //               ),
-                      //               label: Text('Aggregator',
-                      //                   textAlign: TextAlign.center,
-                      //                   style: TextStyle(
-                      //                       color: Colors.white, fontSize: 20)),
-                      //               labelPadding: EdgeInsets.symmetric(
-                      //                   horizontal: 15, vertical: 5),
-                      //               selected: choice == 'Aggregator',
-                      //               onSelected: (bool selected) {
-                      //                 setState(() {
-                      //                   choice =
-                      //                       (selected ? 'Aggregator' : null)!;
-                      //                 });
-                      //               },
-                      //               selectedColor: Color(0xFF00A850),
-                      //               shape: ContinuousRectangleBorder(
-                      //                   borderRadius:
-                      //                       BorderRadius.circular(5.0))))
-                      //     ]),
-              
+                
                       Padding(
-                        padding: const EdgeInsets.only(
-                          top: 25.0,
-                          left: 20.0,
-                          right: 20.0,
-                        ),
-                        child: ButtonTheme(
-                          minWidth: 320.0,
-                          height: 50.0,
-                          child: ButtonComponent(
-                              onPressed: () {
-                               _register(registrationController);
-                              },
-                              caption: "Create an Account",
-                              textColor: Colors.white,
-                              backgroundColor: Colors.green,
+                        padding: const EdgeInsets.all(20.0),
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          height: 60.0,
+                          child: ElevatedButton(
+                            onPressed: () {
+                                 _register(registrationController);                        
+                             },
+                            child: const Text(
+                              'Create Account',
+                              style: TextStyle(
+                                  fontSize: 14.0, fontWeight: FontWeight.normal),
                             ),
-                          
-                          //  FlatButton(
-                          //   shape: RoundedRectangleBorder(
-                          //       borderRadius: BorderRadius.circular(7.0)),
-                          //   color: theme.primaryColor,
-                          //   onPressed: () async {
-
-                            
-                          //        _register(registrationController);
-                          //   },
-                          //   child: Text(
-                          //     'Create an Account',
-                          //     style: TextStyle(color: Colors.white, fontSize: 14),
-                          //   ),
-                          // ),
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.green,
+                              textStyle: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                          ),
                         ),
                       ),
                       SizedBox(
@@ -484,9 +418,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     ));
   }
 
-
-
-
   void _register(RegistrationController controller) async {
     String _userName = controller.userNameController.text.trim();
     String _email = controller.emailController.text.trim();
@@ -511,52 +442,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       }
     });
 
-    // String _confirmPassword = _confirmPasswordController.text.trim();
-
-    // String _numberWithCountryCode = countryCode+_number;
-    // bool _isValid = GetPlatform.isWeb ? true : false;
-    // if(!GetPlatform.isWeb) {
-    //   try {
-    //     PhoneNumber phoneNumber = await PhoneNumberUtil().parse(_numberWithCountryCode);
-    //     _numberWithCountryCode = '+' + phoneNumber.countryCode + phoneNumber.nationalNumber;
-    //     _isValid = true;
-    //   } catch (e) {}
-    // }
-
-    // if (_userName.isEmpty) {
-    //   showCustomSnackBar('enter_your_first_name'.tr);
-    // }else if (_email.isEmpty) {
-    //   showCustomSnackBar('enter_your_last_name'.tr);
-    // }else if (_email.isEmpty) {
-    //   showCustomSnackBar('enter_email_address'.tr);
-    // }else if (!GetUtils.isEmail(_email)) {
-    //   showCustomSnackBar('enter_a_valid_email_address'.tr);
-    // }else if (_number.isEmpty) {
-    //   showCustomSnackBar('enter_phone_number'.tr);
-    // }else if (!_isValid) {
-    //   showCustomSnackBar('invalid_phone_number'.tr);
-    // }else if (_password.isEmpty) {
-    //   showCustomSnackBar('enter_password'.tr);
-    // }else if (_password.length < 6) {
-    //   showCustomSnackBar('password_should_be'.tr);
-    // }else if (_password != _confirmPassword) {
-    //   showCustomSnackBar('confirm_password_does_not_matched'.tr);
-    // }else {
-    //   SignUp signUpBody = SignUp(fName: _userName, lName: _email, email: _email, phone: _numberWithCountryCode, password: _password);
-    //   registrationController.registration(signUpBody).then((status) async {
-    //     if (status.isSuccess) {
-    //       if(Get.find<SplashController>().configModel.customerVerification) {
-    //         List<int> _encoded = utf8.encode(_password);
-    //         String _data = base64Encode(_encoded);
-    //         Get.toNamed(RouteHelper.getVerificationRoute(_numberWithCountryCode, status.message, RouteHelper.signUp, _data));
-    //       }else {
-    //         Get.toNamed(RouteHelper.getAccessLocationRoute(RouteHelper.signUp));
-    //       }
-    //     }else {
-    //       showCustomSnackBar(status.message);
-    //     }
-    //   });
-    // }
   }
 
   

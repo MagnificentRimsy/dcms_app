@@ -21,9 +21,7 @@ class DataBinding extends Bindings{
     Get.lazyPut(() => OtpController());
     Get.lazyPut(() => LoginController());
     Get.lazyPut(() => FarmerController(FarmerRepository(ApiServiceProvider())));
-    Get.lazyPut(() => AgentController(Repository(ApiServiceProvider())));
-
-
+    Get.lazyPut(() => AgentController(FarmerRepository(ApiServiceProvider())));
   }
 
 }

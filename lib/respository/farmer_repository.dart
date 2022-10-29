@@ -4,6 +4,7 @@ import 'package:dcms_app/models/cluster.dart';
 import 'package:dcms_app/models/country.dart';
 import 'package:dcms_app/models/identity_type.dart';
 import 'package:dcms_app/models/lga.dart';
+import 'package:dcms_app/models/organization.dart';
 import 'package:dcms_app/models/relationship_type.dart';
 import 'package:dcms_app/models/state_of_origin.dart';
 
@@ -47,11 +48,22 @@ class FarmerRepository {
    Future<LocalGovernment> getLoadedLocalGovernmentData(String url) =>
       apiProvider.getLocalGovernmentData(url);
   
+    Future<LocalGovernment> getLoadedLocalGovernmentByStateIdData(String url, int stateOid) =>
+      apiProvider.getLocalGovernmentByStateIdData(url, stateOid);
+  
   Future<RelationshipType> getLoadedRelationshipTypeData(String url) =>
       apiProvider.getRelationshipTypeData(url);
-  
+      
+  Future<Cooperative> getLoadedCooperativeDataByClusterOid (String url, clusteOid) =>
+      apiProvider.getCooperativeDataByClusterOid(url, clusteOid);
+ 
+ 
   Future<IdentityType> getLoadedIdentityTypeData(String url) =>
       apiProvider.getIdentityTypeData(url);
+
+  Future<Organization> getLoadedOrganizationData(String url) =>
+      apiProvider.getOrganizationData(url);
+
 
 
 }

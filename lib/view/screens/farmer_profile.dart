@@ -17,11 +17,11 @@ import 'package:get/state_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../controller/farmer_controller.dart';
 import '../../core/api_service_provider.dart';
-import '../../data/api/api_client.dart';
-import '../../models/cooperative.dart';
 import '../../models/marital_status.dart';
 import '../../models/relationship_type.dart';
 import '../../respository/farmer_repository.dart';
+import '../../routes/endpoints.dart';
+import '../../utils/app_snacks.dart';
 import 'components/exit_pop.dart';
 
 class FarmerProfile extends StatefulWidget {
@@ -32,51 +32,70 @@ class FarmerProfile extends StatefulWidget {
 }
 
 class _FarmerProfileState extends State<FarmerProfile> {
-  final controller =
-      Get.put(FarmerController(FarmerRepository(ApiServiceProvider())));
+
+  var userType;
+  var entityType;
+  String? username ='';
+
+    @override
+  void initState() {
+    super.initState();
+    print('UserName Dashboard: $username');
+    _loadUserData();
+
+  }
+
+   _loadUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      userType = prefs.getInt('usertype') ;
+      username = prefs.getString('username')!;
+      entityType = prefs.getInt('entityoid');
+      print('Logged In User $userType');
+    });
+  }
+  final controller = Get.put(FarmerController(FarmerRepository(ApiServiceProvider())));
 
   List<String> genders = [
     'Male',
     'Female',
   ];
 
-
-
   //bio data
-  var bioSelectedTitle;
-  int bioGenderCurrentSelected = 0;
+  var bioSelectedTitle = 1;
+  int bioGenderCurrentSelected =1;
   var bioSelectedDateOfBirth;
-  var selectedCluster;
-  var selectedMaritalStatus;
-  var selectedCooperative;
+  var selectedCluster= 1;
+  var selectedMaritalStatus= 1;
+  var selectedCooperative= 1;
 
   // accounts dropdowns
-  var selectedAccountType;
-  var selectedBankId;
+  var selectedAccountType= 1;
+  var selectedBankId= 1;
 
   //location
-  var selectedCountryId;
-  var selectedStateOfOriginId;
-  var selectedLocalGovernmentId;
+  var selectedCountryId= 1;
+  var selectedStateOfOriginId= 1;
+  var selectedLocalGovernmentId= 1;
 
   //meansofID
-  var selectedIdentityType;
+  var selectedIdentityType= 1;
   var selectedIssuingDate;
   var selectedExpiryDate;
 
   //nationality
-  var selectedNationalityCountryId;
-  var selectedNationalityStateId;
-  var selectedNationalityLocalGovernmentId;
+  var selectedNationalityCountryId = 1;
+  var selectedNationalityStateId = 1;
+  var selectedNationalityLocalGovernmentId= 1;
 
   //nextOfKin
-  var selectedNokRelationshipType;
-  var selectedNokStateId;
-  int nokGenderCurrentSelected = 0;
+  var selectedNokRelationshipType = 1;
+  var selectedNokStateId = 1;
+  int nokGenderCurrentSelected = 1;
 
   //spouse
-  var selectedSpouseStateId;
-  int spouseGenderCurrentSelected = 0;
+  var selectedSpouseStateId = 1;
+  int spouseGenderCurrentSelected = 1;
 
   bool isLoading = false;
 
@@ -84,7 +103,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
   Widget build(BuildContext context) {
     final steps = [
       CoolStep(
-        title: 'Bio Information',
+        title: 'Farmer Bio Information',
         subtitle: 'Please fill some of the basic farmer information',
         content: Form(
           key: controller.firstStepFormKey,
@@ -117,7 +136,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
                                   onChanged: (Values? val) {
                                     controller.setTitleId(val);
                                     setState(() {
-                                      bioSelectedTitle = val!.oid;
+                                      bioSelectedTitle = val!.oid!;
                                     });
                                   },
                                   isExpanded: true,
@@ -252,7 +271,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
                                         onChanged: (MaritalStatusValues? val) {
                                           controller.setMaritalStatusId(val);
                                           setState(() {
-                                            selectedMaritalStatus = val!.id;
+                                            selectedMaritalStatus = val!.id!;
                                           });
                                         },
                                         isExpanded: true,
@@ -350,9 +369,10 @@ class _FarmerProfileState extends State<FarmerProfile> {
                                   onChanged: (ClusterValues? val) {
                                     controller.setClusterId(val);
                                     setState(() {
-                                      selectedCluster = val!.oid;
+                                      selectedCluster = val!.oid!;
                                       print(
                                           'selected CLUSTER $selectedCluster');
+                                          controller.getCooperativesByClusterId(Endpoints.getAllCooperativesByClusterOid, selectedCluster);              
                                     });
                                   },
                                   isExpanded: true,
@@ -368,49 +388,28 @@ class _FarmerProfileState extends State<FarmerProfile> {
                                 )
                               : null),
                     ),
-                    Obx(
-                      () => Padding(
-                          padding: const EdgeInsets.only(left: 0, right: 0),
-                          child: controller
-                                  .listCooperativeModel_.value.isNotEmpty
-                              ? DropdownButtonFormField<CooperativeValues?>(
-                                  hint: Text("Cooperatives"),
-                                  icon: Container(),
-                                  value:
-                                      controller.selectedCooperativeId?.value,
-                                  items: controller.listCooperativeModel_.value
-                                      .map((e) => DropdownMenuItem(
-                                            child: Text(
-                                              e.name!,
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 1,
-                                              softWrap: false,
-                                              style: TextStyle(
-                                                  fontSize: 15.sp,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            value: e,
-                                          ))
-                                      .toList(),
-                                  onChanged: (CooperativeValues? val) {
-                                    controller.setCooperativeId(val);
-
-                                    setState(() {
-                                      selectedCooperative = val!.oid;
-                                    });
-                                  },
-                                  isExpanded: true,
-                                  decoration: InputDecoration(
-                                    suffixIcon: Padding(
-                                      padding: const EdgeInsets.only(top: 0.0),
-                                      child:
-                                          const Icon(Icons.keyboard_arrow_down),
-                                    ),
-                                    isDense: true,
-                                    hintText: "Select Cooperative",
-                                  ),
-                                )
-                              : null),
+                     controller.listCooperativeModel_.value.isEmpty?
+                    Container():
+                    DropdownSearch<dynamic>(
+                      mode: Mode.MENU,
+                      items: controller.listCooperativeModel_.value
+                          .map((e) => e.name)
+                          .toList(),
+                      showSearchBox: true,
+                      dropdownSearchDecoration: InputDecoration(
+                        labelText: "Cooperatives",
+                        hintText: "Cooperatives",
+                      ),
+                      onChanged: (value) {
+                        var selected = controller.listCooperativeModel_.value
+                            .firstWhere((e) => e.name == value);
+                        controller.setCooperativeId(selected);
+                        setState(() {
+                          selectedCooperative = selected.oid!;
+                        });
+                        print('dropdown cooperative id ${selectedCooperative}');
+                      },
+                      selectedItem: "Select Cooperative",
                     ),
                   ],
                 );
@@ -424,7 +423,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
         },
       ),
       CoolStep(
-        title: 'Select your role',
+        title: 'More Bio Details',
         subtitle: 'Choose your Gender and Date of Birth',
         content: Column(
           children: <Widget>[
@@ -567,6 +566,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
                     ),
 
                     _buildTextField(
+                      inputType:  TextInputType.number,
                       labelText: '00000123234',
                       validator: (value) {
                         if (value!.isEmpty) {
@@ -594,7 +594,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
                             .firstWhere((e) => e.name == value);
                         controller.setAccountTypeId(selected);
                         setState(() {
-                          selectedAccountType = selected.oid;
+                          selectedAccountType = selected.oid!;
                         });
                         print('dropdown valueeeeee ${selected.oid}');
                       },
@@ -619,7 +619,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
                             .firstWhere((e) => e.name == value);
                         controller.setBankId(selectedBank);
                         setState(() {
-                          selectedBankId = selectedBank.oid;
+                          selectedBankId = selectedBank.oid!;
                         });
                         print('dropdown valueeeeee ${selectedBank.oid}');
                       },
@@ -630,6 +630,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
                     ),
 
                     _buildTextField(
+                      inputType:  TextInputType.number,
                       labelText: 'Bvn Number',
                       validator: (value) {
                         if (value!.isEmpty) {
@@ -675,7 +676,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
                           controller.setCountryId(selectedCountry);
 
                           setState(() {
-                            selectedCountryId = selectedCountry.oid;
+                            selectedCountryId = selectedCountry.oid!;
                           });
                           print('dropdown value ${selectedCountry.oid}');
                         },
@@ -700,13 +701,17 @@ class _FarmerProfileState extends State<FarmerProfile> {
                               .firstWhere((e) => e.name == value);
                           controller.setStateOfOriginId(selected);
                           setState(() {
-                            selectedStateOfOriginId = selected.oid;
+                            selectedStateOfOriginId = selected.oid!;
+                             controller.getLocalGovernmentByStateId(Endpoints.getAllLocalGovernmentsByStateOid, selectedStateOfOriginId);
+                            
                           });
                           print('dropdown valueeeeee ${selected.oid}');
                         },
                         selectedItem: "Select State",
                       ),
                     ),
+                    controller.listLocalGovernmentModel_.value.isEmpty?
+                    Container():
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: DropdownSearch<dynamic>(
@@ -725,7 +730,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
                               .firstWhere((e) => e.name == value);
                           controller.setLocalGovernmentId(selected);
                           setState(() {
-                            selectedLocalGovernmentId = selected.oid;
+                            selectedLocalGovernmentId = selected.oid!;
                           });
                           print('dropdown value ${selected.oid}');
                         },
@@ -784,7 +789,6 @@ class _FarmerProfileState extends State<FarmerProfile> {
                         onChange: (DateTime newDate, _) {
                           return selectedExpiryDate = newDate;
                         },
-
                         pickerTheme: DateTimePickerTheme(
                           itemTextStyle:
                               TextStyle(color: Colors.black, fontSize: 19),
@@ -809,7 +813,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
                               .firstWhere((e) => e.name == value);
                           controller.setIdentityTypeId(selected);
                           setState(() {
-                            selectedIdentityType = selected.oid;
+                            selectedIdentityType = selected.oid!;
                           });
                           print('dropdown value ${selected.oid}');
                         },
@@ -839,7 +843,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
                           }
                           return null;
                         },
-                        controller: null,
+                        controller: controller.issuingBody,
                       ),
                     ),
                     Padding(
@@ -873,8 +877,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
                         dateFormat: "dd-MMM-yyyy",
                         locale: DatePicker.localeFromString('en'),
                         onChange: (DateTime issuingDate, _) {
-                        return  selectedIssuingDate = issuingDate;
-                           
+                          return selectedIssuingDate = issuingDate;
                         },
                         pickerTheme: DateTimePickerTheme(
                           itemTextStyle:
@@ -918,7 +921,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
                               .firstWhere((e) => e.name == value);
                           controller.setCountryId(selected);
                           setState(() {
-                            selectedNationalityCountryId = selected.oid;
+                            selectedNationalityCountryId = selected.oid!;
                           });
                           print('dropdown value ${selected.oid}');
                         },
@@ -943,13 +946,17 @@ class _FarmerProfileState extends State<FarmerProfile> {
                               .firstWhere((e) => e.name == value);
                           controller.setStateOfOriginId(selected);
                           setState(() {
-                            selectedNationalityStateId = selected.oid;
+                            selectedNationalityStateId = selected.oid!;
+                            controller.getLocalGovernmentByStateId(Endpoints.getAllLocalGovernmentsByStateOid, selectedNationalityStateId);
+
                           });
                           print('dropdown valueeeeee ${selected.oid}');
                         },
                         selectedItem: "Select State Nationality",
                       ),
                     ),
+                  
+                  
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: DropdownSearch<dynamic>(
@@ -968,7 +975,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
                               .firstWhere((e) => e.name == value);
                           controller.setLocalGovernmentId(selected);
                           setState(() {
-                            selectedNationalityLocalGovernmentId = selected.oid;
+                            selectedNationalityLocalGovernmentId = selected.oid!;
                           });
                           print('dropdown value ${selected.oid}');
                         },
@@ -1078,18 +1085,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
                     SizedBox(
                       height: 20,
                     ),
-                    // Container(
-                    //   child: Row(
-                    //     children: <Widget>[
-                    //       _buildSelector(
-                    //           context: context, name: 'Male', value: 1),
-                    //       SizedBox(width: 5.0),
-                    //       _buildSelector(
-                    //           context: context, name: 'Female', value: 2),
-                    //     ],
-                    //   ),
-                    // ),
-
+                   
                     Padding(
                       padding: EdgeInsets.only(left: 10.h, right: 10.h),
                       child: SizedBox(
@@ -1224,7 +1220,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
                                       .toList(),
                                   onChanged: (RelationshipTypeValues? val) {
                                     setState(() {
-                                      selectedNokRelationshipType = val!.oid;
+                                      selectedNokRelationshipType = val!.oid!;
                                     });
                                     controller.setRelationshipTypeId(val);
                                   },
@@ -1256,7 +1252,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
                             .firstWhere((e) => e.name == value);
                         controller.setStateOfOriginId(selected);
                         setState(() {
-                          selectedNokStateId = selected.oid;
+                          selectedNokStateId = selected.oid!;
                         });
                         print('dropdown valueeeeee ${selected.oid}');
                       },
@@ -1478,7 +1474,6 @@ class _FarmerProfileState extends State<FarmerProfile> {
                       },
                       controller: controller.spouse_residentialAddress,
                     ),
-
                     DropdownSearch<dynamic>(
                       mode: Mode.MENU,
                       items: controller.listStateOfOriginModel_.value
@@ -1494,19 +1489,18 @@ class _FarmerProfileState extends State<FarmerProfile> {
                             .firstWhere((e) => e.name == value);
                         controller.setStateOfOriginId(selected);
                         setState(() {
-                          selectedSpouseStateId = selected.oid;
+                          selectedSpouseStateId = selected.oid!;
                         });
                         print('dropdown valueeeeee ${selected.oid}');
                       },
                       selectedItem: "Select State",
                     ),
+                     
                     SizedBox(
                       width: MediaQuery.of(context).size.width,
                       height: 60.0,
                       child: ElevatedButton(
                         onPressed: () {
-                          //  print('complete');
-
                           _createProfile(context, controller);
                         },
                         child: const Text(
@@ -1542,10 +1536,9 @@ class _FarmerProfileState extends State<FarmerProfile> {
         print('Steps completed!');
       },
       steps: steps,
-      config: CoolStepperConfig(
-        backText: 'PREV',
-        // finalText: ''
-      ),
+      config: CoolStepperConfig(backText: 'PREV', finalText: ''
+          // finalText: ''
+          ),
     );
 
     return WillPopScope(
@@ -1553,7 +1546,20 @@ class _FarmerProfileState extends State<FarmerProfile> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-          title: Text('Update Profile'),
+          title: userType != 0 ? Text('Create New Farmer') : Text('Update Your Profile'),
+          actions:  [
+            TextButton.icon(     // <-- TextButton
+              onPressed: () async {
+                  await controller.loadResources();     
+              },
+              icon: Icon(
+                Icons.replay_outlined,
+                size: 24.0,
+                color: Colors.white,
+              ),
+              label: Text('Refresh', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+            ),
+          ],
         ),
         body: Container(
           //todo: replace with controller value
@@ -1575,12 +1581,15 @@ class _FarmerProfileState extends State<FarmerProfile> {
   Widget _buildTextField({
     String? labelText,
     bool? readonly,
+    TextInputType? inputType,
     FormFieldValidator<String>? validator,
     TextEditingController? controller,
   }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10.0),
       child: TextFormField(
+        keyboardType: inputType,
+  
         decoration: InputDecoration(
           labelText: labelText,
         ),
@@ -1609,13 +1618,25 @@ class _FarmerProfileState extends State<FarmerProfile> {
     }
   }
 
+
+
   void itemSelectionChanged(String? s) {
     print(s);
   }
 
-  void _createProfile(BuildContext context, FarmerController controller) async {
+   _createProfile(BuildContext context, FarmerController controller) async {
+    print('entity Type Oid $entityType');
+    print('Gender Oid $bioGenderCurrentSelected');
+    print('Usertype Oid $userType');
+
+   
+    setState(() {
+      isLoading = true;
+    });
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String username = (prefs.getString('username') ?? '');
+    
+    var _titleOid = bioSelectedTitle;
 
     String _bioFirstName = controller.firstNameController.text.trim();
     String _bioMiddleName = controller.middleNameController.text.trim();
@@ -1634,7 +1655,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
     // var photo = 0;
     var _cooperativeMembershipStatus = 0;
     var _maritalStatus = selectedMaritalStatus;
-    var _onBoardingType = 2;
+    var _onBoardingType = userType == 0 ? 2 : 1;
 
     //Account Details
     String _accountName = controller.accountNameController.text.trim();
@@ -1690,7 +1711,7 @@ class _FarmerProfileState extends State<FarmerProfile> {
     var _spouseGender = spouseGenderCurrentSelected;
 
     var addFarmerData = {
-      'titleOid': 1,
+      'titleOid': _titleOid,
       'firstName': _bioFirstName,
       'middleName': _bioMiddleName,
       'lastName': _bioLastName,
@@ -1701,8 +1722,8 @@ class _FarmerProfileState extends State<FarmerProfile> {
       'bvn': _bioBvn,
       'primaryPhone': _bioPrimaryPhone,
       'secondaryPhone': _bioSecondaryPhone,
-      'seasonOid': 0,
-      'assignedAgentOid': 0,
+      'seasonOid': _seasonOid,
+      'assignedAgentOid': entityType,
       'clusterOid': _clusterOid,
       'cooperativeOid': _cooperativeOid,
       'contactAddress': _bioContactAddress,
@@ -1718,8 +1739,6 @@ class _FarmerProfileState extends State<FarmerProfile> {
         'bvn': _accountBvn,
         'createdBy': username,
         'createdOn': DateTime.now().toString(),
-
-
         'pcDomainName': '',
         'pcIpAddress': '',
         'pcName': '',
@@ -1732,8 +1751,6 @@ class _FarmerProfileState extends State<FarmerProfile> {
         'others': _locationOthers,
         'createdBy': username,
         'createdOn': DateTime.now().toString(),
-
-
         'pcDomainName': '',
         'pcIpAddress': '',
         'pcName': '',
@@ -1748,8 +1765,6 @@ class _FarmerProfileState extends State<FarmerProfile> {
         'placeOfIssue': _moiPlaceOfIssuing,
         'createdBy': username,
         'createdOn': DateTime.now().toString(),
-
-
         'pcDomainName': '',
         'pcIpAddress': '',
         'pcName': '',
@@ -1763,8 +1778,6 @@ class _FarmerProfileState extends State<FarmerProfile> {
         'wardOid': 0,
         'createdBy': username,
         'createdOn': DateTime.now().toString(),
-
-
         'pcDomainName': '',
         'pcIpAddress': '',
         'pcName': '',
@@ -1785,8 +1798,6 @@ class _FarmerProfileState extends State<FarmerProfile> {
         'stateOid': _nokStateOid,
         'createdBy': username,
         'createdOn': DateTime.now().toString(),
-
-
         'pcDomainName': '',
         'pcIpAddress': '',
         'pcName': '',
@@ -1805,8 +1816,6 @@ class _FarmerProfileState extends State<FarmerProfile> {
         'stateOid': _spouseStateOid,
         'createdBy': username,
         'createdOn': DateTime.now().toString(),
-
-
         'pcDomainName': '',
         'pcIpAddress': '',
         'pcName': '',
@@ -1814,7 +1823,6 @@ class _FarmerProfileState extends State<FarmerProfile> {
       },
       'createdBy': username,
       'createdOn': DateTime.now().toString(),
-
       'pcDomainName': '',
       'pcIpAddress': '',
       'pcName': '',
@@ -1822,8 +1830,34 @@ class _FarmerProfileState extends State<FarmerProfile> {
       'userName': username
     };
 
-    print('farmer data $addFarmerData');
-    // ignore: void_checks
-    return await controller.createProfile(context, addFarmerData);
+    try{
+
+      if (entityType !<= 0 && userType == 0 || userType == 1){
+          print('farmer data $addFarmerData');
+
+          var response = await controller.createProfile(context, addFarmerData);
+          setState(() {
+            isLoading = false;
+          });
+
+          return response;
+      } 
+      setState(() {
+        isLoading = false;
+      });
+
+     return AppSnacks.show(context, leadingIcon: Icon(Icons.check), message: 'Operation Failed!');
+
+    
+    }catch (e) {
+      print('failed $e');
+      setState(() {
+        isLoading = false;
+      });
+
+       return AppSnacks.show(context, leadingIcon: Icon(Icons.check), message: 'Something went wrong!');
+
+
+    }
   }
 }

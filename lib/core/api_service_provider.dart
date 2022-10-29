@@ -5,6 +5,7 @@ import 'package:dcms_app/models/country.dart';
 import 'package:dcms_app/models/identity_type.dart';
 import 'package:dcms_app/models/lga.dart';
 import 'package:dcms_app/models/new_farm_data.dart';
+import 'package:dcms_app/models/organization.dart';
 import 'package:dcms_app/models/relationship_type.dart';
 import 'package:dcms_app/models/state_of_origin.dart';
 import 'package:dcms_app/models/title.dart';
@@ -61,6 +62,20 @@ class ApiServiceProvider extends GetConnect {
     Future<Cooperative> getCooperativeData(String url) async {
     try {
       final response = await get(BaseEndpoint.baseUrl + url );
+      if (response.status.hasError) {
+        return Future.error(response.statusText!);
+      } else {
+        return Cooperative.fromJson(response.body) ;
+      }
+    } catch (exception) {
+      return Future.error(exception.toString());
+    }
+  }
+
+    Future<Cooperative> getCooperativeDataByClusterOid(String url, int clusterOid) async {
+    try {
+      final response = await get(BaseEndpoint.baseUrl+url+clusterOid.toString());
+      print('Cooperative by clusterOid $response');
       if (response.status.hasError) {
         return Future.error(response.statusText!);
       } else {
@@ -150,6 +165,22 @@ class ApiServiceProvider extends GetConnect {
     }
   }
 
+  Future<Organization> getOrganizationData(String url) async {
+    try {
+      final response = await get(BaseEndpoint.baseUrl + url );
+      if (response.status.hasError) {
+        return Future.error(response.statusText!);
+      } else {
+        return Organization.fromJson(response.body) ;
+      }
+    } catch (exception) {
+      return Future.error(exception.toString());
+    }
+  }
+
+
+  
+
 
 
    Future<LocalGovernment> getLocalGovernmentData(String url) async {
@@ -165,6 +196,19 @@ class ApiServiceProvider extends GetConnect {
     }
   }
 
+  Future<LocalGovernment> getLocalGovernmentByStateIdData(String url, int stateOid) async {
+    try {
+      final response = await get(BaseEndpoint.baseUrl +url+stateOid.toString());
+      print('local government by stateoid $response');
+      if (response.status.hasError) {
+        return Future.error(response.statusText!);
+      } else {
+        return LocalGovernment.fromJson(response.body) ;
+      }
+    } catch (exception) {
+      return Future.error(exception.toString());
+    }
+  }
 
    Future<RelationshipType> getRelationshipTypeData(String url) async {
     try {

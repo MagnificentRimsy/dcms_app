@@ -21,11 +21,16 @@ class Endpoints {
   static const String getAllBanks = 'configurations/GetAllBanks';
   static const String getAccountTypes = 'configurations/GetAllAccountType';
   static const String getAllLocalGovernments = 'Geography/GetAllLocalGovernments';
+  static const String getAllLocalGovernmentsByStateOid = 'Geography/GetAllLocalGovernmentsByStateId?stateOid=';
+  static const String getAllCooperativesByClusterOid = 'configurations/GetCooperativesByClusterId?clusterOid=';
   static const String getAllStates = 'Geography/GetAllStates';
   static const String getRelationshipTypes = 'configurations/GetAllRelationshipTypes';
   static const String getAllCountries = 'geography/GetAllCountries';
   static const String getAllIdentityTypes = 'configurations/GetAllIdentityTypes';
+  static const String getAllOrganizations = 'configurations/GetAllOrganizations';
   static const String createFarmerProfile = 'FarmersManagement/AddFarmer';
+  static const String createAgentProfile = 'FarmersManagement/AddAgent';
+
   static const String updatePersonalInformation = 'auth/personal-information';
   static const String updateBankingInformation = 'auth/bank-information';
   static const String updateDocuments = 'auth/documents';

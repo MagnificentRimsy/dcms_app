@@ -177,11 +177,14 @@ class FarmerController extends GetxController with StateMixin<List<dynamic>> {
   @override
   void onReady() {
     super.onReady();
+    loadResources (); 
+  }
+
+  Future <void> loadResources () async {
     getStateOfOrigin(Endpoints.getAllStates);
-    getLocalGovernment(Endpoints.getAllLocalGovernments);
     getTitles(Endpoints.getAllTitles);
     getClusters(Endpoints.getAllCluters);
-    getCooperatives(Endpoints.getAllCooperatives);
+    // getCooperatives(Endpoints.getAllCooperatives);
     getMaritalStatus(Endpoints.getAllMaritalStatus);
     getAccountType(Endpoints.getAccountTypes);
     getBank(Endpoints.getAllBanks);
@@ -189,7 +192,6 @@ class FarmerController extends GetxController with StateMixin<List<dynamic>> {
     getIdentityType(Endpoints.getAllIdentityTypes);
     getRelationshipType(Endpoints.getRelationshipTypes);
   }
-
   @override
   void onClose() {
     super.onClose();
@@ -551,7 +553,8 @@ class FarmerController extends GetxController with StateMixin<List<dynamic>> {
     return null;
   }
 
-  void getCooperatives(String url) {
+  
+  void getCooperativesByClusterId(String url, var clusterOid) {
     print("get Clusters");
     try {
       Get.dialog(Center(
@@ -561,7 +564,7 @@ class FarmerController extends GetxController with StateMixin<List<dynamic>> {
         ),
       ));
 
-      repository.getLoadedCooperativeData(url).then((value) {
+      repository.getLoadedCooperativeDataByClusterOid(url, clusterOid).then((value) {
         if (value.cooperativeValues!.length > 0) {
           print("get Clusters data: ${value.toString()}");
           Get.back();
@@ -604,12 +607,13 @@ class FarmerController extends GetxController with StateMixin<List<dynamic>> {
     }
   }
 
-  String? validateCooperative(String value) {
+  String? validateCooperativesByClusterOid(String value) {
     if (value == "0") {
       return "Select Cooperative";
     }
     return null;
   }
+
 
   void getMaritalStatus(String url) {
     print("get MaritalStatus");
@@ -912,8 +916,9 @@ class FarmerController extends GetxController with StateMixin<List<dynamic>> {
     return null;
   }
 
-  void getLocalGovernment(String url) {
-    print("get LocalGovernment");
+
+ void getLocalGovernmentByStateId(String url, int stateOid) {
+    print("get LocalGovernment By State Id");
     try {
       Get.dialog(Center(
         child: SpinKitDualRing(
@@ -922,7 +927,7 @@ class FarmerController extends GetxController with StateMixin<List<dynamic>> {
         ),
       ));
 
-      repository.getLoadedLocalGovernmentData(url).then((value) {
+      repository.getLoadedLocalGovernmentByStateIdData(url, stateOid).then((value) {
         if (value.localGovernmentValues!.length > 0) {
           print("get LocalGovernment data: ${value.toString()}");
           Get.back();
@@ -965,14 +970,14 @@ class FarmerController extends GetxController with StateMixin<List<dynamic>> {
     }
   }
 
-  String? validateLocalGovernment(String value) {
+  String? validateLocalGovernmentByStateId(String value) {
     if (value == "0") {
       return "Select LocalGovernment";
     }
     return null;
   }
 
- void getRelationshipType(String url) {
+void getRelationshipType(String url) {
     print("get RelationshipType");
     try {
       Get.dialog(Center(
@@ -1025,7 +1030,7 @@ class FarmerController extends GetxController with StateMixin<List<dynamic>> {
     }
   }
 
-  String? validateRelationshipType(String value) {
+String? validateRelationshipType(String value) {
     if (value == "0") {
       return "Select RelationshipType";
     }
@@ -1110,6 +1115,10 @@ class FarmerController extends GetxController with StateMixin<List<dynamic>> {
 
     }catch(e){
         print('Operation Failed $e');
+         AppSnacks.show(context, leadingIcon: Icon(Icons.check), message: 'Operation Failed!');
+
+         isLoading(false);
+
  
     }
   }

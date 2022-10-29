@@ -12,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../controller/login_controller.dart';
 import '../../controller/pricing_controller.dart';
 import 'components/fade_animation.dart';
+import 'farmer_profile.dart';
 
 class Dashboard extends StatefulWidget {
     final int? pageIndex;
@@ -29,9 +30,9 @@ class _DashboardState extends State<Dashboard> {
         final pricingController = Get.put(PricingController());
 
   //  final RefreshController _refreshController = RefreshController(initialRefresh: false);
-    var userType = 0;
     NumberFormat moneyFormat = NumberFormat.decimalPattern('en_us');
 
+    var userType = 0;
     String? username = '';
   @override
   void initState() {
@@ -41,7 +42,7 @@ class _DashboardState extends State<Dashboard> {
 
   }
 
-    _loadUserData() async {
+   _loadUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       userType = (prefs.getInt('usertype') ?? 0);
@@ -425,11 +426,11 @@ class _DashboardState extends State<Dashboard> {
                             padding: const EdgeInsets.all(8.0),
                             child: HomeTabCard(
                               onPressed: () {
-                            
+                             Get.toNamed('/farmerprofile');
                               },
-                              title: 'FFB',
-                              icon: Icons.ac_unit,
-                              sub: 'Supplies',
+                              title: 'Onboard',
+                              icon: Icons.person_add,
+                              sub: 'Farmer',
                               iconColor: Colors.black,
                               backgroundColor: Color(0xFFF8D568),
                             ),
@@ -439,6 +440,7 @@ class _DashboardState extends State<Dashboard> {
                     ),
                     Row(
                       children: [
+                      userType != 0 ? Container():
                        Expanded(
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -461,8 +463,8 @@ class _DashboardState extends State<Dashboard> {
                             child: HomeTabCard(
                               onPressed: () {},
                               title: 'Manage',
-                              icon: Icons.ac_unit,
-                              sub: 'Clusters',
+                              icon: Icons.people,
+                              sub: 'Farmers',
                               iconColor: Colors.black,
                               backgroundColor: Color(0xff90EE90),
                             ),

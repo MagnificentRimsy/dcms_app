@@ -165,13 +165,6 @@ class _LoginScreenState extends State<LoginScreen>
                               },
                             ),
 
-                            // IconButton(
-                            //   icon: Icon(
-                            //     Icons.remove_red_eye,
-                            //     size: 28.0,
-                            //     color: theme.primaryColor,
-                            //   ),
-                            // ),
                             hintText: 'password',
                             hintStyle: TextStyle(
                               color: Colors.grey[400],
@@ -184,43 +177,28 @@ class _LoginScreenState extends State<LoginScreen>
                         height: 30,
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(
-                          top: 25.0,
-                          left: 20.0,
-                          right: 20.0,
-                        ),
-                        child: ButtonTheme(
-                            minWidth: 320.0,
-                            height: 50.0,
-                            child: ButtonComponent(
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  login(loginController);
-                                }
-                              },
-                              caption: "Sign In",
-                              textColor: Colors.white,
-                              backgroundColor: Colors.green,
-                            )
-
-                            // FlatButton(
-
-                            //   shape: RoundedRectangleBorder(
-                            //       borderRadius: BorderRadius.circular(7.0)),
-                            //   color: theme.primaryColor,
-                            //   onPressed: () {
-
-                            //     if (_formKey.currentState!.validate()) {
-                            //       login(loginController);
-                            //     }
-                            //   },
-                            //   child: const Text(
-                            //     'Sign in',
-                            //     style: const TextStyle(color: Colors.white),
-                            //   ),
-                            // ),
-
+                        padding: const EdgeInsets.all(20.0),
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          height: 60.0,
+                          child: ElevatedButton(
+                            onPressed: () {
+                                  if (_formKey.currentState!.validate()) {
+                                    login(loginController);
+                                  }                         
+                             },
+                            child: const Text(
+                              'Sign In',
+                              style: TextStyle(
+                                  fontSize: 14.0, fontWeight: FontWeight.normal),
                             ),
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.green,
+                              textStyle: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
                       ),
                       const SizedBox(
                         height: 10,

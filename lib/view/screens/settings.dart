@@ -6,10 +6,13 @@ import 'package:dcms_app/view/screens/onboarding.dart';
 import 'package:dcms_app/view/screens/test_stepper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'batches.dart';
+import 'components/exit_pop.dart';
 import 'components/fade_animation.dart';
 import 'farmer_profile.dart';
 
@@ -19,22 +22,30 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+
+  var userType = 0;
+  String? username = '';
+  @override
+  void initState() {
+    super.initState();
+    print('UserName Dashboard: $username');
+    _loadUserData();
+
+  }
+
+   _loadUserData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      userType = (prefs.getInt('usertype') ?? 0);
+      username = prefs.getString('username');
+      print('Logged In User $userType');
+    });
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      //   elevation: 1,
-      //   leading: IconButton(
-      //     onPressed: () {
-      //       Navigator.of(context).pop();
-      //     },
-      //     icon: Icon(
-      //       Icons.arrow_back,
-      //       color: Colors.green,
-      //     ),
-      //   ),
-      // ),
+     
       body: Container(
         padding: EdgeInsets.only(left: 16, top: 25, right: 16),
         child: ListView(
@@ -71,8 +82,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
             InkWell(
               onTap: () {
-                Get.to(FarmerProfile());
-
+                 userType == 1 ?
+                 Get.toNamed('/agentprofile')
+                 : Get.toNamed('/farmerprofile');
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -95,11 +107,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ),
             ),
-
-  InkWell(
+             userType == 1?
+             InkWell(
               onTap: () {
                 Get.to(FarmerProfile());
-
               },
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -121,7 +132,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ],
                 ),
               ),
-            ),
+            ): Container(),
 
             InkWell(
               onTap: () {
@@ -150,9 +161,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
 
             InkWell(
-              onTap: () {
-
-              },
+              onTap: () {},
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Row(
@@ -219,7 +228,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             SizedBox(
               height: 50.h,
             ),
-          
+
             OutlinedButton(
               child: Text(
                 'Log Out',
@@ -233,15 +242,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(5))),
               ),
-              onPressed: () {
+              onPressed: () async{
                 print('Pressed');
-                // Get.to(LoginScreen());
-
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => LoginScreen()));
+                SharedPreferences preferences = await SharedPreferences.getInstance();
+                await preferences.clear();
+                SystemNavigator.pop();
               },
             ),
-       
           ],
         ),
       ),
